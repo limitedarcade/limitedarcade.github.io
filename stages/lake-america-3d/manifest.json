@@ -1,8 +1,8 @@
 {
-  "objects": 133,
-  "meshObjects": 106,
-  "vertices": 153980,
-  "triangles": 210890,
+  "objects": 154,
+  "meshObjects": 126,
+  "vertices": 173738,
+  "triangles": 234730,
   "source": "web/stages/lake_america/blender/lake-america.blend",
   "seed": 7319,
   "bounds": "Arena contact Y=0; layered skyline 178\u2013220m away; 360 degree island coverage",
@@ -19,6 +19,16 @@
       0
     ],
     "stumpCollection": "lake-america-axe-stump",
+    "childrenUseLocalCoordinates": true
+  },
+  "rescueRing": {
+    "node": "lake-america-rescue-ring",
+    "position": [
+      5,
+      0.92,
+      -0.65
+    ],
+    "standCollection": "12 Rescue ring stand",
     "childrenUseLocalCoordinates": true
   },
   "floatingNodes": [
@@ -50,9 +60,9 @@
   ],
   "features": [
     "Continuous reflective glacial fighting shelf",
-    "Editable bilingual lake / thin-ice signage",
+    "Framed park sign with mountain crest and editable English lettering",
     "Illuminated cedar rescue hut and rope-lined dock",
-    "Flotation station and rescue sled",
+    "Independent rescue ring pickup and persistent stand",
     "Canadian flag review equivalent",
     "Layered Toronto skyline and CN Tower",
     "24 independent ice floes",
@@ -60,7 +70,8 @@
     "Snow-loaded individual pine boughs",
     "Sculpted shoreline snowdrifts",
     "Four waterfront lanterns",
-    "Separate axe and persistent stump"
+    "Separate axe and persistent stump",
+    "Waterfront benches, mooring bollards, pressure ice, chimney and stacked firewood"
   ],
   "previews": [
     "lake-america-combat.png",

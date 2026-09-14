@@ -1,0 +1,4 @@
+Medium Beaver Standing Realistic by Pigcraft
+https://sketchfab.com/3d-models/medium-beaver-standing-realistic-f8c13f8d81cf42789a9172b1f09c68ad
+Source metadata: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Adapted: mesh simplification, texture resizing, material adjustment and animation rig.
