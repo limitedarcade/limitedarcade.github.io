@@ -1,0 +1,13 @@
+{
+  "source": "carney_Stylized Cel-Shaded Businessman 3D Model_allparts_20260904_123033.glb",
+  "base": "carney-rigged.glb",
+  "boundsMaxError": 0.000620722770690918,
+  "parts": 6,
+  "bones": 25,
+  "actions": 32,
+  "outputBytes": 13999876,
+  "limitations": [
+    "Original rig and facial geometry retained; no new facial controls.",
+    "Texture bake requires close-up visual review."
+  ]
+}

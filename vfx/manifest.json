@@ -1,0 +1,527 @@
+{
+  "version": 1,
+  "generatedBy": "node tools/prepare-vfx.mjs",
+  "totalBytes": 3534260,
+  "selectionPolicy": "The five small, reusable effects only. Large lightning, a-bomb, ultrako and explosion source assets are intentionally excluded from this pack.",
+  "assets": [
+    {
+      "id": "fireball",
+      "url": "vfx/fireball.glb",
+      "sourceFile": "vfx/fireball_vfx.glb",
+      "bytes": 211168,
+      "sha256": "736f4670819c0561ea969be36697ea4c52266fe154d15393fd070a0aa4faab7a",
+      "attribution": {
+        "title": "Fireball vfx",
+        "author": "Animegod (https://sketchfab.com/Himiko2355)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/fireball-vfx-911322f594b2480e8c3f9d49ff7619c6"
+      },
+      "sourceAssetMetadata": {
+        "extras": {
+          "author": "Animegod (https://sketchfab.com/Himiko2355)",
+          "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+          "source": "https://sketchfab.com/3d-models/fireball-vfx-911322f594b2480e8c3f9d49ff7619c6",
+          "title": "Fireball vfx"
+        },
+        "generator": "Sketchfab-12.65.0",
+        "version": "2.0"
+      },
+      "changes": "File renamed for the runtime pack; GLB contents are byte-for-byte unchanged.",
+      "geometry": {
+        "meshes": 2,
+        "primitives": 2,
+        "vertices": 5015,
+        "triangles": 5093,
+        "skins": 0,
+        "materials": 2,
+        "embeddedImages": 0
+      },
+      "extensionsUsed": [],
+      "cameras": 0,
+      "punctualLights": 0,
+      "clips": [],
+      "bounds": {
+        "coordinateSpace": "scene, including source node transforms and skin pose",
+        "method": "Exact vertex rest bounds; animation envelope sampled at 60 Hz and all authored key times.",
+        "rest": {
+          "min": [
+            -1.0919572,
+            -0.2227269,
+            -0.9531025
+          ],
+          "max": [
+            0.8069582,
+            1.7297523,
+            0.9365243
+          ],
+          "size": [
+            1.8989154,
+            1.9524791,
+            1.8896268
+          ],
+          "center": [
+            -0.1424995,
+            0.7535127,
+            -0.0082891
+          ]
+        },
+        "animated": {
+          "min": [
+            -1.0919572,
+            -0.2227269,
+            -0.9531025
+          ],
+          "max": [
+            0.8069582,
+            1.7297523,
+            0.9365243
+          ],
+          "size": [
+            1.8989154,
+            1.9524791,
+            1.8896268
+          ],
+          "center": [
+            -0.1424995,
+            0.7535127,
+            -0.0082891
+          ]
+        }
+      },
+      "orientation": {
+        "shape": "volume",
+        "principalAxis": null,
+        "normalizeBy": "maxDimension",
+        "notes": "Nearly spherical mesh. Recenter its nonzero source center before scaling or spinning. No authored animation; movement, spin, pulse and fade are runtime controls."
+      }
+    },
+    {
+      "id": "laser",
+      "url": "vfx/laser.glb",
+      "sourceFile": "vfx/laser_shot.glb",
+      "bytes": 299084,
+      "sha256": "05b566465f1b1de29b288806e6b584698254fa0c67b4bc59d31186775c593dd8",
+      "attribution": {
+        "title": "Laser shot",
+        "author": "photon (that one larry) (https://sketchfab.com/Professor_E12)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/laser-shot-88b5122e0f814112b0998eb265f48e7e"
+      },
+      "sourceAssetMetadata": {
+        "extras": {
+          "author": "photon (that one larry) (https://sketchfab.com/Professor_E12)",
+          "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+          "source": "https://sketchfab.com/3d-models/laser-shot-88b5122e0f814112b0998eb265f48e7e",
+          "title": "Laser shot"
+        },
+        "generator": "Sketchfab-0.8.0",
+        "version": "2.0"
+      },
+      "changes": "File renamed for the runtime pack; GLB contents are byte-for-byte unchanged.",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "vertices": 8,
+        "triangles": 4,
+        "skins": 0,
+        "materials": 1,
+        "embeddedImages": 2
+      },
+      "extensionsUsed": [
+        "KHR_materials_emissive_strength"
+      ],
+      "cameras": 0,
+      "punctualLights": 0,
+      "clips": [],
+      "bounds": {
+        "coordinateSpace": "scene, including source node transforms and skin pose",
+        "method": "Exact vertex rest bounds; animation envelope sampled at 60 Hz and all authored key times.",
+        "rest": {
+          "min": [
+            -0.0432777,
+            -0.0432777,
+            -1
+          ],
+          "max": [
+            0.0432777,
+            0.0432777,
+            1
+          ],
+          "size": [
+            0.0865553,
+            0.0865553,
+            2
+          ],
+          "center": [
+            0,
+            0,
+            0
+          ]
+        },
+        "animated": {
+          "min": [
+            -0.0432777,
+            -0.0432777,
+            -1
+          ],
+          "max": [
+            0.0432777,
+            0.0432777,
+            1
+          ],
+          "size": [
+            0.0865553,
+            0.0865553,
+            2
+          ],
+          "center": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "orientation": {
+        "shape": "crossed-planes",
+        "principalAxis": "z",
+        "normalizeBy": "length",
+        "notes": "Two crossed textured planes; original length is 2 along Z, centered at the origin. Rotate the wrapper +PI/2 around Y for +X travel. Adjust local Z length independently of X/Y thickness."
+      }
+    },
+    {
+      "id": "shield",
+      "url": "vfx/shield.glb",
+      "sourceFile": "vfx/pro4ik_utcm_3.0_shield.glb",
+      "bytes": 1075488,
+      "sha256": "fcf1e0f1ff64e4f45fcdec678ff6b91668cf421db7af889ea0e2cd88c6b26243",
+      "attribution": {
+        "title": "Pro4ik UTCM 3.0 Shield",
+        "author": "Elite Big Speakerman (https://sketchfab.com/EvesStudio2008)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/pro4ik-utcm-30-shield-18cb3ce2a9a84c228f23a83801c4766c"
+      },
+      "sourceAssetMetadata": {
+        "extras": {
+          "author": "Elite Big Speakerman (https://sketchfab.com/EvesStudio2008)",
+          "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+          "source": "https://sketchfab.com/3d-models/pro4ik-utcm-30-shield-18cb3ce2a9a84c228f23a83801c4766c",
+          "title": "Pro4ik UTCM 3.0 Shield"
+        },
+        "generator": "Sketchfab-17.15.0",
+        "version": "2.0"
+      },
+      "changes": "File renamed for the runtime pack; GLB contents are byte-for-byte unchanged.",
+      "geometry": {
+        "meshes": 1,
+        "primitives": 1,
+        "vertices": 609,
+        "triangles": 1152,
+        "skins": 1,
+        "materials": 1,
+        "embeddedImages": 3
+      },
+      "extensionsUsed": [
+        "KHR_materials_emissive_strength"
+      ],
+      "cameras": 0,
+      "punctualLights": 0,
+      "clips": [],
+      "bounds": {
+        "coordinateSpace": "scene, including source node transforms and skin pose",
+        "method": "Exact vertex rest bounds; animation envelope sampled at 60 Hz and all authored key times.",
+        "rest": {
+          "min": [
+            -9.963848,
+            -9.9638475,
+            -1.8340749
+          ],
+          "max": [
+            9.96385,
+            9.9638422,
+            1.4870293
+          ],
+          "size": [
+            19.927698,
+            19.9276897,
+            3.3211042
+          ],
+          "center": [
+            0.000001,
+            -0.0000027,
+            -0.1735228
+          ]
+        },
+        "animated": {
+          "min": [
+            -9.963848,
+            -9.9638475,
+            -1.8340749
+          ],
+          "max": [
+            9.96385,
+            9.9638422,
+            1.4870293
+          ],
+          "size": [
+            19.927698,
+            19.9276897,
+            3.3211042
+          ],
+          "center": [
+            0.000001,
+            -0.0000027,
+            -0.1735228
+          ]
+        }
+      },
+      "orientation": {
+        "shape": "disc",
+        "principalAxis": "z",
+        "normalizeBy": "diameter",
+        "notes": "Disc lies in XY and faces Z, approximately 19.9277 units in diameter. Contains a skin and bones despite having no animation clip: use SkeletonUtils.clone for independent instances. Recenter before scaling. A scale near 0.1 gives a fighter-sized disc."
+      }
+    },
+    {
+      "id": "appearance",
+      "url": "vfx/appearance.glb",
+      "sourceFile": "vfx/appearance_effect_light_beam.glb",
+      "bytes": 420428,
+      "sha256": "25dc2cdd4dbe96b57260c105c63845a422c104d0de63867773ab27ebf3b2573f",
+      "attribution": {
+        "title": "Appearance effect light beam 出场特效",
+        "author": "Yuki (https://sketchfab.com/SHLER)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/appearance-effect-light-beam-ebef0b795c474efc8a39a80bcbb3868d"
+      },
+      "sourceAssetMetadata": {
+        "extras": {
+          "author": "Yuki (https://sketchfab.com/SHLER)",
+          "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+          "source": "https://sketchfab.com/3d-models/appearance-effect-light-beam-ebef0b795c474efc8a39a80bcbb3868d",
+          "title": "Appearance effect light beam 出场特效"
+        },
+        "generator": "Sketchfab-16.8.0",
+        "version": "2.0"
+      },
+      "changes": "File renamed for the runtime pack; GLB contents are byte-for-byte unchanged.",
+      "geometry": {
+        "meshes": 4,
+        "primitives": 4,
+        "vertices": 16,
+        "triangles": 8,
+        "skins": 0,
+        "materials": 3,
+        "embeddedImages": 3
+      },
+      "extensionsUsed": [],
+      "cameras": 0,
+      "punctualLights": 0,
+      "clips": [
+        {
+          "name": "Take 001",
+          "durationSeconds": 1.6666666269302368,
+          "tracks": 7,
+          "bounds": {
+            "min": [
+              -2.1398815,
+              0.0063957,
+              -2.2416974
+            ],
+            "max": [
+              2.1398815,
+              0.541983,
+              2.0384747
+            ],
+            "size": [
+              4.279763,
+              0.5355873,
+              4.2801721
+            ],
+            "center": [
+              0,
+              0.2741894,
+              -0.1016114
+            ]
+          },
+          "samples": 111
+        }
+      ],
+      "bounds": {
+        "coordinateSpace": "scene, including source node transforms and skin pose",
+        "method": "Exact vertex rest bounds; animation envelope sampled at 60 Hz and all authored key times.",
+        "rest": {
+          "min": [
+            -1.6533516,
+            0.0063957,
+            -1.7500752
+          ],
+          "max": [
+            1.6533516,
+            0.541983,
+            1.5468525
+          ],
+          "size": [
+            3.3067032,
+            0.5355873,
+            3.2969277
+          ],
+          "center": [
+            0,
+            0.2741893,
+            -0.1016114
+          ]
+        },
+        "animated": {
+          "min": [
+            -2.1398815,
+            0.0063957,
+            -2.2416974
+          ],
+          "max": [
+            2.1398815,
+            0.541983,
+            2.0384747
+          ],
+          "size": [
+            4.279763,
+            0.5355873,
+            4.2801721
+          ],
+          "center": [
+            0,
+            0.2741894,
+            -0.1016114
+          ]
+        }
+      },
+      "orientation": {
+        "shape": "layered-ground-planes",
+        "principalAxis": "y",
+        "normalizeBy": "animatedDiameter",
+        "notes": "Authored as horizontal XZ layers, not an upright column. Preserve orientation for ground summons; rotate the wrapper +PI/2 around X for an upright camera-facing effect. The 1.6667-second clip scales in during its first 0.37 seconds and then rotates; provide a runtime fade. Preserve original textures and their alpha."
+      }
+    },
+    {
+      "id": "burst",
+      "url": "vfx/burst.glb",
+      "sourceFile": "vfx/27444eb10a4f4409b4a2649738ec7441.glb",
+      "bytes": 1528092,
+      "sha256": "e94869e0244977166ebe62a4ee4d19ba387e3245d602eddfae5211702af53211",
+      "attribution": {
+        "title": "2024中秋特效_3",
+        "author": "Yuki (https://sketchfab.com/SHLER)",
+        "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+        "source": "https://sketchfab.com/3d-models/2024-3-27444eb10a4f4409b4a2649738ec7441"
+      },
+      "sourceAssetMetadata": {
+        "extras": {
+          "author": "Yuki (https://sketchfab.com/SHLER)",
+          "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+          "source": "https://sketchfab.com/3d-models/2024-3-27444eb10a4f4409b4a2649738ec7441",
+          "title": "2024中秋特效_3"
+        },
+        "generator": "Sketchfab-16.28.0",
+        "version": "2.0"
+      },
+      "changes": "File renamed for the runtime pack; GLB contents are byte-for-byte unchanged.",
+      "geometry": {
+        "meshes": 9,
+        "primitives": 9,
+        "vertices": 90,
+        "triangles": 72,
+        "skins": 0,
+        "materials": 7,
+        "embeddedImages": 7
+      },
+      "extensionsUsed": [
+        "KHR_materials_emissive_strength"
+      ],
+      "cameras": 0,
+      "punctualLights": 0,
+      "clips": [
+        {
+          "name": "Take 001",
+          "durationSeconds": 12.5999116897583,
+          "tracks": 15,
+          "bounds": {
+            "min": [
+              -1.4576495,
+              -0.2528535,
+              -1.4576495
+            ],
+            "max": [
+              1.4576495,
+              0.9382837,
+              1.4576495
+            ],
+            "size": [
+              2.915299,
+              1.1911372,
+              2.915299
+            ],
+            "center": [
+              0,
+              0.3427151,
+              0
+            ]
+          },
+          "samples": 1133
+        }
+      ],
+      "bounds": {
+        "coordinateSpace": "scene, including source node transforms and skin pose",
+        "method": "Exact vertex rest bounds; animation envelope sampled at 60 Hz and all authored key times.",
+        "rest": {
+          "min": [
+            -1.1024504,
+            -0.0117745,
+            -1.1024506
+          ],
+          "max": [
+            1.1024507,
+            0.9382837,
+            1.1024509
+          ],
+          "size": [
+            2.2049011,
+            0.9500582,
+            2.2049015
+          ],
+          "center": [
+            2e-7,
+            0.4632546,
+            1e-7
+          ]
+        },
+        "animated": {
+          "min": [
+            -1.4576495,
+            -0.2528535,
+            -1.4576495
+          ],
+          "max": [
+            1.4576495,
+            0.9382837,
+            1.4576495
+          ],
+          "size": [
+            2.915299,
+            1.1911372,
+            2.915299
+          ],
+          "center": [
+            0,
+            0.3427151,
+            0
+          ]
+        }
+      },
+      "orientation": {
+        "shape": "layered-ground-planes",
+        "principalAxis": "y",
+        "normalizeBy": "animatedDiameter",
+        "notes": "Layered XZ rings and a shallow volume. Preserve orientation for a ground sigil or rotate the wrapper +PI/2 around X for upright impacts. The complete 12.5999-second clip mainly rotates rings and applies single-key layer poses; it is not a baked explosion. Use runtime scale/fade envelopes for a burst or loop the animation for a sustained sigil. Some layers have opaque default materials; preserve material distinctions."
+      }
+    }
+  ]
+}
