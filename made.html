@@ -1,0 +1,3052 @@
+<!doctype html>
+<html lang="en">
+  <head><base href="./">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#070b16" />
+    <title>How Battle for Independence was made</title>
+    <style>
+      @font-face {
+        font-family: "Fatal Fighter";
+        src: url("./fonts/fatal-fighter.otf") format("opentype");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Great Fighter";
+        src: url("./fonts/great-fighter.otf") format("opentype");
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Single Fighter";
+        src: url("./fonts/single-fighter.otf") format("opentype");
+        font-display: swap;
+      }
+
+      :root {
+        --ink: #080c18;
+        --panel: #111a2a;
+        --paper: #eef3ff;
+        --muted: #b1bed0;
+        --gold: #ffc63d;
+        --gold-light: #ffe9a1;
+        --gold-deep: #e8871a;
+        --red: #d81f2a;
+        --red-deep: #7c0d14;
+        --blue: #2f6bff;
+        --cyan: #80dbff;
+        --border: rgba(238, 243, 255, 0.12);
+        color-scheme: dark;
+      }
+
+      html { scroll-behavior: smooth; }
+      html, body { background: var(--ink); }
+      body {
+        margin: 0;
+        color: var(--paper);
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      .made-root { position: relative; }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(420px, 44vw);
+        gap: 0;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      .prose {
+        padding: clamp(2rem, 5vw, 5rem) clamp(1.4rem, 4vw, 4rem) 8rem;
+        min-width: 0;
+      }
+      .viewer-rail {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        align-self: start;
+        background: linear-gradient(180deg, #050913 0%, #0a1224 100%);
+        border-left: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      @media (max-width: 1024px) {
+        .layout { grid-template-columns: 1fr; }
+        .viewer-rail {
+          position: sticky;
+          top: 0;
+          height: auto;
+          border-left: none;
+          border-bottom: 1px solid var(--border);
+          z-index: 5;
+        }
+      }
+
+      h1.title {
+        font-family: "Fatal Fighter", "Impact", sans-serif;
+        font-size: clamp(2.4rem, 6vw, 4.4rem);
+        line-height: 0.95;
+        margin: 0 0 1rem;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        color: var(--gold);
+        background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 45%, var(--gold-deep) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 0 rgba(0, 0, 0, 0.6);
+      }
+      h2 {
+        font-family: "Fatal Fighter", "Impact", sans-serif;
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        line-height: 1;
+        margin: 4rem 0 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--gold);
+      }
+      h3 {
+        font-family: "Single Fighter", "Impact", sans-serif;
+        font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+        margin: 2rem 0 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--cyan);
+      }
+      h4 {
+        font-family: "Great Fighter", "Impact", sans-serif;
+        font-size: 1.15rem;
+        margin: 0 0 0.4rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      p { margin: 0.7rem 0 1.1rem; color: var(--paper); }
+      .muted { color: var(--muted); }
+      .accent-red { color: var(--red); }
+      .accent-blue { color: var(--blue); }
+      .accent-gold { color: var(--gold); }
+      kbd {
+        font-family: inherit;
+        font-size: 0.85em;
+        padding: 0.05rem 0.4rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        color: var(--paper);
+      }
+      code {
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.92em;
+        padding: 0.05rem 0.35rem;
+        background: var(--panel);
+        border-radius: 4px;
+        color: var(--cyan);
+      }
+
+      .kicker {
+        display: inline-block;
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 0.35rem 0.7rem;
+        margin-bottom: 1.4rem;
+      }
+      .lede {
+        font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+        color: var(--paper);
+        max-width: 60ch;
+      }
+      .made-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem 1rem;
+        margin: 1.5rem 0 0;
+      }
+      .made-nav a {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        text-decoration: none;
+        border: 1px solid rgba(255, 198, 61, 0.35);
+        padding: 0.42rem 0.85rem;
+        transition: background 0.12s ease, color 0.12s ease;
+      }
+      .made-nav a:hover {
+        background: var(--gold);
+        color: var(--ink);
+      }
+
+      /* ---------- PLAIN-ENGLISH FAQ ---------- */
+      .faq {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 0.8rem;
+        margin: 1.5rem 0 0.5rem;
+      }
+      .faq details {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0.8rem 1rem 0.4rem;
+        transition: border-color 0.15s ease;
+      }
+      .faq details[open] {
+        border-color: var(--gold);
+      }
+      .faq summary {
+        cursor: pointer;
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.92rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--cyan);
+        list-style: none;
+        padding: 0.25rem 0;
+        position: relative;
+        padding-right: 1.6rem;
+      }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after {
+        content: "+";
+        position: absolute;
+        right: 0;
+        top: 0.15rem;
+        color: var(--gold);
+        font-size: 1.1rem;
+        line-height: 1;
+      }
+      .faq details[open] summary::after { content: "−"; }
+      .faq summary:hover { color: var(--paper); }
+      .faq details p {
+        font-size: 0.95rem;
+        color: var(--paper);
+        margin: 0.7rem 0 0.8rem;
+      }
+      .faq details p + p { margin-top: 0; }
+      .faq .tag {
+        display: inline-block;
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border: 1px solid rgba(255, 198, 61, 0.3);
+        padding: 0.1rem 0.45rem;
+        border-radius: 3px;
+        margin-right: 0.4rem;
+      }
+      .callout {
+        background: linear-gradient(135deg, rgba(255, 198, 61, 0.08), rgba(216, 31, 42, 0.05));
+        border: 1px solid rgba(255, 198, 61, 0.25);
+        border-left: 3px solid var(--gold);
+        padding: 0.9rem 1.1rem;
+        border-radius: 4px;
+        margin: 1.4rem 0;
+        font-size: 1rem;
+      }
+      .callout b { color: var(--gold); font-family: "Single Fighter", sans-serif; }
+      .callout p { margin: 0.4rem 0 0; color: var(--paper); }
+
+      .pipeline {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.6rem;
+        margin: 2rem 0;
+      }
+      .step {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        padding: 1rem 1.1rem;
+        border-radius: 4px;
+        position: relative;
+      }
+      .step .num {
+        font-family: "Fatal Fighter", sans-serif;
+        font-size: 1.6rem;
+        color: var(--gold);
+        line-height: 1;
+        display: block;
+      }
+      .step .name {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--cyan);
+        margin-top: 0.4rem;
+        display: block;
+      }
+      .step p {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin: 0.5rem 0 0;
+      }
+      .step .gate {
+        display: inline-block;
+        margin-top: 0.6rem;
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.78rem;
+        color: var(--gold);
+        background: rgba(255, 198, 61, 0.07);
+        border: 1px solid rgba(255, 198, 61, 0.25);
+        padding: 0.15rem 0.4rem;
+        border-radius: 3px;
+      }
+
+      .roster {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0 3rem;
+      }
+      .fighter {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1rem 1.2rem 1.4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .fighter::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at top right, rgba(216, 31, 42, 0.18), transparent 60%);
+        pointer-events: none;
+      }
+      .fighter.carney::before {
+        background: radial-gradient(ellipse at top right, rgba(47, 107, 255, 0.18), transparent 60%);
+      }
+      .fighter.officer-flock::before {
+        background: radial-gradient(ellipse at top right, rgba(127, 140, 152, 0.2), transparent 60%);
+      }
+      .fighter h4 {
+        margin: 0 0 0.2rem;
+        color: var(--paper);
+        font-size: 1.5rem;
+      }
+      .fighter .sub {
+        color: var(--muted);
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 0.7rem;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem 1rem;
+        font-size: 0.88rem;
+        margin: 0.7rem 0;
+      }
+      .stats span { color: var(--muted); }
+      .stats b {
+        color: var(--paper);
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-weight: 600;
+      }
+      .fighter button.cta {
+        font-family: "Fatal Fighter", sans-serif;
+        background: var(--gold);
+        color: var(--ink);
+        border: none;
+        padding: 0.55rem 1rem;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        text-transform: uppercase;
+        margin-top: 0.7rem;
+        transition: transform 0.12s ease;
+      }
+      .fighter button.cta:hover { transform: translateY(-1px); }
+      .fighter button.cta.active {
+        background: var(--red);
+        color: var(--paper);
+      }
+
+      .detail-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+      }
+      .detail-list li {
+        padding: 0.7rem 0;
+        border-bottom: 1px dashed var(--border);
+        display: grid;
+        grid-template-columns: 8rem 1fr;
+        gap: 1rem;
+        align-items: baseline;
+      }
+      .detail-list li b {
+        color: var(--cyan);
+        font-family: "Single Fighter", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 0.82rem;
+      }
+
+      .viewer {
+        position: relative;
+        width: 100%;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+      @media (max-width: 1024px) {
+        .viewer { min-height: 70vh; }
+      }
+      .viewer canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        cursor: grab;
+        touch-action: none;
+      }
+      .viewer canvas.dragging { cursor: grabbing; }
+      .viewer-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 1rem 1.2rem;
+      }
+      .viewer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.7rem;
+      }
+      .badge {
+        background: rgba(8, 12, 24, 0.7);
+        border: 1px solid var(--border);
+        padding: 0.35rem 0.7rem;
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--paper);
+        backdrop-filter: blur(6px);
+      }
+      .badge .accent { color: var(--gold); }
+      .viewer-controls {
+        flex: 0 0 auto;
+        background: rgba(8, 12, 24, 0.92);
+        border-top: 1px solid var(--border);
+        padding: 0.9rem 1rem 1rem;
+        backdrop-filter: blur(8px);
+        pointer-events: auto;
+      }
+      .viewer-controls .swap-row {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+      }
+      .lighting-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.35rem;
+        margin-bottom: 0.65rem;
+      }
+      .lighting-row .pill { padding-inline: 0.35rem; }
+      .swap-btn {
+        flex: 1;
+        font-family: "Fatal Fighter", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: var(--gold);
+        color: var(--ink);
+        border: 1px solid var(--gold);
+        padding: 0.5rem 0.6rem;
+        cursor: pointer;
+        transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
+      }
+      .swap-btn:hover { transform: translateY(-1px); }
+      .swap-btn.active { background: var(--red); color: var(--paper); border-color: var(--red); }
+      .viewer-controls label {
+        display: block;
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0.6rem 0 0.25rem;
+      }
+      .viewer-controls label .val {
+        color: var(--gold);
+        float: right;
+      }
+      .viewer-controls input[type="range"] {
+        width: 100%;
+        accent-color: var(--gold);
+      }
+      .viewer-controls .row {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        margin-top: 0.4rem;
+      }
+      .pill {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        padding: 0.3rem 0.65rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+      }
+      .pill:hover { color: var(--paper); border-color: var(--cyan); }
+      .pill.active {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+      }
+      .reel-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        margin-top: 0.9rem;
+      }
+      .reel-row label { margin: 0; }
+      .reel-toggle { font-family: "Fatal Fighter", sans-serif; font-size: 0.9rem; padding: 0.35rem 0.75rem; }
+      .reel-toggle[aria-pressed="true"] {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+      }
+      .viewer-controls .status {
+        margin-top: 0.6rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+        font-family: "Cascadia Code", Consolas, monospace;
+      }
+      .viewer-controls .status .ok { color: var(--gold); }
+      .viewer-controls .status .bad { color: var(--red); }
+      .viewer-controls .status code {
+        font-size: 0.78rem;
+        padding: 0.05rem 0.3rem;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--paper);
+      }
+
+      .loader-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(5, 9, 19, 0.9);
+        z-index: 2;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+      .loader-overlay.hidden { opacity: 0; }
+      .loader-overlay .ring {
+        width: 56px;
+        height: 56px;
+        border: 3px solid var(--border);
+        border-top-color: var(--gold);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      footer {
+        padding: 4rem clamp(1.4rem, 4vw, 4rem);
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.85rem;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+
+      /* ---------- GORE / DISMEMBERMENT ---------- */
+      .callout.warn {
+        background: linear-gradient(135deg, rgba(216, 31, 42, 0.14), rgba(124, 13, 20, 0.06));
+        border-color: rgba(216, 31, 42, 0.35);
+        border-left-color: var(--red);
+      }
+      .callout.warn b { color: var(--red); }
+
+      .regions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+        gap: 0.6rem;
+        margin: 1.4rem 0 1.6rem;
+      }
+      .region {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-left: 3px solid rgba(216, 31, 42, 0.3);
+        border-radius: 4px;
+        padding: 0.8rem 0.9rem 0.9rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        transition: border-color 0.15s ease, opacity 0.25s ease;
+      }
+      .region .rname {
+        font-family: "Great Fighter", "Impact", sans-serif;
+        font-size: 1.05rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--paper);
+      }
+      .region .rgate {
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+      .region .rgate b { color: var(--gold); font-weight: 600; }
+      .region .rmeta {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.45;
+      }
+      .region .rmeta code { font-size: 0.75rem; padding: 0.02rem 0.25rem; }
+      .region.lethal { border-left-color: rgba(255, 198, 61, 0.45); }
+      .region.eligible {
+        border-left-color: var(--red);
+        border-color: rgba(216, 31, 42, 0.35);
+      }
+      .region.eligible .rgate b { color: var(--red); }
+      .region.gone { opacity: 0.4; border-left-color: var(--muted); }
+      .region.unrigged { opacity: 0.5; }
+      .region .rstate {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: auto;
+        padding-top: 0.3rem;
+      }
+      .region.eligible .rstate { color: var(--red); }
+
+      button.danger {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: transparent;
+        border: 1px solid rgba(216, 31, 42, 0.5);
+        color: var(--red);
+        padding: 0.32rem 0.65rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+      }
+      button.danger:hover:not(:disabled) { background: var(--red); color: var(--paper); border-color: var(--red); }
+      button.danger:disabled { opacity: 0.35; cursor: not-allowed; }
+      button.fatality {
+        font-family: "Fatal Fighter", "Impact", sans-serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background: var(--red-deep);
+        border: 1px solid var(--red);
+        color: var(--gold-light);
+        padding: 0.3rem 0.8rem;
+        cursor: pointer;
+        transition: all 0.12s ease;
+      }
+      button.fatality:hover:not(:disabled) { background: var(--red); color: var(--paper); }
+      button.fatality:disabled { opacity: 0.35; cursor: not-allowed; }
+      .gore-row { margin-top: 0.5rem; }
+      .gore-row button.pill.on { background: var(--red); color: var(--paper); border-color: var(--red); }
+
+      .hud-health {
+        margin-top: 0.6rem;
+        width: 46%;
+        min-width: 150px;
+        height: 9px;
+        background: rgba(8, 12, 24, 0.75);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .hud-health span {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(90deg, var(--red-deep), var(--red));
+        transform-origin: left center;
+        transition: transform 0.2s ease;
+      }
+      .hud-tally {
+        margin-top: 0.45rem;
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.72rem;
+        color: var(--red);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      .organ-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0 1.4rem;
+        font-size: 0.85rem;
+      }
+      .organ-table th, .organ-table td {
+        text-align: left;
+        padding: 0.42rem 0.6rem;
+        border-bottom: 1px dashed var(--border);
+      }
+      .organ-table th {
+        font-family: "Single Fighter", sans-serif;
+        font-size: 0.72rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--cyan);
+      }
+      .organ-table td { color: var(--muted); }
+      .organ-table td:first-child { color: var(--paper); }
+      .organ-table td b {
+        color: var(--paper);
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-weight: 600;
+      }
+
+      @media (max-width: 640px) {
+        .detail-list li { grid-template-columns: 1fr; gap: 0.2rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="made-root">
+      <div class="layout">
+        <main class="prose">
+          <span class="kicker">Fictional parody prototype · Made page</span>
+          <h1 class="title">How this game<br/>was made</h1>
+          <p class="lede">
+            <strong>Battle for Independence</strong> is a 3D fighting game built entirely
+            with <span class="accent-gold">Three.js</span>, WebGL, and
+            a procedurally generated fighter pipeline. This page walks through how it was
+            built — and lets you take the fighters apart.
+          </p>
+          <p class="made-nav">
+            <a href="./">Play the game</a>
+            <a href="fighter-lab.html">Fighter lab</a>
+          </p>
+
+          <!-- ======= PLAIN ENGLISH ======= -->
+          <h2>No coding background? Start here</h2>
+          <p>
+            If terms like <em>rig</em>, <em>GLB</em>, or <em>animation clip</em> don't mean anything to you,
+            open this section first. The short version of everything is below; the
+            technical deep-dive is in the sections after.
+          </p>
+
+          <div class="callout">
+            <b>The 30-second version.</b>
+            <p>
+              A 3D model is just a hollow shell made of triangles. To make a fighter move,
+              we glue an invisible skeleton inside the shell, then teach each bone how to
+              bend. Each move the fighter can do — a punch, a crouch, a knockdown — is a
+              short recording of how every bone should rotate. The game stitches those
+              recordings together when you press buttons.
+            </p>
+          </div>
+
+          <div class="faq">
+            <details>
+              <summary><span class="tag">model</span>What even is a 3D model?</summary>
+              <p>
+                A 3D model is a hollow shape built out of tiny triangles. The figure you're
+                looking at in the viewer on the right is roughly <b>150,000 triangles</b>
+                stitched together so they look like a person. The triangles carry three
+                things: where their corners sit in space (<em>position</em>), which way they
+                face (<em>normals</em>), and their colour (<em>paint</em>).
+              </p>
+              <p>
+                Picture a beach-ball made of coloured paper plates glued edge to edge.
+                Now shrink each plate to about 3 mm and stack 150,000 of them. That's
+                roughly a 3D model.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">mesh</span>Why does it look "blocky" up close?</summary>
+              <p>
+                Because it really is. There are no smooth surfaces underneath — just
+                triangles. When you're far away, your eye fills in the gaps. When you zoom
+                in (or pull the fighter apart with the explode slider), the flat plates
+                become visible. The number of triangles is a trade-off: more triangles =
+                smoother curves but slower to render.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">rig</span>What does "rigging" mean?</summary>
+              <p>
+                Rigging is putting a digital skeleton inside the model. The skeleton is a
+                tree of bones — <em>hips</em> at the bottom, <em>spine</em> on top, then
+                <em>chest</em>, <em>neck</em>, <em>head</em>, and from the chest, two
+                arms branching into shoulder, upper arm, forearm, hand, and from the hips,
+                two legs into upper leg, knee, foot, toe.
+              </p>
+              <p>
+                Each bone is invisibly glued to a chunk of the surrounding triangles, so
+                when the bone rotates, the triangles move with it. The rig for both
+                fighters in this game has <b>25 bones</b>.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">clip</span>What is an animation clip?</summary>
+              <p>
+                An animation clip is a short, time-stamped recording of how every bone in
+                the skeleton should rotate. A "jab" clip might say: at frame 0 the right
+                arm is at the hip; at frame 4 the right arm is fully extended; at frame 12
+                the arm is back at the hip.
+              </p>
+              <p>
+                The game plays these recordings on demand. Press a punch button, the jab
+                clip plays. Press block, the guard clip loops. Clips can be blended —
+                that's how a fighter can be part-way through a punch and start a kick at
+                the same time.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">shader</span>What's a "shader"?</summary>
+              <p>
+                A shader is a tiny program that runs once per triangle, on the graphics
+                card, to decide what colour to draw. The "key light" you can see hitting
+                the fighter's shoulder? That's a shader working out where the light hits
+                and how bright it should be.
+              </p>
+              <p>
+                This game uses fairly simple shaders (the standard "physical" material that
+                ships with Three.js). The fancy stuff — reflections, glow, soft shadows —
+                is all the shader's job.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">GLB</span>Why is a .glb file so big?</summary>
+              <p>
+                A <code>.glb</code> is a binary package that holds everything one model
+                needs: positions, normals, colours, the rig, all the clips, and (for
+                non-cartoon models) texture images. The two fighters in this game are
+                roughly 9 MB each.
+              </p>
+              <p>
+                This page uses the rigged <code>.glb</code> as the source it shows in the
+                viewer. The actual game runtime ships a much smaller encoded form
+                (~6 MB per fighter) that decodes at load time — same look, smaller file.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">fps</span>What is "frame data"?</summary>
+              <p>
+                A frame is one still image the game draws. A typical display shows 60 of
+                them per second. "Frame data" is the list of <em>which frame each move
+                hits, blocks, or ends on</em>.
+              </p>
+              <p>
+                The jab in this game is 0.62 seconds long. At 60 frames per second that's
+                37 frames. Frame data says: hits on frame 4, recovers on frame 12, is fully
+                safe to interrupt again by frame 16. Two players on different refresh-rate
+                monitors see the same fight, just with smoother or choppier pictures —
+                the timing is identical.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">Ai</span>How does the CPU opponent "think"?</summary>
+              <p>
+                It's not thinking. It's a short decision tree: <em>how far is the other
+                fighter?</em> → if close, try a jab; <em>are they attacking?</em> → if yes,
+                block; <em>am I low on health?</em> → if yes, play safe. The CPU reads the
+                exact same frame data the human reads, so it plays by the same rules.
+              </p>
+              <p>
+                Difficulty just widens how often the CPU picks the best option versus a
+                random one. On the lowest setting it picks randomly about half the time.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">pipeline</span>What's a "pipeline"?</summary>
+              <p>
+                A pipeline is a sequence of automated steps that turns one thing into
+                another. The character pipeline in this game turns a photograph of a
+                character into a rigged, animated, ready-to-punch fighter — in eight
+                fixed steps, with a number-based check between each step so a bad result
+                fails loudly instead of silently.
+              </p>
+              <p>
+                The whole point of a pipeline is that you can run it again on a new
+                character and get the same quality, without anyone having to redo the
+                same trial-and-error by hand.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">gate</span>What's a "gate"?</summary>
+              <p>
+                A gate is a number-based pass/fail check. <em>Silhouette overlap must be
+                at least 98.5 %.</em> If the new fighter's silhouette doesn't match the
+                reference drawing at least that well, the pipeline stops and the human
+                decides what to do. No "looks fine" — a number, with a threshold.
+              </p>
+              <p>
+                This is what makes the pipeline trustworthy. A small local AI judging
+                "does this look right?" is exactly the kind of fuzzy check that lets bad
+                results slip through. Gating on a measured number does not.
+              </p>
+            </details>
+
+            <details>
+              <summary><span class="tag">ai art</span>Was the art drawn by an AI?</summary>
+              <p>
+                The <em>silhouettes</em> were generated by an image-to-3D service from
+                hand-made reference drawings. Everything else — the painted colour, the
+                skeleton, the bones, every pose, every clip, every hit effect, every
+                sound, the music, the announcer calls, the code, the font styling, the
+                menus, the HUD — was authored or assembled by hand on top of those
+                generated surfaces.
+              </p>
+              <p>
+                The pages and the README are explicit that this is a fictional parody and
+                not affiliated with any real person or organisation.
+              </p>
+            </details>
+          </div>
+
+          <h2>The game</h2>
+          <p>
+            A standalone Vite + Three.js combat prototype with two fictional fighters, a
+            standing-stance Lake America stage, locked 60 Hz simulation and one-shot visual
+            ceremony. The match is frame-data driven: every move is N frames on a 144 Hz
+            monitor and on a throttled phone. Rendering is the only thing that interpolates.
+          </p>
+
+          <h3>Tech stack</h3>
+          <ul class="detail-list">
+            <li><b>Engine</b><span>Three.js (vendored, MIT) + WebGL2. No physics engine, no animation library other than Three's <code>AnimationMixer</code>.</span></li>
+            <li><b>Sim loop</b><span>Fixed-step accumulator at 60 Hz. Effects pull from a frame-data table in <code>engine/frameData.js</code> and a <code>Match</code> state machine.</span></li>
+            <li><b>CPU</b><span>Decision tree with four difficulty dials. Reads the same frame data the human reads, so the AI plays by the same rules.</span></li>
+            <li><b>Input</b><span>Keyboard, gamepad, touch. One set of chord macros reaches both the P1 keyboard and any gamepad.</span></li>
+            <li><b>Audio</b><span>77 mono 32 kHz PCM effects, three music tracks, an announcer pool with ducking. Sound starts after a user gesture.</span></li>
+            <li><b>Build</b><span>Vite, single CSS theme driven by <code>COLOR_BIBLE.md</code> tokens, no UI framework.</span></li>
+          </ul>
+
+          <h3>Only Three.js</h3>
+          <p>
+            <b>Three.js is not a game engine.</b> It is a renderer — a library that turns
+            "put this mesh here, light it that way, point a camera at it" into the thousands of
+            low-level WebGL calls a graphics card actually wants. It draws. It has no opinion
+            about what a round is, what a hitbox does, or when a match ends.
+          </p>
+
+          <div class="callout">
+            <b>The 30-second version.</b>
+            <p>
+              Most browser games are built on an engine that owns the whole thing: the game
+              loop, physics, collision, scenes, UI, audio, an editor. This one is built on a
+              library that only knows how to draw triangles. Everything above the triangles —
+              the fighting game — is in this repository.
+            </p>
+          </div>
+
+          <p>
+            That library is the entire third-party runtime. Not "few dependencies" as a figure
+            of speech: <code>package.json</code> lists exactly one, and it is vendored into the
+            source tree as a single MIT-licensed file, so the shipped game makes
+            <span class="accent-gold">no network request to anything it does not own</span>.
+            No CDN, no off-site import map, no analytics, no webfont fetch. Vite builds it and
+            never ships with it.
+          </p>
+
+          <div class="stats">
+            <span>Runtime dependencies</span><b>1 — three r170</b>
+            <span>Vendored as</span><b>one 1.31 MB file</b>
+            <span>Three.js API used</span><b>60 classes</b>
+            <span>Script tags in index.html</span><b>1</b>
+            <span>Non-relative imports</span><b>0</b>
+            <span>Shipped bundle</span><b>812 KB → 225 KB gzip</b>
+          </div>
+
+          <p>Three.js earns its place. It carries the genuinely hard graphics work:</p>
+          <ul class="detail-list">
+            <li><b>Draws</b><span>WebGL2 state management, shader compilation, the render graph. <code>WebGLRenderer</code> plus <code>setAnimationLoop</code> — the only outside code that calls into this game each frame.</span></li>
+            <li><b>Skins</b><span><code>SkinnedMesh</code> and <code>Skeleton</code> deform ~105k vertices against the 25-bone rig on the GPU, per fighter, per frame.</span></li>
+            <li><b>Blends</b><span><code>AnimationMixer</code> cross-fades the 32 clips each fighter carries. The only animation code in the project not written here.</span></li>
+            <li><b>Lights</b><span>Shadow maps, ACES filmic tone mapping, physically-based materials for the stage and both fighters.</span></li>
+            <li><b>Composes</b><span>The passes in <code>render/postfx.js</code> are Three's own addons — bloom, copy, output — wired by hand into a stack this repo controls.</span></li>
+          </ul>
+
+          <p>
+            What it does not do is everything an engine would have handed over. All of this is
+            first-party:
+          </p>
+          <ul class="detail-list">
+            <li><b>Game loop</b><span>The fixed-step 60 Hz accumulator in <code>main.js</code>. Three supplies a frame callback and nothing more.</span></li>
+            <li><b>Combat</b><span>1,715 lines across eight files in <code>engine/</code>: frame-data table, <code>Match</code> state machine, hit resolution, blocking, combos, meter.</span></li>
+            <li><b>Collision</b><span>Axis-aligned hit and hurt boxes resolved by hand. No physics engine — no Rapier, no Cannon, no Ammo.</span></li>
+            <li><b>Input</b><span>Keyboard, Gamepad API and touch polled into one button struct, with a chord resolver for the two-button macros.</span></li>
+            <li><b>Audio</b><span>Raw Web Audio — buffer sources, gain nodes, announcer ducking. <code>THREE.Audio</code> is not used.</span></li>
+            <li><b>Interface</b><span>HUD, menus and round reel are DOM and one stylesheet. No React, no UI kit, no tween library.</span></li>
+          </ul>
+
+          <h3>Why one library instead of an engine</h3>
+          <p>
+            <b class="accent-gold">1. The dependency tree is readable in an afternoon.</b>
+            One direct dependency means one transitive tree, and this one has no branches.
+            There is no 400-package <code>node_modules</code> under the shipped game, so there
+            is no supply chain to audit and no postinstall script to trust. The complete list
+            of third-party code running in a player's browser is: Three.js r170, MIT.
+          </p>
+          <p>
+            <b class="accent-gold">2. It will still run.</b> No engine version to migrate, no
+            editor project format to open, no proprietary runtime to keep licensed. The game is
+            ES modules and WebGL2 — two things browsers have committed to indefinitely.
+            Nothing here needs a company to stay in business.
+          </p>
+          <p>
+            <b class="accent-gold">3. It is the reason the combat is deterministic.</b> This is
+            the one that actually matters, and it is not a philosophical point. An engine owns
+            the update tick and hands you a variable <code>deltaTime</code>, which quietly makes
+            your game logic a function of how fast the machine happened to be running. Because
+            nothing outside this repository owns the loop, the simulation could be written as a
+            pure function instead: <code>step(inputs)</code> advances exactly one 60 Hz frame,
+            and rendering is the only layer that interpolates.
+          </p>
+
+          <div class="callout">
+            <b>What that buys.</b>
+            <p>
+              The <code>engine/</code> folder contains no <code>Math.random</code>, no
+              <code>Date.now</code>, no <code>performance.now</code> and no trigonometry —
+              nothing that can differ between two machines. A four-frame jab is four frames on
+              a 144 Hz desktop and four frames on a throttled phone, and a whole round can be
+              reconstructed from nothing but the button presses. That property is very hard to
+              retrofit and nearly impossible to guarantee inside an engine that owns your tick.
+              Here it falls out of the architecture for free.
+            </p>
+          </div>
+
+          <p>
+            The cost is honest, and it is the rest of this repository:
+            <span class="accent-red">roughly 8,000 lines across 57 modules</span> doing work an
+            engine would have shipped for you. "Only Three.js" is not a claim to have written a
+            renderer — Three.js is carrying enormous weight, and reimplementing
+            <code>WebGLRenderer</code> would be foolish. The claim is narrower and more useful:
+            there is exactly one seam between this game and somebody else's code, it is
+            documented, and everything on this side of it can be changed without asking
+            anyone's permission.
+          </p>
+
+          <h3>Ceremony and feedback</h3>
+          <p>
+            The round reel is locked: title → versus shot → intros → round announcement →
+            <span class="accent-gold">FIGHT</span> slam → live input. KO holds impact state for
+            32 slow-mo frames plus a freeze before the card. Flawless, Double KO, Fatality,
+            Draw and ordinary Victory each get a distinct end card with its own colour pair
+            from the bible. Reduced-motion mode strips scaling slams and camera kicks but
+            keeps the callouts.
+          </p>
+
+          <h2>The character pipeline</h2>
+          <p>
+            Every fighter in the roster comes out of one automated four-command pipeline.
+            The run is fail-closed by gates — numbers, not vibes. Re-roll is cheap; signed-off
+            results are not re-touched.
+          </p>
+
+          <div class="pipeline">
+            <div class="step">
+              <span class="num">01</span>
+              <span class="name">Reference turnaround</span>
+              <p>Front / side / back, RGBA, single connected alpha, tight crop.</p>
+            </div>
+            <div class="step">
+              <span class="num">02</span>
+              <span class="name">Hitem3D two-export</span>
+              <p>Textured mesh + named parts mesh of the same sculpt. Bounds must match exactly.</p>
+              <span class="gate">gate: bounds ≤ 1 mm/m</span>
+            </div>
+            <div class="step">
+              <span class="num">03</span>
+              <span class="name">Bake atlas → parts</span>
+              <p>Transfer the 8K colour atlas onto the six named anatomical parts in 3D.</p>
+              <span class="gate">gate: median ≤ 0.5 mm</span>
+            </div>
+            <div class="step">
+              <span class="num">04</span>
+              <span class="name">Decimate (QEM)</span>
+              <p>Curvature- and colour-aware quadric error metric, per-part budget.</p>
+              <span class="gate">gate: IoU ≥ 98.5%, head ΔE50 ≤ 4</span>
+            </div>
+            <div class="step">
+              <span class="num">05</span>
+              <span class="name">Measure joints</span>
+              <p>Joints come from the part bounds. Wrist is the only landmark searched — the two arms cross-check each other.</p>
+              <span class="gate">gate: wrist agree ≤ 3%</span>
+            </div>
+            <div class="step">
+              <span class="num">06</span>
+              <span class="name">Rig &amp; pose check</span>
+              <p>Canonical 25-bone skeleton. Pose check runs the same IK outside the browser and prints trunk clearance.</p>
+              <span class="gate">gate: clearance ∈ band</span>
+            </div>
+            <div class="step">
+              <span class="num">07</span>
+              <span class="name">Encode to TypeScript</span>
+              <p>Pack positions, normals, colours, joints and weights into one Base64 stream in <code>surfaceData.js</code>.</p>
+              <span class="gate">no .glb fetch</span>
+            </div>
+            <div class="step">
+              <span class="num">08</span>
+              <span class="name">Author clips</span>
+              <p>Keyframes on the frozen tree, never retargeted mocap. One jab first, then idle, walk, hurt, special.</p>
+            </div>
+          </div>
+
+          <div class="callout">
+            <b>Fighter lab.</b>
+            <p>
+              The <a href="fighter-lab.html" style="color:var(--gold)">fighter lab</a>
+              puts the original vertex-color sculpt beside the textured GLB export:
+              camera presets, animation scrubbing, and wireframe. It is the production
+              proof for the bake in steps 02–03, not a second game.
+            </p>
+          </div>
+
+          <p>
+            The single biggest lesson is that
+            <span class="accent-red">vision QA of the mesh is the wrong place for a model</span>.
+            A small local VLM asked "does this look right?" is the exact component that says
+            "looks fine" to a clay-coloured regression that ships at ΔE 104. Every gate above
+            is a number with a threshold: silhouette IoU, ΔE50/ΔE95, trunk clearance in
+            metres, floor penetration, left-right wrist agreement. The pipeline is
+            automatable because the gates are floats.
+          </p>
+
+          <h3>The canonical skeleton</h3>
+          <p>
+            Every fighter shares the same 25-bone rig so combat clips can be authored once
+            and inherited. The canonical tree:
+          </p>
+<pre style="background:var(--panel);padding:0.9rem 1rem;border-radius:4px;border:1px solid var(--border);overflow:auto;font-size:0.85rem;color:var(--paper);">
+root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
+                            &gt; shoulderL/R &gt; upperArmL/R &gt; forearmL/R &gt; handL/R &gt; handEndL/R
+            &gt; upLegL/R &gt; legL/R &gt; footL/R &gt; toeL/R</pre>
+
+          <h3>Why no GLB ships at runtime</h3>
+          <p>
+            The 9 MB rigged GLB inside <code>site/fighters/&lt;id&gt;</code> is the
+            <em>measurement source</em>, not the deliverable. The runtime game ships a
+            Three.js factory that decodes a packed surface stream and rig data from
+            JavaScript modules. It is, structurally, code. No <code>.glb</code>,
+            <code>.bin</code>, or texture image is fetched during play.
+          </p>
+
+          <h2>Roster</h2>
+          <p>
+            Click a fighter to load it into the viewer on the right. Drag the explode slider
+            to separate the six named parts along their centroid vectors. Use the pose pills
+            to switch between bound, idle and authored moves.
+          </p>
+
+          <div class="roster">
+            <div class="fighter" data-id="trump">
+              <h4>Trump</h4>
+              <div class="sub">Fighter · P1 default</div>
+              <p>Established caricature, taller stance, narrow trunk. First fighter through the pipeline — every default number in <code>FIGHTER_PLAYBOOK.md</code> was tuned against this mesh.</p>
+              <div class="stats">
+                <span>Height</span><b>1.92 m</b>
+                <span>Verts</span><b>105,159</b>
+                <span>Tris</span><b>150,000</b>
+                <span>Bones</span><b>25</b>
+                <span>Clips</span><b>32</b>
+                <span>Palette</span><b>navy / red tie</b>
+              </div>
+              <button class="cta" data-load="trump">Load in viewer</button>
+            </div>
+
+            <div class="fighter carney" data-id="carney">
+              <h4>Carney</h4>
+              <div class="sub">Fighter · P2 default</div>
+              <p>Slimmer build (0.25 m deep vs 0.38 m). Generated with closed fists, so the jab reads as a punch, not a traffic-cop gesture. The pipeline transferred unchanged except for a 0.13 m aim-offset sidecar.</p>
+              <div class="stats">
+                <span>Height</span><b>1.92 m</b>
+                <span>Verts</span><b>104,894</b>
+                <span>Tris</span><b>149,996</b>
+                <span>Bones</span><b>25</b>
+                <span>Clips</span><b>32</b>
+                <span>Palette</span><b>blue / silver</b>
+              </div>
+              <button class="cta" data-load="carney">Load in viewer</button>
+            </div>
+
+            <div class="fighter officer-flock" data-id="officer_flock">
+              <h4>Officer Flock</h4>
+              <div class="sub">Fighter · surveillance specialist</div>
+              <p>Retargeted imported rig with preserved PBR textures and closed hands. The shared combat animation set is mapped onto the source skeleton without replacing its five textured meshes.</p>
+              <div class="stats">
+                <span>Height</span><b>1.92 m</b>
+                <span>Tris</span><b>134,431</b>
+                <span>Meshes</span><b>5</b>
+                <span>Clips</span><b>32</b>
+                <span>Textures</span><b>9</b>
+                <span>Palette</span><b>black / steel</b>
+              </div>
+              <button class="cta" data-load="officer_flock">Load in viewer</button>
+            </div>
+          </div>
+
+          <h3>Try it: explode</h3>
+          <p>
+            Each fighter is a group of six named anatomical parts — <code>Head</code>,
+            <code>Torso</code>, <code>LeftArm</code>, <code>RightArm</code>,
+            <code>LeftLeg</code>, <code>RightLeg</code>. The codec already pre-computes an
+            <code>explode</code> vector per part — its own centroid offset from the figure's
+            centre. Drag the slider and the parts move along those vectors; the bones do not
+            detach, they merely separate. <code>explode(1)</code> is what you see in the
+            versus setup before the round starts.
+          </p>
+
+          <h2>Taking a fighter apart</h2>
+
+          <div class="callout warn">
+            <b>Content note.</b>
+            <p>
+              Everything below this heading is the game's dismemberment system, running
+              live in the viewer on the right: severed limbs, cartoon arterial blood, and
+              organs on the floor. It only happens when you press something. If you would
+              rather not, skip ahead to <a href="made.html#refnums" style="color:var(--gold)">reference
+              numbers</a> &mdash; nothing later on depends on this section.
+            </p>
+          </div>
+
+          <p>
+            A fighting game that only drains a bar tells you the same story every round.
+            This one keeps a record. The rule the whole system is built around is that
+            <span class="accent-red">a limb is never taken by the health bar alone</span>.
+            A region severs when it has been <em>hit</em> while the fighter is below that
+            region's threshold &mdash; so the damage on screen is a record of how the round
+            was actually fought. Beat someone to the body and the torso opens. Headhunt and
+            the jaw goes. A fighter who never gets hit in the legs keeps them, at any
+            health.
+          </p>
+
+          <div class="callout">
+            <b>The 30-second version.</b>
+            <p>
+              Two things have to agree before anything comes off: <em>where</em> the hit
+              landed on the body, and <em>how hurt</em> the fighter already was. The hit
+              height picks which regions it could plausibly have removed; the health
+              threshold decides which of those are eligible at all. Neither is enough on
+              its own, which is what stops a body blow at 20&nbsp;% health from taking a
+              head off.
+            </p>
+          </div>
+
+          <h3>The seven regions</h3>
+          <p>
+            This is the shipped table out of <code>render/goreAtlas.js</code>, thresholds
+            and all. <b>Threshold</b> is remaining health. The two
+            <span class="accent-gold">lethal</span> regions sit at 0&nbsp;% because they can
+            only ever be the last thing that happens &mdash; an ordinary hit is never
+            allowed to take them, so the round does not routinely end on a decapitation
+            nobody chose. Only a KO or a finisher asks for those directly, which is what
+            the <b>Cut</b> button on each card is doing.
+          </p>
+
+          <div class="regions" id="regions"></div>
+
+          <p class="muted" style="font-size:0.88rem;">
+            Regions are named by the <em>bones</em> their geometry hangs from, matched by
+            pattern rather than by exact name, because the roster does not agree on a
+            skeleton: the authored fighters use this project's rig (<code>upperArmL</code>,
+            <code>forearmL</code>, <code>upLegR</code>) and imported models arrive on
+            whatever their source used. Matching on a pattern means a new model is
+            dismemberable on arrival instead of after someone hand-writes a bone map. It
+            also means a region can come back <em>not rigged</em> &mdash; neither fighter
+            here has a jaw bone, so the jaw card marks itself and cutting it is a no-op
+            rather than a silently retired region.
+          </p>
+
+          <h3>What happens on the frame a limb comes off</h3>
+          <p>
+            Four things, all driven from the same <em>posed</em> skeleton, so they agree
+            about where the cut was:
+          </p>
+          <ul class="detail-list">
+            <li><b>Geometry</b><span>Everything skinned to the severed bone chain stops being drawn. The stump bone is looked up on the animated skeleton, so the wound is where the limb <em>is now</em>, not where the bind pose left it.</span></li>
+            <li><b>Momentum</b><span>The limb becomes a prop carrying 55&nbsp;% of the blow's force. A limb that flies off along the blow reads as caused by it; one that drops straight down reads as a bug.</span></li>
+            <li><b>Spill</b><span>The region's organs follow the cut, thrown a little more softly than the limb so they trail behind it instead of arriving together in a clump.</span></li>
+            <li><b>Bleed</b><span>The stump is soaked before the limb has finished leaving. A cut that is not bleeding at its edge reads as plastic.</span></li>
+          </ul>
+
+          <h3>Nothing is actually deleted</h3>
+          <p>
+            The obvious way to remove an arm is to rebuild the index buffer without it.
+            This does not do that. Every vertex carries a <code>severMask</code> &mdash; its
+            total skin weight on the severed chain &mdash; and the fragment shader
+            <code>discard</code>s anything above 0.94. The fighter keeps
+            <span class="accent-gold">one draw call and one index buffer all round</span>,
+            and putting the limb back for the next round is a <code>fill(0)</code> rather
+            than a rebuild.
+          </p>
+
+          <div class="callout">
+            <b>The seam lands in the right place for free.</b>
+            <p>
+              Deep in the forearm every skin weight belongs to the severed chain and the
+              mask is 1. Across the elbow it falls off exactly as the skinning blend does.
+              The band left in between &mdash; mask between 0.02 and 0.94 &mdash; is the cut
+              face, and the shader paints it raw meat instead of skin. Without that band a
+              severed arm reads as a rendering glitch rather than a wound, and nobody had to
+              author a cut cap for any of it.
+            </p>
+          </div>
+
+          <h3>The limb is the body's own vertices</h3>
+          <p>
+            At the moment of the cut, the posed positions of the removed vertices are
+            lifted straight out of the fighter and thrown as a dense point cloud. It is the
+            same silhouette that was attached a frame ago, which is the whole reason it is
+            worth doing rather than throwing a generic lump. Those vertices are a
+            <em>point cloud</em> and not a surface &mdash; their triangles are still indexed
+            against the body &mdash; but as fast-moving points they read as wet tissue in
+            motion and cost nothing to build. That is the right trade for something on
+            screen for under a second. Once it lands it fades, and what stays behind is
+            what actually belongs there: the blood stain, and the real severed chunk the
+            atlas spilled alongside it.
+          </p>
+
+          <h3>Organs are props with real sizes</h3>
+          <p>
+            Every organ is authored against one number &mdash; <code>span</code>, its
+            longest axis <em>in metres</em>, on a fighter a little under two of them tall.
+            It is the single source of truth for scale: the build tool normalises each
+            imported mesh to it, and the procedural fallback generates to it, so a real
+            heart and a generated one are the same size. Authoring these by eye instead
+            produced organs the size of a torso.
+          </p>
+          <table class="organ-table">
+            <thead>
+              <tr><th>Prop</th><th>Span</th><th>Mass</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>heart</td><td><b>0.135 m</b></td><td><b>0.5</b></td><td>keeps beating for nine seconds after it lands</td></tr>
+              <tr><td>brain</td><td><b>0.170 m</b></td><td><b>0.6</b></td><td>head only</td></tr>
+              <tr><td>intestine</td><td><b>0.780 m</b></td><td><b>0.9</b></td><td>strand &mdash; stretched on one axis so it reads as rope, not another lump</td></tr>
+              <tr><td>guts</td><td><b>0.560 m</b></td><td><b>1.1</b></td><td>strand</td></tr>
+              <tr><td>ribcage</td><td><b>0.300 m</b></td><td><b>1.4</b></td><td>heaviest piece, lands first</td></tr>
+              <tr><td>eyeball</td><td><b>0.030 m</b></td><td><b>0.2</b></td><td>two of them, from the head</td></tr>
+              <tr><td>armChunk</td><td><b>0.230 m</b></td><td><b>0.9</b></td><td>salvaged from the gib library &mdash; the piece that comes <em>off</em></td></tr>
+            </tbody>
+          </table>
+          <p class="muted" style="font-size:0.88rem;">
+            The viewer on this page generates its props procedurally from those same spans.
+            The shipped game loads a baked library and falls through to exactly this
+            generated blob for anything the library does not carry &mdash; so the system is
+            never blocked on art, and a headless test that loads no assets still runs the
+            whole path.
+          </p>
+
+          <h3>Blood goes into the mesh, not on top of it</h3>
+          <p>
+            Wounds are painted into a per-vertex attribute in <em>bind space</em>, so they
+            follow every animation for free &mdash; no decal meshes, no texture copies, no
+            per-frame work. The wound is located by sampling the <em>posed</em> surface for
+            the nearest vertex to the hit, then painting that vertex's bind-space
+            neighbourhood, which is what stops a crouching fighter's head wound landing on
+            their jacket. Each splash gets a narrow downward tail so it reads as a trickle
+            rather than a perfectly round paintbrush.
+          </p>
+          <p>
+            Debris bleeds <em>in flight</em>, not only where it lands &mdash; a limb that
+            only stains its landing spot leaves a clean floor between the body and the
+            piece, which is the tell that the two events are unrelated. Pieces get exactly
+            one heavily damped bounce and then stay. Debris that skitters is distracting
+            during a round it is not part of any more.
+          </p>
+
+          <h3>Try it</h3>
+          <p>
+            The controls are in the viewer panel on the right, and every one of them is a
+            real entry point in the shipped system:
+          </p>
+          <ul class="detail-list">
+            <li><b>Health</b><span>Drag it and watch the cards above arm themselves. This is the only thing gating which regions an ordinary hit may take.</span></li>
+            <li><b>Land a hit</b><span>Rolls a height and a force, then runs <code>onHit</code> &mdash; the same path a real hit takes. Small hits only bleed. Heavy ones take something.</span></li>
+            <li><b>Beat down</b><span>Lands one every 0.42&nbsp;s until there is nothing left to take. This is the honest demo: the body comes apart in the order it was beaten, and no two runs are the same.</span></li>
+            <li><b>Cut</b><span>Calls <code>sever</code> directly, ignoring the gate, which is what the KO and the finisher do.</span></li>
+            <li><b>Fatality</b><span><code>explode()</code> &mdash; every region at once, ordered extremities-inward so the body falls apart rather than the head simply vanishing first.</span></li>
+            <li><b>Patch up</b><span><code>resetRound()</code>. Masks and blood are zeroed, debris is retired, the floor is washed. A new round starts on a clean stage.</span></li>
+          </ul>
+
+          <div class="callout warn">
+            <b>What this demo is not.</b>
+            <p>
+              It is the shipped design, the shipped thresholds and the shipped numbers, but
+              the viewer on this page is its own small copy of the runtime rather than the
+              game booted in an iframe. The difference that matters: a real hit gets its
+              height and force from the collision solver, and <b>Land a hit</b> rolls them.
+              Everything downstream of that roll &mdash; which regions are eligible, what
+              severs, where the cut lands, what spills, how it falls &mdash; is the logic
+              described above.
+            </p>
+            <p>
+              One thing genuinely had to change, and it is a property of the asset rather
+              than of the system. This page loads the 9&nbsp;MB <em>measurement</em> GLB,
+              which is blended much more softly than the rig the game ships: a vertex in the
+              middle of this Trump's head is only about half bound to the head bone and
+              nearly half to the chest, so the chain never reaches 0.94 anywhere on the head
+              and the shipped absolute cut would leave it attached. So the mask here is
+              scaled against the strongest hold the chain has on the fighter &mdash; what
+              &ldquo;fully attached&rdquo; means is read off the rig instead of assumed
+              &mdash; and the 0.94 and 0.02 thresholds are then applied unchanged. On a
+              tightly rigged fighter the two are the same thing.
+            </p>
+          </div>
+
+          <h3 id="refnums">Reference numbers</h3>
+          <p>Trump, the shipped build that beat every other budget on both axes:</p>
+          <ul class="detail-list">
+            <li><b>hero IoU</b><span><b>99.146 %</b> against the 2 M-triangle source at identical framing</span></li>
+            <li><b>3/4 IoU</b><span><b>99.318 %</b></span></li>
+            <li><b>head ΔE50</b><span><b>3.00</b> (median colour delta inside the silhouette intersection)</span></li>
+            <li><b>head ΔE95</b><span><b>20.27</b> (95th percentile)</span></li>
+            <li><b>Wrist x</b><span>±0.4452 on both arms — four-decimal cross-check between independently tessellated sides</span></li>
+            <li><b>Trunk width</b><span>0.54 m at the belly, 0.40 m at the chest — drives the elbow pole</span></li>
+          </ul>
+
+          <h3>What this page isn't</h3>
+          <p>
+            A walkthrough of the mixer or the IK. A demo of the input chords. An
+            endorsement of mixing ragdoll with a deterministic sim. The full game lives at
+            <code><a href="./" style="color:var(--gold)">../dist/index.html</a></code>.
+            Side-by-side mesh inspection lives in the
+            <a href="fighter-lab.html" style="color:var(--gold)">fighter lab</a>.
+            This is the behind-the-scenes note pinned to the same build.
+          </p>
+        </main>
+
+        <aside class="viewer-rail">
+          <div class="viewer" id="viewer">
+            <canvas id="canvas"></canvas>
+            <div class="loader-overlay" id="loader">
+              <div class="ring"></div>
+            </div>
+            <div class="viewer-overlay">
+              <div class="viewer-top">
+                <span class="badge" id="badge-id">—</span>
+                <span class="badge"><span class="accent" id="badge-clip">guard</span></span>
+              </div>
+              <div class="hud-health" id="hud-health"><span id="hud-health-fill"></span></div>
+              <div class="hud-tally" id="hud-tally"></div>
+            </div>
+          </div>
+          <div class="viewer-controls" id="controls" hidden>
+            <div class="swap-row" id="swap-row">
+              <button class="swap-btn" data-swap="trump">Trump</button>
+              <button class="swap-btn" data-swap="carney">Carney</button>
+              <button class="swap-btn" data-swap="officer_flock">Officer Flock</button>
+            </div>
+            <label style="margin-top:0;">Lighting</label>
+            <div class="lighting-row" id="lighting-row">
+              <button class="pill active" data-light="arena" aria-pressed="true">Arena</button>
+              <button class="pill" data-light="studio" aria-pressed="false">Studio</button>
+              <button class="pill" data-light="neon" aria-pressed="false">Neon</button>
+              <button class="pill" data-light="silhouette" aria-pressed="false">Silhouette</button>
+            </div>
+            <label>
+              Explode
+              <span class="val" id="explode-val">0.00</span>
+            </label>
+            <input type="range" id="explode" min="0" max="100" value="0" step="0.5" />
+
+            <div id="pose-ui" hidden>
+              <div class="reel-row">
+                <label style="margin:0;">Pose</label>
+                <button class="pill reel-toggle" id="reel-toggle" aria-pressed="false">▶ Play reel</button>
+              </div>
+              <div class="row" id="pose-row"></div>
+            </div>
+
+            <label style="margin-top:0.9rem;">
+              Health
+              <span class="val" id="health-val">100%</span>
+            </label>
+            <input type="range" id="health" min="0" max="100" value="100" step="1" />
+
+            <div class="row gore-row">
+              <button class="danger" id="hit-btn">Land a hit</button>
+              <button class="pill" id="beat-btn">Beat down</button>
+              <button class="fatality" id="fatality-btn">Fatality</button>
+              <button class="pill" id="patch-btn">Patch up</button>
+            </div>
+            <div class="status" id="gore-status">Intact.</div>
+
+            <div class="status" id="status">Ready.</div>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        Built procedurally with Three.js · Fonts:
+        <span class="accent-gold">Fatal Fighter</span>,
+        <span class="accent-gold">Great Fighter</span>,
+        <span class="accent-gold">Single Fighter</span> ·
+        Palette from <code>COLOR_BIBLE.md</code> · Fictional parody.
+      </footer>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./assets/vendor/three.module.js",
+          "three/addons/": "./assets/vendor/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/GLTFLoader.js";
+
+      const FIGHTERS = {
+        trump: {
+          label: "Trump",
+          model: "./fighters/trump/trump-rigged.glb",
+        },
+        carney: {
+          label: "Carney",
+          model: "./fighters/carney/carney-rigged.glb",
+        },
+        officer_flock: {
+          label: "Officer Flock",
+          model: "./fighters/officer_flock/model.json",
+          format: "three",
+          facingRotationY: Math.PI / 2 - 0.3,
+        },
+      };
+      // Curated to ~half of the 32 shipped clips — the ones that show off the
+      // skeleton the most (silhouette changes, big limb arcs, vertical travel).
+      // Order is "neutral first, then escalation" so the loop reads like a
+      // screen-test reel rather than a shuffled bag.
+      const POSES = [
+        "guard",       // neutral stance — the baseline silhouette
+        "idle",        // breathing / weight shift
+        "walkF",       // locomotion, shows leg cycle
+        "crouch",      // vertical compression
+        "jump",        // full-body vertical travel
+        "jumpAttack",  // jump + attack combined
+        "heavyPunch",  // big arm arc, weight transfer
+        "heavyKick",   // big leg arc
+        "crouchPunch", // crouch + attack, low silhouette
+        "crouchKick",  // sweep, very low
+        "grab",        // extended reach forward
+        "throw",       // full-body rotation, dramatic
+        "hitHigh",     // recoil, head snap
+        "knockdown",   // falls to floor, ground contact
+        "dizzy",       // head wobble, stance break
+        "finisher",    // over-the-top signature move
+      ];
+
+      // ===================================================================
+      // GORE
+      //
+      // A condensed copy of the shipped dismemberment system --
+      // render/goreAtlas.js, render/fighterDamage.js, render/goreProps.js and
+      // render/dismemberment.js -- inlined here for the same reason the rest of
+      // this viewer is inlined: the page is served on its own, from a folder
+      // that cannot see the game's source tree, and it has to keep working when
+      // it is re-emitted into the built game at /made.html.
+      //
+      // The table, the thresholds, the masses, the organ spans and the constants
+      // below are the shipped ones, copied rather than paraphrased, so the page
+      // cannot document a number the demo does not honour.
+      // ===================================================================
+
+      const clamp = THREE.MathUtils.clamp;
+      const posed = new THREE.Vector3();
+      const worldScale = new THREE.Vector3();
+      const severOrigin = new THREE.Vector3();
+      const severVelocity = new THREE.Vector3();
+      const spinStep = new THREE.Vector3();
+      const towardCamera = new THREE.Vector3();
+      const hitPoint = new THREE.Vector3();
+
+      // --- goreAtlas.js: both naming conventions for one joint ------------
+      const BONE = Object.freeze({
+        head: /(^|[._]|mixamorig)(head1?|bip01_head)([._]|$)/i,
+        neck: /(^|[._]|mixamorig)(neck1?|bip01_neck)([._]|$)/i,
+        chest: /(^|[._]|mixamorig)(chest|spine[24]|bip01_spine[24])([._]|$)/i,
+        spine: /(^|[._]|mixamorig)(spine1?|bip01_spine1?)([._]|$)/i,
+        hips: /(^|[._]|mixamorig)(hips|pelvis|bip01_pelvis)([._]|$)/i,
+        upperArmL: /(^|[._]|mixamorig)(upperarml|l_upperarm|leftarm)([._]|$)/i,
+        upperArmR: /(^|[._]|mixamorig)(upperarmr|r_upperarm|rightarm)([._]|$)/i,
+        forearmL: /(^|[._]|mixamorig)(forearml|l_forearm|leftforearm)([._]|$)/i,
+        forearmR: /(^|[._]|mixamorig)(forearmr|r_forearm|rightforearm)([._]|$)/i,
+        handL: /(^|[._]|mixamorig)(handl|l_hand|lefthand|l_finger)/i,
+        handR: /(^|[._]|mixamorig)(handr|r_hand|righthand|r_finger)/i,
+        upLegL: /(^|[._]|mixamorig)(uplegl|l_thigh|leftupleg)([._]|$)/i,
+        upLegR: /(^|[._]|mixamorig)(uplegr|r_thigh|rightupleg)([._]|$)/i,
+        legL: /(^|[._]|mixamorig)(legl|l_calf|leftleg)([._]|$)/i,
+        legR: /(^|[._]|mixamorig)(legr|r_calf|rightleg)([._]|$)/i,
+        footL: /(^|[._]|mixamorig)(footl|l_foot|leftfoot|l_toe)/i,
+        footR: /(^|[._]|mixamorig)(footr|r_foot|rightfoot|r_toe)/i,
+      });
+
+      // `span` is the prop's longest axis IN METRES, against a fighter a little
+      // under two of them tall. It is the single source of truth for scale.
+      const ORGANS = Object.freeze({
+        brain: { span: 0.170, mass: 0.6, wet: 0.85 },
+        eyeball: { span: 0.030, mass: 0.2, wet: 0.6 },
+        heart: { span: 0.135, mass: 0.5, wet: 1.0, pulse: true },
+        intestine: { span: 0.780, mass: 0.9, wet: 1.0, strand: true },
+        guts: { span: 0.560, mass: 1.1, wet: 1.0, strand: true },
+        ribcage: { span: 0.300, mass: 1.4, wet: 0.5 },
+        spineChunk: { span: 0.340, mass: 0.8, wet: 0.7 },
+        neckTie: { span: 0.160, mass: 0.4, wet: 1.0 },
+        stomachPlug: { span: 0.200, mass: 0.7, wet: 1.0 },
+        skullCap: { span: 0.150, mass: 0.5, wet: 0.55 },
+        jawPiece: { span: 0.130, mass: 0.35, wet: 0.8 },
+        eyeMeat: { span: 0.070, mass: 0.2, wet: 1.0 },
+        armChunk: { span: 0.230, mass: 0.9, wet: 0.9 },
+        legChunk: { span: 0.280, mass: 1.3, wet: 0.9 },
+        ribsTorn: { span: 0.320, mass: 1.2, wet: 0.6 },
+      });
+
+      // `threshold` is remaining health. `lethal` regions sit at 0 because they
+      // can only ever be the last thing that happens.
+      const REGIONS = Object.freeze([
+        { id: "leftArm", label: "Left Arm", threshold: 0.55, lethal: false,
+          chain: [BONE.forearmL, BONE.handL], stump: BONE.upperArmL,
+          mass: 1.0, spurt: 1.5, organs: ["armChunk"] },
+        { id: "rightArm", label: "Right Arm", threshold: 0.55, lethal: false,
+          chain: [BONE.forearmR, BONE.handR], stump: BONE.upperArmR,
+          mass: 1.0, spurt: 1.5, organs: ["armChunk"] },
+        { id: "leftLeg", label: "Left Leg", threshold: 0.32, lethal: false,
+          chain: [BONE.legL, BONE.footL], stump: BONE.upLegL,
+          mass: 1.6, spurt: 1.9, organs: ["legChunk"] },
+        { id: "rightLeg", label: "Right Leg", threshold: 0.32, lethal: false,
+          chain: [BONE.legR, BONE.footR], stump: BONE.upLegR,
+          mass: 1.6, spurt: 1.9, organs: ["legChunk"] },
+        // The jaw goes before the skull does. A non-lethal head wound that
+        // still reads from the back row is what makes the last exchange land.
+        { id: "jaw", label: "Jaw", threshold: 0.42, lethal: false,
+          chain: [/(^|[._])(jaw|tongue)/i], stump: BONE.head,
+          mass: 0.3, spurt: 2.2, organs: ["jawPiece", "eyeball", "eyeMeat"] },
+        { id: "head", label: "Head", threshold: 0.0, lethal: true,
+          chain: [BONE.head, BONE.neck], stump: BONE.chest,
+          mass: 1.2, spurt: 3.4, organs: ["brain", "skullCap", "eyeball", "eyeball", "neckTie"] },
+        { id: "torso", label: "Torso", threshold: 0.0, lethal: true,
+          chain: [BONE.hips, BONE.upLegL, BONE.upLegR, BONE.legL, BONE.legR, BONE.footL, BONE.footR],
+          stump: BONE.spine, mass: 2.4, spurt: 4.0,
+          organs: ["intestine", "guts", "heart", "ribcage", "ribsTorn", "spineChunk", "stomachPlug"] },
+      ]);
+      const REGION_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));
+
+      // Where on the body a hit landed, from the height the solver reports, as
+      // a fraction of the fighter's standing height.
+      function regionsForHeight(fraction) {
+        if (fraction > 0.82) return ["head", "jaw"];
+        if (fraction > 0.52) return ["torso", "leftArm", "rightArm"];
+        return ["leftLeg", "rightLeg", "torso"];
+      }
+
+      // --- fighterDamage.js: blood and the sever mask ---------------------
+      //
+      // Damage is attached to the original skinned vertices, so it follows every
+      // animation and needs no decal meshes, texture copies or per-frame work.
+      // Severed geometry is discarded in the fragment shader rather than deleted
+      // from the buffer: the mesh keeps one draw call and one index buffer all
+      // round, and putting a limb back is a fill(0) instead of a rebuild.
+      class GoreSkin {
+        constructor(model) {
+          this.model = model;
+          this.meshes = [];
+          this.patched = new Set();
+          this.hits = 0;
+          model.traverse((mesh) => {
+            if (!mesh.isMesh || !mesh.geometry?.attributes.position) return;
+            const geometry = mesh.geometry;
+            const count = geometry.attributes.position.count;
+            const blood = new THREE.BufferAttribute(new Float32Array(count), 1);
+            blood.setUsage(THREE.DynamicDrawUsage);
+            geometry.setAttribute("bloodPaint", blood);
+            const sever = new THREE.BufferAttribute(new Float32Array(count), 1);
+            sever.setUsage(THREE.DynamicDrawUsage);
+            geometry.setAttribute("severMask", sever);
+            const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            for (const material of materials) this.patchMaterial(material, geometry);
+            this.meshes.push({ mesh, geometry, blood, sever });
+          });
+        }
+
+        patchMaterial(material, geometry) {
+          if (!material || this.patched.has(material)) return;
+          this.patched.add(material);
+          geometry.computeBoundingBox();
+          const height = Math.max(0.01, geometry.boundingBox.getSize(new THREE.Vector3()).y);
+          const previous = material.onBeforeCompile;
+          const previousKey = material.customProgramCacheKey;
+          material.onBeforeCompile = function (shader, renderer) {
+            previous?.call(this, shader, renderer);
+            if (!shader.fragmentShader.includes("#include <color_fragment>")) return;
+            shader.vertexShader =
+              "attribute float bloodPaint;\nattribute float severMask;\n" +
+              "varying float vBlood;\nvarying float vSever;\nvarying vec3 vLocal;\n" +
+              shader.vertexShader.replace(
+                "#include <begin_vertex>",
+                "#include <begin_vertex>\n" +
+                "  vBlood = bloodPaint;\n" +
+                "  vSever = severMask;\n" +
+                "  vLocal = position / " + height.toFixed(8) + ";\n"
+              );
+            shader.fragmentShader =
+              "varying float vBlood;\nvarying float vSever;\nvarying vec3 vLocal;\n" +
+              shader.fragmentShader.replace(
+                "#include <color_fragment>",
+                "#include <color_fragment>\n" +
+                // Fully severed geometry is gone. The partial band left at the
+                // seam is the cut face itself, which is raw meat rather than
+                // skin -- without it a severed arm reads as a rendering glitch
+                // instead of a wound.
+                "  if (vSever > 0.94) discard;\n" +
+                "  if (vSever > 0.02) {\n" +
+                "    float raw = smoothstep(0.02, 0.94, vSever);\n" +
+                "    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.135, 0.011, 0.014), raw * 0.96);\n" +
+                "    diffuseColor.rgb += vec3(0.16, 0.02, 0.02) * raw * 0.35;\n" +
+                "  }\n" +
+                "  {\n" +
+                "    float grain = fract(sin(dot(floor(vLocal * 640.0), vec3(12.9898, 78.233, 43.811))) * 43758.5453);\n" +
+                "    float blood = clamp(vBlood * (0.66 + grain * 0.48), 0.0, 0.93);\n" +
+                "    vec3 fresh = mix(vec3(0.055, 0.003, 0.009), vec3(0.25, 0.008, 0.016), grain);\n" +
+                "    diffuseColor.rgb = mix(diffuseColor.rgb, fresh, blood);\n" +
+                "  }\n"
+              );
+            if (shader.fragmentShader.includes("#include <roughnessmap_fragment>")) {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                "#include <roughnessmap_fragment>",
+                "#include <roughnessmap_fragment>\n" +
+                "  roughnessFactor = mix(roughnessFactor, 0.72, clamp(vBlood, 0.0, 0.7));\n" +
+                "  roughnessFactor = mix(roughnessFactor, 0.28, clamp(vSever, 0.0, 1.0) * 0.8);\n"
+              );
+            }
+          };
+          material.customProgramCacheKey = function () {
+            return (previousKey?.call(this) || "") + "|made-gore-" + height.toFixed(8);
+          };
+          material.needsUpdate = true;
+        }
+
+        // Sample the posed surface to locate the wound, then paint its
+        // bind-space neighbourhood. This is what stops a crouching fighter's
+        // head wound landing on their jacket.
+        paint(worldPoint, amount = 1.4) {
+          const strength = clamp(Number(amount) || 1, 0.1, 4);
+          this.model.updateWorldMatrix(true, true);
+          let nearest = null;
+          let bestDistance = Infinity;
+          for (const record of this.meshes) {
+            const mesh = record.mesh;
+            mesh.skeleton?.update();
+            const count = record.geometry.attributes.position.count;
+            const stride = Math.max(1, Math.floor(count / 2200));
+            for (let i = 0; i < count; i += stride) {
+              mesh.getVertexPosition(i, posed).applyMatrix4(mesh.matrixWorld);
+              const distance = posed.distanceToSquared(worldPoint);
+              if (distance < bestDistance) { bestDistance = distance; nearest = { record, index: i }; }
+            }
+          }
+          if (!nearest) return null;
+          const { record, index } = nearest;
+          const position = record.geometry.attributes.position;
+          const cx = position.getX(index), cy = position.getY(index), cz = position.getZ(index);
+          record.mesh.getWorldScale(worldScale);
+          const scale = Math.max(0.001, Math.abs(worldScale.x), Math.abs(worldScale.y), Math.abs(worldScale.z));
+          const radius = (0.095 + strength * 0.045) / scale;
+          const data = record.blood.array;
+          for (let i = 0; i < position.count; i++) {
+            const dx = position.getX(i) - cx;
+            const dy = position.getY(i) - cy;
+            const dz = position.getZ(i) - cz;
+            // A narrow downward tail reads as a trickle rather than a perfectly
+            // round paintbrush, and is still bound to the surface.
+            const drop = dy < 0 ? 0.40 : 1;
+            const distance = Math.sqrt(dx * dx + dy * dy * drop + dz * dz) / radius;
+            if (distance >= 1) continue;
+            const noise = 0.72 + Math.sin(i * 12.9898 + this.hits * 3.21) * 0.18;
+            const weight = (1 - distance) * noise;
+            data[i] = clamp(data[i] + weight * (0.7 + strength * 0.22), 0, 1);
+          }
+          record.blood.needsUpdate = true;
+          this.hits += 1;
+          return nearest;
+        }
+
+        // Cut everything weighted to `matchers` off the body.
+        //
+        // The mask is the vertex's total skin weight on the severed chain, which
+        // is what makes the seam land in the right place for free: deep in the
+        // forearm every weight belongs to the chain and the mask is 1, and
+        // across the elbow it falls off exactly as the skinning blend does.
+        //
+        // Returns the posed positions that were removed, so the caller can build
+        // the flying limb out of the same geometry the body just lost.
+        severByBones(matchers) {
+          // Pass one: how strongly does the chain hold each vertex, and what is
+          // the strongest hold it has anywhere on this fighter?
+          const found = [];
+          let strongest = 0;
+          for (const record of this.meshes) {
+            const skeleton = record.mesh.skeleton;
+            if (!skeleton) continue;
+            const severedBones = new Set();
+            skeleton.bones.forEach((bone, index) => {
+              if (matchers.some((matcher) => matcher.test(bone.name))) severedBones.add(index);
+            });
+            if (!severedBones.size) continue;
+            const skinIndex = record.geometry.attributes.skinIndex;
+            const skinWeight = record.geometry.attributes.skinWeight;
+            if (!skinIndex || !skinWeight) continue;
+            const held = [];
+            for (let i = 0; i < skinIndex.count; i++) {
+              let bound = 0;
+              if (severedBones.has(skinIndex.getX(i))) bound += skinWeight.getX(i);
+              if (severedBones.has(skinIndex.getY(i))) bound += skinWeight.getY(i);
+              if (severedBones.has(skinIndex.getZ(i))) bound += skinWeight.getZ(i);
+              if (severedBones.has(skinIndex.getW(i))) bound += skinWeight.getW(i);
+              if (bound <= 0.02) continue;
+              held.push(i, bound);
+              if (bound > strongest) strongest = bound;
+            }
+            if (held.length) found.push({ record, held });
+          }
+          if (!found.length) return null;
+
+          // What "fully attached" means is read off the rig instead of assumed.
+          //
+          // The runtime fighters are rigged tightly enough that a forearm vertex
+          // is ~1.0 bound to the forearm chain, and the shipped 0.94 cut fires
+          // on it directly. The 9 MB measurement GLB this page loads is blended
+          // far more softly: a vertex in the middle of its head is only about
+          // half bound to the head bone and nearly half to the chest, so the
+          // chain never reaches 0.94 anywhere on the head and an absolute cut
+          // would leave it attached. Scaling the mask against the strongest hold
+          // the chain has on this fighter keeps the shipped thresholds and the
+          // falloff at the seam, on either kind of rig, without hard-coding a
+          // second constant for this one.
+          const scale = 1 / Math.max(0.2, strongest * 0.55);
+
+          const removed = [];
+          let cut = false;
+          for (const { record, held } of found) {
+            const mask = record.sever.array;
+            const positions = [];
+            record.mesh.skeleton.update();
+            record.mesh.updateWorldMatrix(true, false);
+            for (let i = 0; i < held.length; i += 2) {
+              const index = held[i];
+              const value = clamp(Math.max(mask[index], held[i + 1] * scale), 0, 1);
+              if (value > mask[index]) { mask[index] = value; cut = true; }
+              if (value > 0.5) {
+                record.mesh.getVertexPosition(index, posed).applyMatrix4(record.mesh.matrixWorld);
+                positions.push(posed.x, posed.y, posed.z);
+              }
+            }
+            record.sever.needsUpdate = true;
+            if (positions.length) removed.push(positions);
+          }
+          return cut ? removed : null;
+        }
+
+        // Soak the stump. A cut that is not bleeding at its edge reads as
+        // plastic, so severance always paints before the limb has finished
+        // leaving.
+        bleedStump(worldPoint, amount = 2.6) {
+          this.paint(worldPoint, amount);
+        }
+
+        reset() {
+          this.hits = 0;
+          for (const { blood, sever } of this.meshes) {
+            blood.array.fill(0); blood.needsUpdate = true;
+            sever.array.fill(0); sever.needsUpdate = true;
+          }
+        }
+      }
+
+      // --- goreProps.js: everything that leaves a body --------------------
+      const GRAVITY = 17.0;
+      const FLOOR = 0.02;
+      const MAX_PIECES = 46;
+
+      // The procedural prop. `span` is the longest axis, so a round organ gets
+      // half of it as a radius and a strand divides by the stretch as well --
+      // which keeps a generated piece exactly the size of the real mesh it
+      // stands in for.
+      function organGeometry(kind) {
+        const spec = ORGANS[kind] || ORGANS.guts;
+        const radius = spec.strand ? spec.span / (2 * 2.6) : spec.span / 2;
+        const geometry = new THREE.IcosahedronGeometry(radius, spec.strand ? 2 : 1);
+        const position = geometry.attributes.position;
+        const noise = (x, y, z) => Math.sin(x * 9.1 + y * 4.7) * Math.cos(z * 7.3 + x * 2.2);
+        for (let i = 0; i < position.count; i++) {
+          const x = position.getX(i), y = position.getY(i), z = position.getZ(i);
+          const lump = 1 + noise(x, y, z) * (spec.strand ? 0.16 : 0.34);
+          position.setXYZ(i, x * lump, y * lump * (spec.strand ? 2.6 : 0.82), z * lump);
+        }
+        geometry.computeVertexNormals();
+        return geometry;
+      }
+
+      function organMaterial(kind) {
+        const spec = ORGANS[kind] || ORGANS.guts;
+        return new THREE.MeshStandardMaterial({
+          color: new THREE.Color(0.24, 0.018, 0.026).lerp(new THREE.Color(0.42, 0.10, 0.09), 1 - spec.wet),
+          roughness: 0.26 - spec.wet * 0.14,
+          metalness: 0.0,
+          emissive: new THREE.Color(0.05, 0.002, 0.004),
+        });
+      }
+
+      class GoreDebris {
+        constructor(scene, splat) {
+          this.splat = splat;
+          this.root = new THREE.Group();
+          this.root.name = "goreDebris";
+          this.root.renderOrder = 2;
+          scene.add(this.root);
+          this.pieces = [];
+          this.organGeometries = new Map();
+          this.organMaterials = new Map();
+          this.owned = new Set();
+        }
+
+        geometryFor(kind) {
+          if (!this.organGeometries.has(kind)) this.organGeometries.set(kind, organGeometry(kind));
+          return this.organGeometries.get(kind);
+        }
+
+        materialFor(kind) {
+          if (!this.organMaterials.has(kind)) this.organMaterials.set(kind, organMaterial(kind));
+          return this.organMaterials.get(kind);
+        }
+
+        // Retire whatever landed longest ago -- never the piece still in the
+        // air, because a limb vanishing mid-arc is the one failure the viewer is
+        // guaranteed to be looking straight at.
+        reclaim() {
+          if (this.pieces.length < MAX_PIECES) return;
+          let oldest = -1;
+          let bestAge = -Infinity;
+          for (let i = 0; i < this.pieces.length; i++) {
+            const piece = this.pieces[i];
+            if (!piece.settled) continue;
+            if (piece.age > bestAge) { bestAge = piece.age; oldest = i; }
+          }
+          if (oldest < 0) oldest = 0;
+          this.retire(this.pieces[oldest]);
+          this.pieces.splice(oldest, 1);
+        }
+
+        retire(piece) {
+          this.root.remove(piece.mesh);
+          if (this.owned.has(piece.mesh.geometry)) { piece.mesh.geometry.dispose(); this.owned.delete(piece.mesh.geometry); }
+          if (this.owned.has(piece.mesh.material)) { piece.mesh.material.dispose(); this.owned.delete(piece.mesh.material); }
+        }
+
+        add(mesh, { velocity, mass = 1, wet = 1, strand = false, pulse = false, transient = false }) {
+          this.reclaim();
+          this.root.add(mesh);
+          const piece = {
+            mesh, mass, wet, strand, pulse, transient,
+            age: 0, settled: false, bled: 0, bounced: false, done: false,
+            baseScale: mesh.scale.x,
+            velocity: velocity.clone(),
+            spin: new THREE.Vector3((Math.random() - 0.5) * 14, (Math.random() - 0.5) * 9, (Math.random() - 0.5) * 14),
+          };
+          this.pieces.push(piece);
+          return piece;
+        }
+
+        // A severed limb, built from the vertices the body just discarded. It is
+        // the same silhouette that was attached a frame ago, which is the whole
+        // reason it is worth lifting real geometry instead of throwing a lump.
+        //
+        // Those vertices are a point cloud, not a surface: the triangles they
+        // belonged to are still indexed against the body. Rendering them as
+        // dense points reads as wet tissue in motion and costs nothing to build.
+        addLimb(positions, origin, velocity, { mass = 1 } = {}) {
+          if (positions.length < 36) return null;
+          const count = Math.floor(positions.length / 3);
+          const array = new Float32Array(count * 3);
+          for (let i = 0; i < count; i++) {
+            array[i * 3] = positions[i * 3] - origin.x;
+            array[i * 3 + 1] = positions[i * 3 + 1] - origin.y;
+            array[i * 3 + 2] = positions[i * 3 + 2] - origin.z;
+          }
+          const geometry = new THREE.BufferGeometry();
+          geometry.setAttribute("position", new THREE.BufferAttribute(array, 3));
+          geometry.computeBoundingSphere();
+          const material = new THREE.PointsMaterial({
+            color: new THREE.Color(0.46, 0.05, 0.055), size: 0.042, sizeAttenuation: true,
+          });
+          const points = new THREE.Points(geometry, material);
+          points.position.copy(origin);
+          this.owned.add(geometry);
+          this.owned.add(material);
+          // The spray is a flight effect, not a floor prop: settled, a point
+          // cloud turned to face the camera reads as a flat pink rectangle. It
+          // fades shortly after landing and leaves behind what belongs there --
+          // its blood stain and the real severed chunk spilled alongside it.
+          return this.add(points, { velocity, mass, wet: 1, transient: true });
+        }
+
+        addOrgan(kind, origin, velocity) {
+          const spec = ORGANS[kind] || ORGANS.guts;
+          const mesh = new THREE.Mesh(this.geometryFor(kind), this.materialFor(kind));
+          mesh.position.copy(origin);
+          mesh.castShadow = true;
+          mesh.scale.setScalar(0.85 + Math.random() * 0.35);
+          mesh.rotation.set(Math.random() * 6.283, Math.random() * 6.283, Math.random() * 6.283);
+          return this.add(mesh, { velocity, mass: spec.mass, wet: spec.wet, strand: spec.strand, pulse: spec.pulse });
+        }
+
+        update(dt, camera = null) {
+          if (dt <= 0) return;
+          for (const piece of this.pieces) {
+            piece.age += dt;
+            if (piece.settled) {
+              if (piece.transient) {
+                const fade = 1 - Math.max(0, piece.age - 0.7) / 0.8;
+                if (fade <= 0) { piece.done = true; continue; }
+                piece.mesh.material.opacity = Math.min(1, fade);
+                piece.mesh.material.transparent = true;
+                continue;
+              }
+              // A heart keeps going for a while after it is out. It is a small
+              // thing that makes the floor feel alive rather than decorated.
+              if (piece.pulse && piece.age < 9) {
+                const beat = 1 + Math.sin(piece.age * 7.4) * 0.09 * Math.max(0, 1 - piece.age / 9);
+                piece.mesh.scale.setScalar(piece.baseScale * beat);
+              }
+              continue;
+            }
+            piece.velocity.y -= GRAVITY * dt * (0.55 + piece.mass * 0.3);
+            piece.mesh.position.addScaledVector(piece.velocity, dt);
+            spinStep.copy(piece.spin).multiplyScalar(dt);
+            piece.mesh.rotation.x += spinStep.x;
+            piece.mesh.rotation.y += spinStep.y;
+            piece.mesh.rotation.z += spinStep.z;
+
+            // Bleeding in flight. A limb that only stains where it lands leaves
+            // a clean floor between the body and the piece, which is the tell
+            // that the two events are unrelated.
+            piece.bled += dt;
+            if (piece.bled > 0.045 && piece.wet > 0.3) {
+              piece.bled = 0;
+              this.splat(piece.mesh.position.x, piece.mesh.position.z, 0.05 + piece.mass * 0.05, 1.4);
+            }
+
+            if (piece.mesh.position.y <= FLOOR) {
+              piece.mesh.position.y = FLOOR;
+              // One bounce, heavily damped, then it stays. Debris that skitters
+              // is distracting during a round it is not part of any more.
+              if (piece.velocity.y < -2.2 && !piece.bounced) {
+                piece.bounced = true;
+                piece.velocity.y *= -0.24;
+                piece.velocity.x *= 0.5;
+                piece.velocity.z *= 0.5;
+                piece.spin.multiplyScalar(0.4);
+              } else {
+                piece.settled = true;
+                piece.age = 0;
+                piece.velocity.set(0, 0, 0);
+                piece.mesh.rotation.x = (Math.PI / 2) * (piece.strand ? 1 : 0.35 + Math.random() * 0.4);
+                this.splat(piece.mesh.position.x, piece.mesh.position.z, 0.20 + piece.mass * 0.22, 4);
+              }
+            }
+          }
+          for (let i = this.pieces.length - 1; i >= 0; i--) {
+            if (!this.pieces[i].done) continue;
+            this.retire(this.pieces[i]);
+            this.pieces.splice(i, 1);
+          }
+          // Point clouds have no thickness, so a limb seen edge-on would
+          // disappear. Facing them at the camera keeps the spray readable.
+          if (camera) {
+            camera.getWorldPosition(towardCamera);
+            for (const piece of this.pieces) if (piece.mesh.isPoints) piece.mesh.lookAt(towardCamera);
+          }
+        }
+
+        reset() {
+          for (const piece of this.pieces) this.retire(piece);
+          this.pieces.length = 0;
+        }
+      }
+
+      // --- dismemberment.js: when a fighter comes apart, and into what -----
+      //
+      // How much of a hit's force is inherited by what it removes. A limb that
+      // flies off along the blow reads as caused by it; one that drops straight
+      // down reads as a bug.
+      const INHERIT = 0.55;
+
+      class Dismemberment {
+        constructor({ skin, model, debris, side = 0 }) {
+          this.skin = skin;
+          this.model = model;
+          this.debris = debris;
+          this.side = side;
+          this.severed = new Set();
+        }
+
+        get count() { return this.severed.size; }
+
+        has(regionId) { return this.severed.has(regionId); }
+
+        // Which regions this particular rig can actually give up. A region whose
+        // chain matches no bone is reported rather than silently retired -- the
+        // two fighters here have no jaw bone, and the page says so.
+        riggedRegions() {
+          const bones = [];
+          this.model.traverse((node) => { if (node.isBone) bones.push(node.name); });
+          const rigged = new Set();
+          for (const region of REGIONS) {
+            if (region.chain.some((matcher) => bones.some((name) => matcher.test(name)))) rigged.add(region.id);
+          }
+          return rigged;
+        }
+
+        // Locate a region's stump bone on the *posed* skeleton, so the wound is
+        // where the limb is now rather than where the bind pose left it.
+        stumpPoint(region, out) {
+          let found = null;
+          this.model.traverse((node) => {
+            if (found || !node.isBone) return;
+            if (region.stump.test(node.name)) found = node;
+          });
+          if (!found) return null;
+          found.updateWorldMatrix(true, false);
+          return out.setFromMatrixPosition(found.matrixWorld);
+        }
+
+        // A hit landed. Decide whether it takes something with it.
+        onHit(event, healthPct, { standHeight = 1.86 } = {}) {
+          if (!event || event.type === "block" || !Number.isFinite(event.y)) return null;
+          const fraction = clamp(event.y / standHeight, 0, 1.4);
+          const candidates = regionsForHeight(fraction)
+            .map((id) => REGION_BY_ID[id])
+            .filter((region) => region && !this.severed.has(region.id) && healthPct <= region.threshold);
+          if (!candidates.length) return null;
+
+          // A lethal region is never taken by an ordinary hit -- those are
+          // reserved for the KO and the finisher, which call `sever` directly.
+          const takeable = candidates.filter((region) => !region.lethal);
+          if (!takeable.length) return null;
+
+          // Bigger hits take bigger things. Within what is eligible, a heavy
+          // blow reaches past the arm for the leg rather than always removing
+          // the first match in the table.
+          const force = clamp((event.bloodScale || 1) * (event.knockdown ? 1.5 : 1), 0.4, 4);
+          if (force < 1.15) return null;
+          const region = takeable[Math.min(takeable.length - 1, Math.floor(Math.random() * takeable.length))];
+          return this.sever(region.id, {
+            dx: event.push ?? (this.side === 0 ? -1 : 1),
+            dy: 0.5 + force * 0.2,
+            force,
+          });
+        }
+
+        // Take a region off. Safe to call for something already gone.
+        sever(regionId, { dx = 0, dy = 1, force = 1.6 } = {}) {
+          const region = REGION_BY_ID[regionId];
+          if (!region || this.severed.has(regionId)) return null;
+          const removed = this.skin.severByBones(region.chain);
+          // No geometry answered to those bones: this model does not have that
+          // part rigged separately, so there is nothing to take. Recording it as
+          // severed anyway would silently retire the region for the rest of the
+          // match.
+          if (!removed || !removed.length) return null;
+          this.severed.add(regionId);
+
+          const point = this.stumpPoint(region, severOrigin);
+          if (!point) severOrigin.set(0, 1, 0).applyMatrix4(this.model.matrixWorld);
+
+          const direction = Math.sign(dx) || (this.side === 0 ? -1 : 1);
+          for (const positions of removed) {
+            severVelocity.set(
+              direction * (1.6 + force * 1.5) * INHERIT + (Math.random() - 0.5) * 1.2,
+              (dy + 1.4) * (0.8 + force * 0.25),
+              (Math.random() - 0.5) * 1.8
+            );
+            this.debris.addLimb(positions, severOrigin, severVelocity, { mass: region.mass });
+          }
+
+          // Organs follow the cut, thrown a little more softly than the limb so
+          // they trail behind it instead of arriving together in a clump.
+          for (const kind of region.organs) {
+            if (!ORGANS[kind]) continue;
+            severVelocity.set(
+              direction * (0.9 + force) * INHERIT + (Math.random() - 0.5) * 2.4,
+              dy + 0.8 + Math.random() * 1.9,
+              (Math.random() - 0.5) * 2.2
+            );
+            this.debris.addOrgan(kind, severOrigin, severVelocity);
+          }
+
+          this.skin.bleedStump(severOrigin, region.spurt);
+          return { region: region.id, x: severOrigin.x, y: severOrigin.y, z: severOrigin.z, force, lethal: region.lethal };
+        }
+
+        // Everything at once, for a finisher. Ordered so the body falls apart
+        // from the extremities inward rather than the head simply vanishing.
+        explode({ force = 3.2 } = {}) {
+          const order = ["leftArm", "rightArm", "leftLeg", "rightLeg", "jaw", "torso", "head"];
+          const results = [];
+          for (const id of order) {
+            const result = this.sever(id, {
+              dx: (Math.random() - 0.5) * 2,
+              dy: 1.2 + Math.random(),
+              force: force * (0.7 + Math.random() * 0.6),
+            });
+            if (result) results.push(result);
+          }
+          return results;
+        }
+
+        reset() { this.severed.clear(); }
+      }
+
+      const canvas = document.getElementById("canvas");
+      const loader = document.getElementById("loader");
+      const controls = document.getElementById("controls");
+      const explodeInput = document.getElementById("explode");
+      const explodeVal = document.getElementById("explode-val");
+      const poseUI = document.getElementById("pose-ui");
+      const poseRow = document.getElementById("pose-row");
+      const reelToggle = document.getElementById("reel-toggle");
+      // The toggle survives fighter swaps, so its "running?" flag lives at
+      // module scope and the per-fighter start/pause methods on currentFighter
+      // do the actual mixer work.
+      let reelRunning = false;
+      let currentFighter = null;
+      reelToggle.addEventListener("click", () => {
+        if (!currentFighter) return;
+        if (reelRunning) currentFighter.pauseReel();
+        else currentFighter.startReel();
+      });
+      const status = document.getElementById("status");
+      const badgeId = document.getElementById("badge-id");
+      const badgeClip = document.getElementById("badge-clip");
+      const ctaButtons = document.querySelectorAll("button[data-load]");
+      const swapButtons = document.querySelectorAll("button[data-swap]");
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.background = null;
+
+      const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 50);
+      camera.position.set(0, 1.05, 3.6);
+      camera.lookAt(0, 1.0, 0);
+
+      const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+      scene.add(ambient);
+      const key = new THREE.DirectionalLight(0xffe9a1, 1.6);
+      key.position.set(1.5, 3, 2);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.near = 0.1;
+      key.shadow.camera.far = 10;
+      key.shadow.camera.left = -2;
+      key.shadow.camera.right = 2;
+      key.shadow.camera.top = 2;
+      key.shadow.camera.bottom = -1;
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0x80dbff, 0.55);
+      rim.position.set(-2, 2, -1.5);
+      scene.add(rim);
+      const fill = new THREE.HemisphereLight(0xffe9a1, 0x101830, 0.35);
+      scene.add(fill);
+
+      const LIGHT_PRESETS = Object.freeze({
+        arena: {
+          exposure: 1.0, ambient: [0xffffff, 0.45], key: [0xffe9a1, 1.6, 1.5, 3, 2],
+          rim: [0x80dbff, 0.55, -2, 2, -1.5], fill: [0xffe9a1, 0x101830, 0.35],
+        },
+        studio: {
+          exposure: 1.05, ambient: [0xffffff, 0.72], key: [0xffffff, 2.0, 1.2, 3.4, 2.5],
+          rim: [0xbfd8ff, 0.75, -2.4, 2.6, -1], fill: [0xffffff, 0x3a4250, 0.62],
+        },
+        neon: {
+          exposure: 1.12, ambient: [0x30204d, 0.32], key: [0xff3d9a, 2.25, 1.8, 2.6, 1.3],
+          rim: [0x25e6ff, 2.0, -2.2, 2.2, -1.7], fill: [0x774cff, 0x071b30, 0.48],
+        },
+        silhouette: {
+          exposure: 0.86, ambient: [0x182038, 0.08], key: [0xffc63d, 0.22, 0.5, 2.8, -2.5],
+          rim: [0x80dbff, 2.8, -2.5, 2.4, -1.8], fill: [0x182943, 0x02040a, 0.08],
+        },
+      });
+      const lightingButtons = document.querySelectorAll("button[data-light]");
+      let lightingPreset = "arena";
+      function applyLighting(name) {
+        const preset = LIGHT_PRESETS[name];
+        if (!preset) return;
+        lightingPreset = name;
+        renderer.toneMappingExposure = preset.exposure;
+        ambient.color.setHex(preset.ambient[0]); ambient.intensity = preset.ambient[1];
+        key.color.setHex(preset.key[0]); key.intensity = preset.key[1]; key.position.set(...preset.key.slice(2));
+        rim.color.setHex(preset.rim[0]); rim.intensity = preset.rim[1]; rim.position.set(...preset.rim.slice(2));
+        fill.color.setHex(preset.fill[0]); fill.groundColor.setHex(preset.fill[1]); fill.intensity = preset.fill[2];
+        lightingButtons.forEach((button) => {
+          const active = button.dataset.light === name;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+      }
+      lightingButtons.forEach((button) =>
+        button.addEventListener("click", () => applyLighting(button.dataset.light))
+      );
+      applyLighting(lightingPreset);
+
+      // The floor keeps what lands on it. One canvas texture is the whole stain
+      // system: the ground colour is painted in once and every splat is drawn
+      // straight on top of it, which costs one texture upload per splat and no
+      // extra geometry at all.
+      const STAGE_RADIUS = 2.2;
+      const stainCanvas = document.createElement("canvas");
+      stainCanvas.width = 1024;
+      stainCanvas.height = 1024;
+      const stainCtx = stainCanvas.getContext("2d");
+      const stainTexture = new THREE.CanvasTexture(stainCanvas);
+      stainTexture.colorSpace = THREE.SRGBColorSpace;
+
+      function washFloor() {
+        stainCtx.clearRect(0, 0, stainCanvas.width, stainCanvas.height);
+        // Floor used to be a solid disc that visually cut the model in half
+        // around its shins. Now it's a tight pool under the feet: opaque dark
+        // at the centre, fully transparent at the rim so it blends into the
+        // viewer-rail background. Blood still gets the same canvas so the
+        // stain system is unchanged.
+        const cx = stainCanvas.width / 2;
+        const cy = stainCanvas.height / 2;
+        const gradient = stainCtx.createRadialGradient(cx, cy, 0, cx, cy, cx);
+        gradient.addColorStop(0.0, "rgba(17, 26, 42, 1)");
+        gradient.addColorStop(0.55, "rgba(17, 26, 42, 0.85)");
+        gradient.addColorStop(0.85, "rgba(17, 26, 42, 0.25)");
+        gradient.addColorStop(1.0, "rgba(17, 26, 42, 0)");
+        stainCtx.fillStyle = gradient;
+        stainCtx.fillRect(0, 0, stainCanvas.width, stainCanvas.height);
+        stainTexture.needsUpdate = true;
+      }
+      washFloor();
+
+      // CircleGeometry lies in XY and is rotated -90 degrees about X, so local
+      // +y is world -z; its UVs put the centre of the disc at (0.5, 0.5) with
+      // the rim half a unit away in each direction. Both flips cancel, which
+      // collapses world-to-canvas to one linear mapping per axis.
+      function splatBlood(x, z, radius, alpha = 1) {
+        const px = (0.5 + x / (STAGE_RADIUS * 2)) * stainCanvas.width;
+        const py = (0.5 + z / (STAGE_RADIUS * 2)) * stainCanvas.height;
+        const pr = Math.max(2, (radius / (STAGE_RADIUS * 2)) * stainCanvas.width);
+        // Three overlapping lobes: one circle reads as a decal, three read as a
+        // spill, and it is the cheapest place to buy that difference.
+        for (let i = 0; i < 3; i++) {
+          const ox = px + (Math.random() - 0.5) * pr * 1.3;
+          const oy = py + (Math.random() - 0.5) * pr * 1.3;
+          const or = pr * (0.5 + Math.random() * 0.7);
+          const a = Math.min(0.95, alpha * (0.26 + Math.random() * 0.2));
+          const gradient = stainCtx.createRadialGradient(ox, oy, 0, ox, oy, or);
+          gradient.addColorStop(0, "rgba(126, 12, 15, " + a.toFixed(3) + ")");
+          gradient.addColorStop(0.55, "rgba(88, 8, 11, " + (a * 0.7).toFixed(3) + ")");
+          gradient.addColorStop(1, "rgba(56, 5, 8, 0)");
+          stainCtx.fillStyle = gradient;
+          stainCtx.beginPath();
+          stainCtx.arc(ox, oy, or, 0, Math.PI * 2);
+          stainCtx.fill();
+        }
+        stainTexture.needsUpdate = true;
+      }
+
+      const ground = new THREE.Mesh(
+        // Radius used to be STAGE_RADIUS (2.2) which put the rim at shoulder
+        // height and visually chopped the model in half. Tightened to 0.95 —
+        // just wider than the model's footprint — and the alpha fade in
+        // washFloor() takes care of the edge so there's no visible seam.
+        new THREE.CircleGeometry(0.95, 64),
+        new THREE.MeshStandardMaterial({
+          map: stainTexture,
+          transparent: true,
+          depthWrite: false,
+          roughness: 0.9,
+          metalness: 0.0,
+        })
+      );
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.y = -0.001;
+      ground.receiveShadow = true;
+      scene.add(ground);
+
+      const debris = new GoreDebris(scene, splatBlood);
+      let shake = 0;
+
+      let goreState = null;
+      let currentClipName = "guard";
+      let explodeAmount = 0;
+      let mouseX = 0, mouseY = 0;
+      let cameraAz = 0.25;
+      let cameraEl = 0.05;
+      let cameraRadius = 3.6;
+      let dragging = false;
+      let dragLastX = 0;
+      let dragLastY = 0;
+
+      function resize() {
+        const w = canvas.clientWidth || 1;
+        const h = canvas.clientHeight || 1;
+        if (renderer.domElement.width !== w || renderer.domElement.height !== h) {
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+      }
+      window.addEventListener("resize", resize);
+      new ResizeObserver(resize).observe(canvas);
+
+      const rail = document.querySelector(".viewer-rail");
+      // Hover-tracking still nudges the camera when the user isn't actively
+      // dragging the model. It's the gentle "lean toward the cursor" idle
+      // motion; while a drag is active the drag deltas take over.
+      rail.addEventListener("pointermove", (e) => {
+        const rect = rail.getBoundingClientRect();
+        mouseX = (e.clientX - rect.left) / rect.width;
+        mouseY = (e.clientY - rect.top) / rect.height;
+      });
+      rail.addEventListener("pointerleave", () => {
+        mouseX = 0.5;
+        mouseY = 0.5;
+      });
+
+      // Click-and-drag rotates the model; wheel zooms in/out. The drag math
+      // lives on the camera angles so the existing tick loop keeps working
+      // unchanged — it just reads cameraAz/cameraEl/cameraRadius and orbits.
+      canvas.addEventListener("pointerdown", (e) => {
+        dragging = true;
+        dragLastX = e.clientX;
+        dragLastY = e.clientY;
+        canvas.classList.add("dragging");
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - dragLastX;
+        const dy = e.clientY - dragLastY;
+        dragLastX = e.clientX;
+        dragLastY = e.clientY;
+        // Convert pixels to radians. Tuned so a full-width swipe is roughly a
+        // half turn — feels right at typical viewer widths.
+        cameraAz -= dx * 0.01;
+        cameraEl += dy * 0.008;
+        const maxEl = Math.PI * 0.45;
+        if (cameraEl > maxEl) cameraEl = maxEl;
+        if (cameraEl < -maxEl) cameraEl = -maxEl;
+      });
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        canvas.classList.remove("dragging");
+        if (e && e.pointerId !== undefined && canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      }
+      canvas.addEventListener("pointerup", endDrag);
+      canvas.addEventListener("pointercancel", endDrag);
+      canvas.addEventListener("pointerleave", endDrag);
+
+      // Wheel zoom. Clamp so the user can't push the camera through the model
+      // or fly off into space.
+      canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const factor = Math.exp(e.deltaY * 0.0012);
+        cameraRadius = Math.min(8.0, Math.max(1.4, cameraRadius * factor));
+      }, { passive: false });
+
+      const gltfLoader = new GLTFLoader();
+      const tmpBox = new THREE.Box3();
+
+      function clearScene() {
+        if (currentFighter) {
+          if (typeof currentFighter.pauseReel === "function") currentFighter.pauseReel();
+          scene.remove(currentFighter.root);
+          currentFighter.root.traverse((n) => {
+            if (n.geometry) n.geometry.dispose();
+            if (n.material) {
+              const mats = Array.isArray(n.material) ? n.material : [n.material];
+              for (const m of mats) m.dispose();
+            }
+          });
+        }
+        // Gore is per-fighter, like the blood on them and the stains on the
+        // floor. Swapping the model starts a clean stage.
+        goreState = null;
+        debris.reset();
+        washFloor();
+        currentFighter = null;
+      }
+
+      async function loadFighter(id) {
+        const cfg = FIGHTERS[id];
+        if (!cfg) return;
+        loader.classList.remove("hidden");
+        status.textContent = `Fetching ${cfg.label}…`;
+        controls.hidden = true;
+        clearScene();
+        // New fighter always starts with the reel paused — the user hits Play
+        // to start the auto-advance.
+        reelRunning = false;
+        if (reelToggle) {
+          reelToggle.textContent = "▶ Play reel";
+          reelToggle.setAttribute("aria-pressed", "false");
+        }
+        badgeId.textContent = cfg.label;
+
+        ctaButtons.forEach((b) =>
+          b.classList.toggle("active", b.dataset.load === id)
+        );
+        swapButtons.forEach((b) =>
+          b.classList.toggle("active", b.dataset.swap === id)
+        );
+
+        // file:// blocks fetch of local binary files in Chromium-based browsers.
+        // Surface that explicitly instead of spinning forever.
+        if (location.protocol === "file:") {
+          loader.classList.add("hidden");
+          status.innerHTML = `<span class="bad">Cannot load via file://</span> · run <code>npm run dev</code> from <code>web/</code>, then open <code>http://127.0.0.1:5176/made</code>`;
+          return;
+        }
+
+        let gltf;
+        try {
+          if (cfg.format === "three") {
+            const object = await new THREE.ObjectLoader().loadAsync(cfg.model);
+            gltf = { scene: object, animations: object.animations || [] };
+          } else {
+            gltf = await gltfLoader.loadAsync(cfg.model);
+          }
+        } catch (err) {
+          loader.classList.add("hidden");
+          console.error(err);
+          status.innerHTML = `<span class="bad">Failed</span> · ${(err && err.message) || err}`;
+          return;
+        }
+        const root = gltf.scene || gltf.scenes[0];
+        root.traverse((n) => {
+          if (n.isMesh) {
+            n.castShadow = true;
+            n.receiveShadow = true;
+            if (n.material && n.material.isMeshStandardMaterial) {
+              n.material.envMapIntensity = 0.6;
+              n.material.roughness = Math.min(0.85, (n.material.roughness ?? 0.6) + 0.05);
+            }
+          }
+        });
+
+        tmpBox.setFromObject(root);
+        const size = tmpBox.getSize(new THREE.Vector3());
+        const targetHeight = 1.92;
+        const s = targetHeight / size.y;
+        root.scale.setScalar(s);
+        // Measure after scaling. Using the source bounds for the translation
+        // made each native unit system land at a different height and let the
+        // floor plane cut through feet and shins.
+        root.updateMatrixWorld(true);
+        tmpBox.setFromObject(root);
+        const centre = tmpBox.getCenter(new THREE.Vector3());
+        root.position.x -= centre.x;
+        root.position.y -= tmpBox.min.y;
+        root.position.z -= centre.z;
+        root.rotation.y = cfg.facingRotationY || 0;
+        root.updateMatrixWorld(true);
+
+        const parts = [];
+        const figureCentre = new THREE.Vector3();
+        let partCount = 0;
+        root.updateMatrixWorld(true);
+        root.traverse((n) => {
+          if (n.isSkinnedMesh) {
+            tmpBox.setFromObject(n);
+            const c = tmpBox.getCenter(new THREE.Vector3());
+            figureCentre.add(c);
+            partCount += 1;
+          }
+        });
+        figureCentre.multiplyScalar(1 / Math.max(1, partCount));
+
+        root.traverse((n) => {
+          if (n.isSkinnedMesh) {
+            tmpBox.setFromObject(n);
+            const c = tmpBox.getCenter(new THREE.Vector3());
+            const dir = c.clone().sub(figureCentre);
+            if (dir.lengthSq() < 1e-6) dir.set(0, 1, 0);
+            dir.normalize();
+            // See applyExplode: a part has to leave AttachedBindMode before its
+            // own transform means anything at all. The bind matrix is the rest
+            // the offset is measured from, so it is captured before the switch.
+            parts.push({ mesh: n, dir, bind: n.bindMatrix.clone() });
+            n.bindMode = THREE.DetachedBindMode;
+            n.matrixAutoUpdate = false;
+          }
+        });
+
+        scene.add(root);
+
+        // Gore rides on the same posed skeleton the viewer is already driving,
+        // so the wound is wherever the current clip has put the limb.
+        const skin = new GoreSkin(root);
+        const dismemberment = new Dismemberment({ skin, model: root, debris, side: 0 });
+        goreState = {
+          skin,
+          dismemberment,
+          standHeight: targetHeight,
+          rigged: dismemberment.riggedRegions(),
+        };
+
+        const mixer = new THREE.AnimationMixer(root);
+        let clips = [];
+        if (gltf.animations && gltf.animations.length) {
+          clips = gltf.animations;
+        }
+        let active = null;
+        const play = (name) => {
+          const clip = clips.find((c) => c.name === name) || clips[0];
+          if (!clip) return;
+          const next = mixer.clipAction(clip);
+          next.reset();
+          next.enabled = true;
+          // Idle / breathing clips loop forever — they're the resting state
+          // the model sits in when no pose reel is running. Anything else
+          // plays once and clamps at the last frame so the next call to
+          // play() can take over cleanly.
+          if (name === "idle" || name === "guard") {
+            next.setLoop(THREE.LoopRepeat, Infinity);
+            next.clampWhenFinished = false;
+          } else {
+            next.setLoop(THREE.LoopOnce, 1);
+            next.clampWhenFinished = true;
+          }
+          if (active && active !== next) active.stop();
+          next.play();
+          active = next;
+          currentClipName = clip.name;
+          badgeClip.textContent = clip.name;
+        };
+
+        currentFighter = {
+          id,
+          root,
+          mixer,
+          clips,
+          parts,
+          play,
+          startReel,
+          pauseReel,
+        };
+
+        poseRow.innerHTML = "";
+        const names = new Set();
+        for (const c of clips) names.add(c.name);
+        const ordered = [...POSES.filter((n) => names.has(n)), ...[...names].filter((n) => !POSES.includes(n))];
+        if (!ordered.length) ordered.push("guard");
+
+        // Auto-reel: walk the curated list, hold each pose for its full clip,
+        // then sit for a second before advancing. `mixer.finished` fires when a
+        // LoopOnce action reaches its end; we use that as the "play next" cue.
+        let reelIndex = 0;
+        let gapTimer = 0;
+        function pauseReel() {
+          if (gapTimer) { clearTimeout(gapTimer); gapTimer = 0; }
+          mixer.removeEventListener("finished", onReelFinish);
+          reelRunning = false;
+          if (reelToggle) {
+            reelToggle.textContent = "▶ Play reel";
+            reelToggle.setAttribute("aria-pressed", "false");
+          }
+        }
+        function onReelFinish(e) {
+          if (!reelRunning) return; // paused mid-clip — don't auto-advance
+          if (e.action !== active) return; // user-clicked pose, don't auto-advance
+          if (!currentFighter || currentFighter.id !== id) return;
+          gapTimer = setTimeout(() => {
+            gapTimer = 0;
+            if (!reelRunning) return;
+            if (!currentFighter || currentFighter.id !== id) return;
+            reelIndex = (reelIndex + 1) % ordered.length;
+            const nextName = ordered[reelIndex];
+            document.querySelectorAll("#pose-row .pill").forEach((b) =>
+              b.classList.toggle("active", b.textContent === nextName)
+            );
+            currentFighter.play(nextName);
+          }, 1000);
+        }
+        function startReel() {
+          reelRunning = true;
+          mixer.addEventListener("finished", onReelFinish);
+          if (reelToggle) {
+            reelToggle.textContent = "❚❚ Pause reel";
+            reelToggle.setAttribute("aria-pressed", "true");
+          }
+        }
+
+        for (const name of ordered) {
+          const btn = document.createElement("button");
+          btn.className = "pill";
+          btn.textContent = name;
+          btn.addEventListener("click", () => {
+            // Manual pick: stop the auto-reel so the user's choice stays put
+            // until they hit Play reel again.
+            pauseReel();
+            reelIndex = ordered.indexOf(name);
+            document.querySelectorAll("#pose-row .pill").forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentFighter.play(name);
+          });
+          poseRow.appendChild(btn);
+        }
+        const first = poseRow.querySelector(".pill");
+        if (first) first.classList.add("active");
+        // Reel is paused by default — render the opening pose but don't kick
+        // off the auto-advance. The toggle button starts it. Prefer idle over
+        // guard because idle is the looped breathing clip — the model sits in
+        // it forever until the user picks a different pose.
+        const idleName = ordered.includes("idle") ? "idle"
+                       : ordered.includes("guard") ? "guard"
+                       : ordered[0];
+        play(idleName);
+
+        // Reset the slider and its readout together: swapping fighters used to
+        // leave the old number on screen next to an unexploded model.
+        setExplode(0);
+
+        loader.classList.add("hidden");
+        controls.hidden = false;
+        poseUI.hidden = false;
+        status.innerHTML = `<span class="ok">Loaded</span> · ${parts.length} parts · ${clips.length} clips`;
+        setHealth(1);
+        setBeatdown(false);
+        refreshTally("Intact.");
+      }
+
+      // Moving a SkinnedMesh does nothing, which is why this slider used to be
+      // inert on both fighters. In the default AttachedBindMode, Three.js sets
+      // `bindMatrixInverse` to the inverse of the mesh's own world matrix on
+      // every update, and the skinning shader cancels that matrix straight back
+      // out -- the object moved, the vertices did not. Only the bones can shift
+      // a skinned vertex, and all six parts share one skeleton.
+      //
+      // DetachedBindMode pins `bindMatrixInverse` to the bind matrix instead,
+      // which leaves the mesh's world matrix live. Setting that matrix to
+      // `translate(offset) * bindMatrix` then displaces the skinned result by
+      // exactly `offset` world metres, on any frame of any clip, and collapses
+      // back to the untouched render at explode(0).
+      const explodeParentInverse = new THREE.Matrix4();
+      const explodeOffset = new THREE.Matrix4();
+      function applyExplode(t) {
+        explodeAmount = t;
+        if (!currentFighter) return;
+        // Metres of separation at explode(1), on a figure normalised to 1.92 m.
+        const dist = 1.4;
+        for (const p of currentFighter.parts) {
+          explodeParentInverse.copy(p.mesh.parent.matrixWorld).invert();
+          explodeOffset.makeTranslation(p.dir.x * t * dist, p.dir.y * t * dist, p.dir.z * t * dist);
+          p.mesh.matrix.copy(explodeParentInverse).multiply(explodeOffset).multiply(p.bind);
+          p.mesh.matrixWorldNeedsUpdate = true;
+        }
+      }
+      function setExplode(v) {
+        explodeInput.value = String(v * 100);
+        explodeVal.textContent = v.toFixed(2);
+        applyExplode(v);
+      }
+      explodeInput.addEventListener("input", (e) => {
+        setExplode(Number(e.target.value) / 100);
+      });
+
+      ctaButtons.forEach((b) =>
+        b.addEventListener("click", () => loadFighter(b.dataset.load))
+      );
+
+      swapButtons.forEach((b) =>
+        b.addEventListener("click", () => {
+          const id = b.dataset.swap;
+          // No-op if this fighter is already on stage — avoids re-fetching
+          // the same 9 MB GLB just to flicker the loader.
+          if (currentFighter && currentFighter.id === id) return;
+          loadFighter(id);
+        })
+      );
+
+      // ---- gore controls -------------------------------------------------
+      const regionsGrid = document.getElementById("regions");
+      const healthInput = document.getElementById("health");
+      const healthVal = document.getElementById("health-val");
+      const hudFill = document.getElementById("hud-health-fill");
+      const hudTally = document.getElementById("hud-tally");
+      const goreStatus = document.getElementById("gore-status");
+      const hitBtn = document.getElementById("hit-btn");
+      const beatBtn = document.getElementById("beat-btn");
+      const fatalityBtn = document.getElementById("fatality-btn");
+      const patchBtn = document.getElementById("patch-btn");
+
+      let health = 1;
+      let beatdownTimer = 0;
+
+      // The cards are built from the same table the system severs from, so the
+      // page cannot document a threshold the demo does not honour.
+      for (const region of REGIONS) {
+        const card = document.createElement("div");
+        card.className = "region" + (region.lethal ? " lethal" : "");
+        card.dataset.region = region.id;
+        const gate = region.lethal
+          ? "<b>lethal</b> &middot; finisher only"
+          : "severs at <b>&le; " + Math.round(region.threshold * 100) + "%</b>";
+        card.innerHTML =
+          '<span class="rname">' + region.label + "</span>" +
+          '<span class="rgate">' + gate + "</span>" +
+          '<p class="rmeta">mass ' + region.mass.toFixed(1) + " &middot; spurt " + region.spurt.toFixed(1) +
+          "<br/>spills <code>" + region.organs.join("</code> <code>") + "</code></p>" +
+          '<span class="rstate" data-state>intact</span>' +
+          '<div><button class="danger" data-sever="' + region.id + '">Cut</button></div>';
+        regionsGrid.appendChild(card);
+      }
+
+      function refreshRegions() {
+        for (const card of regionsGrid.children) {
+          const region = REGION_BY_ID[card.dataset.region];
+          const state = card.querySelector("[data-state]");
+          const button = card.querySelector("button");
+          const gone = goreState ? goreState.dismemberment.has(region.id) : false;
+          const rigged = goreState ? goreState.rigged.has(region.id) : true;
+          const eligible = !gone && rigged && !region.lethal && health <= region.threshold;
+          card.classList.toggle("gone", gone);
+          card.classList.toggle("unrigged", !rigged);
+          card.classList.toggle("eligible", eligible);
+          button.disabled = gone || !rigged || !goreState;
+          state.textContent = !goreState ? "waiting for a fighter"
+            : !rigged ? "no bone on this rig"
+            : gone ? "severed"
+            : region.lethal ? "finisher only"
+            : eligible ? "eligible \u2014 a hit here takes it"
+            : "locked \u2014 needs " + Math.round(region.threshold * 100) + "% or less";
+        }
+      }
+
+      function setHealth(value) {
+        health = clamp(value, 0, 1);
+        healthInput.value = String(Math.round(health * 100));
+        healthVal.textContent = Math.round(health * 100) + "%";
+        hudFill.style.transform = "scaleX(" + health.toFixed(3) + ")";
+        refreshRegions();
+      }
+
+      function refreshTally(message) {
+        const off = goreState ? goreState.dismemberment.count : 0;
+        hudTally.textContent = off
+          ? off + (off === 1 ? " region severed \u00b7 " : " regions severed \u00b7 ") + debris.pieces.length + " pieces"
+          : "";
+        if (message) goreStatus.innerHTML = message;
+      }
+
+      // A severance is queued rather than handled inside the cut itself: the
+      // viewer wants its own spray, shake and floor stain off the event, and
+      // doing that inside the gore system would put VFX ordering in there.
+      function onSevered(records) {
+        if (!records || !records.length) return false;
+        for (const record of records) {
+          shake = Math.min(0.16, shake + 0.045 + record.force * 0.012);
+          splatBlood(record.x, record.z, 0.22 + record.force * 0.06, 3);
+        }
+        refreshRegions();
+        return true;
+      }
+
+      function landHit() {
+        if (!goreState) return;
+        // A real hit arrives from the collision solver carrying a height, a push
+        // direction and a blood scale. Here all three are rolled -- everything
+        // downstream of the roll is the shipped path.
+        const fraction = 0.16 + Math.random() * 0.86;
+        hitPoint.set((Math.random() - 0.5) * 0.30, fraction * goreState.standHeight, 0.10 + Math.random() * 0.12);
+        const bloodScale = 0.7 + Math.random() * 2.1;
+        const knockdown = Math.random() < 0.28;
+        const force = clamp(bloodScale * (knockdown ? 1.5 : 1), 0.4, 4);
+
+        goreState.skin.paint(hitPoint, 0.8 + bloodScale * 0.5);
+        setHealth(health - (0.035 + Math.random() * 0.075));
+        shake = Math.min(0.10, shake + 0.010 + bloodScale * 0.006);
+        if (currentFighter) currentFighter.play(fraction > 0.6 ? "hitHigh" : "hitLow");
+
+        const record = goreState.dismemberment.onHit(
+          { type: "hit", x: hitPoint.x, y: hitPoint.y, z: hitPoint.z, bloodScale, knockdown, push: Math.random() < 0.5 ? -1 : 1 },
+          health,
+          { standHeight: goreState.standHeight }
+        );
+        if (onSevered(record ? [record] : null)) {
+          refreshTally('<span class="bad">sever</span> ' + record.region + " \u00b7 force " + record.force.toFixed(2));
+        } else {
+          refreshTally("hit at " + Math.round(fraction * 100) + "% height \u00b7 force " + force.toFixed(2) + " \u00b7 nothing taken");
+        }
+      }
+
+      // Stop when there is genuinely nothing left an ordinary hit could take.
+      function beatdownSpent() {
+        if (!goreState) return true;
+        if (health > 0) return false;
+        return REGIONS.every((region) =>
+          region.lethal || !goreState.rigged.has(region.id) || goreState.dismemberment.has(region.id));
+      }
+
+      function setBeatdown(on) {
+        if (beatdownTimer) { clearInterval(beatdownTimer); beatdownTimer = 0; }
+        beatBtn.classList.toggle("on", !!on);
+        beatBtn.textContent = on ? "Stop" : "Beat down";
+        if (!on) return;
+        beatdownTimer = setInterval(() => {
+          if (beatdownSpent()) { setBeatdown(false); return; }
+          landHit();
+        }, 420);
+      }
+
+      healthInput.addEventListener("input", (e) => setHealth(Number(e.target.value) / 100));
+      hitBtn.addEventListener("click", landHit);
+      beatBtn.addEventListener("click", () => setBeatdown(!beatdownTimer));
+
+      fatalityBtn.addEventListener("click", () => {
+        if (!goreState) return;
+        setBeatdown(false);
+        setHealth(0);
+        const records = goreState.dismemberment.explode({ force: 3.2 });
+        if (currentFighter) currentFighter.play("knockdown");
+        if (onSevered(records)) {
+          refreshTally('<span class="bad">FATALITY</span> \u00b7 ' + records.length + " regions in one frame");
+        } else {
+          refreshTally("nothing left to take.");
+        }
+      });
+
+      patchBtn.addEventListener("click", () => {
+        setBeatdown(false);
+        if (goreState) { goreState.skin.reset(); goreState.dismemberment.reset(); }
+        debris.reset();
+        washFloor();
+        setHealth(1);
+        refreshTally("Intact.");
+        // A fatal cut leaves the model locked at the last frame of the
+        // knockdown pose. Patch up also has to put him back on his feet —
+        // re-play the looped idle so the fighter stands up and breathes again.
+        if (currentFighter) {
+          const order = currentFighter.clips.map((c) => c.name);
+          const stand = order.includes("idle") ? "idle"
+                      : order.includes("guard") ? "guard"
+                      : order[0];
+          currentFighter.play(stand);
+        }
+      });
+
+      // The Cut button on a card is `sever` called directly, which is what the
+      // KO and the finisher do -- it ignores the health gate on purpose.
+      regionsGrid.addEventListener("click", (e) => {
+        const button = e.target.closest("button[data-sever]");
+        if (!button || !goreState) return;
+        setBeatdown(false);
+        const region = REGION_BY_ID[button.dataset.sever];
+        const record = goreState.dismemberment.sever(region.id, {
+          dx: Math.random() < 0.5 ? -1 : 1,
+          dy: 1.1 + Math.random() * 0.8,
+          force: 2.2 + Math.random() * 1.2,
+        });
+        if (record) {
+          if (region.lethal) setHealth(0);
+          onSevered([record]);
+          if (currentFighter) currentFighter.play(region.lethal ? "knockdown" : "hitHigh");
+          refreshTally('<span class="bad">cut</span> ' + region.id + " \u00b7 " + region.organs.length + (region.organs.length === 1 ? " prop spilled" : " props spilled"));
+        } else {
+          refreshRegions();
+          refreshTally('<span class="bad">no geometry</span> answered to ' + region.id + " on this rig.");
+        }
+      });
+
+      setHealth(1);
+      refreshTally("");
+
+      const clock = new THREE.Clock();
+      function tick() {
+        resize();
+        const dt = clock.getDelta();
+        if (currentFighter) currentFighter.mixer.update(dt);
+
+        if (dragging) {
+          // User is driving the camera directly — no easing, no hover-nudge,
+          // no turntable. The cursor is in charge.
+        } else {
+          const targetAz = -0.45 + mouseX * 0.9;
+          const targetEl = 0.0 + (1 - mouseY) * 0.25;
+          cameraAz += (targetAz - cameraAz) * Math.min(1, dt * 4);
+          cameraEl += (targetEl - cameraEl) * Math.min(1, dt * 4);
+        }
+        const r = cameraRadius;
+        camera.position.x = Math.sin(cameraAz) * Math.cos(cameraEl) * r;
+        camera.position.z = Math.cos(cameraAz) * Math.cos(cameraEl) * r;
+        camera.position.y = 1.05 + Math.sin(cameraEl) * r;
+        camera.lookAt(0, 1.05, 0);
+
+        // Turntable: rotate the model so it faces the cursor instead of the
+        // camera orbiting away from it. Skipped while the user is dragging —
+        // they expect the model to move with the cursor, not snap back.
+        if (currentFighter && !dragging) {
+          const targetYaw = (mouseX - 0.5) * 1.4;
+          currentFighter.root.rotation.y +=
+            (targetYaw - currentFighter.root.rotation.y) * Math.min(1, dt * 4);
+        }
+
+        debris.update(dt, camera);
+        // A severance kicks the camera. It decays linearly rather than
+        // exponentially so it always actually reaches zero.
+        if (shake > 0) {
+          shake = Math.max(0, shake - dt * 0.5);
+          camera.position.x += (Math.random() - 0.5) * shake;
+          camera.position.y += (Math.random() - 0.5) * shake;
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      loadFighter("trump");
+    </script>
+  </body>
+</html>

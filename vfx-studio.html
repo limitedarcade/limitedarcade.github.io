@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11191d">
+  <meta name="description" content="Shape, recolor, and preview reusable effects for Battle for Independence.">
+  <title>Effects Studio · Battle for Independence</title>
+  <script type="module" crossorigin src="./assets/vfxStudio-Cv9--mxC.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/GLTFLoader-B2CXoxbi.js">
+  <link rel="modulepreload" crossorigin href="./assets/modelVfx-8BFv-sDS.js">
+  <link rel="stylesheet" crossorigin href="./assets/vfxStudio-DMFpzZTF.css">
+</head>
+<body>
+  <a class="skip-link" href="#tuning">Skip to effect controls</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Battle for Independence, back to game"><span class="brand-mark" aria-hidden="true">B<span>/</span>I</span><span>Battle for<br><strong>Independence</strong></span></a>
+    <div class="studio-label"><span class="live-dot" aria-hidden="true"></span>Effects studio <span class="version">01</span></div>
+    <a class="back-link" href="./">Back to game <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="workbench">
+    <section class="library" aria-labelledby="library-title">
+      <div class="section-heading"><span class="eyebrow">Your collection</span><span class="section-number">01—05</span></div>
+      <h1 id="library-title">Make an<br><em>impact.</em></h1>
+      <p class="intro">Five effects. Endless variations.<br>Find the right feel for every move.</p>
+      <div id="effect-library" class="effect-library" role="group" aria-label="Choose an effect"></div>
+      <div class="library-footer"><span class="small-dot" aria-hidden="true"></span>Ready for the arena<p>Size, color, and timing travel with every preset.</p></div>
+    </section>
+
+    <section class="preview" aria-label="Live effect preview">
+      <div class="viewport" id="viewport">
+        <canvas id="effect-canvas" tabindex="0" aria-label="3D effect preview. Drag to orbit, use the mouse wheel to zoom, or use the camera buttons below."></canvas>
+        <div class="stage-title"><span class="eyebrow">Live preview</span><h2 id="effect-title">Fireball</h2><p id="effect-description">A concentrated shot of heat.</p></div>
+        <div class="stage-badge"><span class="live-dot" aria-hidden="true"></span><span id="stage-state">Loading</span></div>
+        <div class="stage-message" id="stage-message" role="status">Preparing your first effect…</div>
+        <div class="stage-scale"><span class="scale-rule" aria-hidden="true"></span><span>Reference · 1.8 m</span></div>
+        <div class="camera-tools" role="group" aria-label="Camera view">
+          <button type="button" id="camera-perspective" class="camera-button selected" aria-pressed="true">Perspective</button>
+          <button type="button" id="camera-front" class="camera-button" aria-pressed="false">Front</button>
+          <button type="button" id="camera-reset" class="camera-button" title="Reset camera">Reset view</button>
+        </div>
+        <p class="orbit-hint">Drag to orbit <span>·</span> Scroll to zoom</p>
+      </div>
+      <div class="transport">
+        <div class="timeline-head"><span id="playback-label">Preview playback</span><output id="time-output">0.00 / 2.00 s</output></div>
+        <label class="sr-only" for="preview-position">Preview position</label>
+        <div class="timeline" id="timeline"><span id="timeline-fill" aria-hidden="true"></span><input id="preview-position" type="range" min="0" max="1" step="0.001" value="0" disabled></div>
+        <div class="transport-actions">
+          <div class="playback-buttons"><button class="primary-button" type="button" id="play-toggle" disabled><span id="play-icon" aria-hidden="true">Ⅱ</span><span id="play-label">Pause</span></button><button class="secondary-button" type="button" id="replay" disabled><span aria-hidden="true">↻</span> Replay</button></div>
+          <label class="switch-label" for="loop"><input id="loop" type="checkbox" checked><span class="switch" aria-hidden="true"></span>Loop preview</label>
+        </div>
+        <div class="preview-footer"><span id="load-status" role="status">Loading selected effect…</span><span class="key-hint"><kbd>Space</kbd> play / pause</span></div>
+      </div>
+    </section>
+
+    <aside class="tuning" id="tuning" aria-labelledby="tuning-title" tabindex="-1">
+      <div class="section-heading"><span class="eyebrow">Make it yours</span><button type="button" class="text-button" id="reset-preset">Reset</button></div>
+      <h2 id="tuning-title">Effect settings</h2>
+      <p class="panel-intro">Adjust it here. Reuse it anywhere.</p>
+      <fieldset class="control-section"><legend>Appearance <span>01</span></legend>
+        <div class="control"><label for="size">Size <output id="size-output" for="size">2.00 m</output></label><input id="size" data-setting="size" type="range" min="0.25" max="5" step="0.05" value="2"><div class="range-labels"><span>Compact</span><span>Oversized</span></div></div>
+        <div class="control"><label for="color">Color <output id="color-output" for="color">#ff7844</output></label><div class="color-row"><input id="color" data-setting="color" type="color" value="#ff7844" aria-label="Custom effect color"><div class="color-swatches" role="group" aria-label="Color palette"><button type="button" class="swatch" data-color="#ff7844" style="--swatch:#ff7844" aria-label="Ember orange"></button><button type="button" class="swatch" data-color="#75dbef" style="--swatch:#75dbef" aria-label="Ice blue"></button><button type="button" class="swatch" data-color="#b4a2ff" style="--swatch:#b4a2ff" aria-label="Violet"></button><button type="button" class="swatch" data-color="#9ee5a6" style="--swatch:#9ee5a6" aria-label="Mint green"></button><button type="button" class="swatch" data-color="#ffe5ad" style="--swatch:#ffe5ad" aria-label="Warm gold"></button></div></div></div>
+        <div class="control"><label for="glow">Glow <output id="glow-output" for="glow">1.00×</output></label><input id="glow" data-setting="glow" type="range" min="0" max="3" step="0.05" value="1"></div>
+        <div class="control"><label for="opacity">Opacity <output id="opacity-output" for="opacity">100%</output></label><input id="opacity" data-setting="opacity" type="range" min="0" max="1" step="0.01" value="1"></div>
+      </fieldset>
+      <fieldset class="control-section"><legend>Timing <span>02</span></legend>
+        <div class="control"><label for="duration">Duration <output id="duration-output" for="duration">2.00 s</output></label><input id="duration" data-setting="duration" type="range" min="0.2" max="8" step="0.1" value="2"></div>
+        <div class="control"><label for="speed">Playback speed <output id="speed-output" for="speed">1.00×</output></label><input id="speed" data-setting="speed" type="range" min="0.1" max="2" step="0.05" value="1"></div>
+        <div class="control"><label for="delay">Start delay <output id="delay-output" for="delay">0.00 s</output></label><input id="delay" data-setting="delay" type="range" min="0" max="3" step="0.1" value="0"></div>
+      </fieldset>
+      <details class="orientation"><summary>Orientation <span aria-hidden="true">+</span></summary><div class="control"><label for="yaw">Turn <output id="yaw-output" for="yaw">0°</output></label><input id="yaw" data-setting="yaw" type="range" min="-180" max="180" step="5" value="0"></div><div class="control"><label for="tilt">Tilt <output id="tilt-output" for="tilt">0°</output></label><input id="tilt" data-setting="tilt" type="range" min="-180" max="180" step="5" value="0"></div></details>
+      <button type="button" id="copy-preset" class="copy-button">Copy reusable preset <span aria-hidden="true">↗</span></button>
+      <p id="save-status" class="save-status" role="status">Settings stay on this device.</p>
+      <details id="preset-export" class="preset-export"><summary>View preset</summary><label class="sr-only" for="preset-json">Reusable effect preset JSON</label><textarea id="preset-json" readonly spellcheck="false" rows="12"></textarea></details>
+    </aside>
+  </main>
+  <footer class="page-footer"><span>Battle for Independence <span aria-hidden="true">/</span> Effects studio</span><span>Small details. Big energy.</span></footer>
+</body>
+</html>

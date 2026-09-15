@@ -1,0 +1,475 @@
+{
+  "kind": "force-measured-parity",
+  "id": "lang",
+  "displayName": "Jake Lang",
+  "source": "web/fighter-tool\\build\\lang\\lang_rigged.glb",
+  "outDir": "web/fighter-tool\\build\\lang\\threejs",
+  "ms": 202,
+  "verts": 98619,
+  "tris": 150000,
+  "bones": 25,
+  "clips": [
+    "tpose",
+    "guard",
+    "idle",
+    "jab",
+    "walkF",
+    "walkB",
+    "crouch",
+    "crouchGuard",
+    "jump",
+    "land",
+    "intro",
+    "lightPunch",
+    "heavyPunch",
+    "lightKick",
+    "heavyKick",
+    "crouchPunch",
+    "crouchKick",
+    "jumpAttack",
+    "grab",
+    "grabHold",
+    "throw",
+    "hitHigh",
+    "hitLow",
+    "blockHit",
+    "grabbed",
+    "knockdown",
+    "getUp",
+    "dizzy",
+    "finisher",
+    "finisherVictim",
+    "victory",
+    "defeat",
+    "backHop",
+    "lang_bodyCheck",
+    "lang_heelDrop",
+    "lang_risingKnee",
+    "lang_powerStrike",
+    "lang_hammerRush",
+    "lang_meteorKick",
+    "lang_cyclone",
+    "lang_groundBreaker",
+    "lang_burstStrike",
+    "lang_uppercut",
+    "lang_lungePunch",
+    "lang_retreatKick",
+    "lang_lightPunch",
+    "lang_heavyPunch",
+    "lang_lightKick",
+    "lang_heavyKick",
+    "lang_crouchPunch",
+    "lang_crouchKick",
+    "lang_jumpAttack",
+    "lang_grab",
+    "lang_throw",
+    "lang_finisher"
+  ],
+  "streamBytes": 2861864,
+  "surfaceJsBytes": 3819784,
+  "height": 0.9994098842144012,
+  "quantization": {
+    "origin": [
+      -0.4695482850074768,
+      -0.5000161528587341,
+      -0.12212097644805908
+    ],
+    "extent": [
+      0.9387200772762299,
+      0.9994098842144012,
+      0.244233138859272
+    ],
+    "step": [
+      0.000014323950214026549,
+      0.000015250017307002383,
+      0.000003726758813752529
+    ]
+  },
+  "gates": [
+    {
+      "name": "vertexCount",
+      "value": 98619,
+      "status": "pass",
+      "measured": 98619
+    },
+    {
+      "name": "triangleCount",
+      "value": 150000,
+      "status": "pass",
+      "measured": 150000
+    },
+    {
+      "name": "boneCount",
+      "value": 25,
+      "status": "pass",
+      "measured": 25
+    },
+    {
+      "name": "clipCount",
+      "value": 55,
+      "status": "pass",
+      "measured": [
+        "tpose",
+        "guard",
+        "idle",
+        "jab",
+        "walkF",
+        "walkB",
+        "crouch",
+        "crouchGuard",
+        "jump",
+        "land",
+        "intro",
+        "lightPunch",
+        "heavyPunch",
+        "lightKick",
+        "heavyKick",
+        "crouchPunch",
+        "crouchKick",
+        "jumpAttack",
+        "grab",
+        "grabHold",
+        "throw",
+        "hitHigh",
+        "hitLow",
+        "blockHit",
+        "grabbed",
+        "knockdown",
+        "getUp",
+        "dizzy",
+        "finisher",
+        "finisherVictim",
+        "victory",
+        "defeat",
+        "backHop",
+        "lang_bodyCheck",
+        "lang_heelDrop",
+        "lang_risingKnee",
+        "lang_powerStrike",
+        "lang_hammerRush",
+        "lang_meteorKick",
+        "lang_cyclone",
+        "lang_groundBreaker",
+        "lang_burstStrike",
+        "lang_uppercut",
+        "lang_lungePunch",
+        "lang_retreatKick",
+        "lang_lightPunch",
+        "lang_heavyPunch",
+        "lang_lightKick",
+        "lang_heavyKick",
+        "lang_crouchPunch",
+        "lang_crouchKick",
+        "lang_jumpAttack",
+        "lang_grab",
+        "lang_throw",
+        "lang_finisher"
+      ]
+    },
+    {
+      "name": "quantizationError",
+      "value": 0.000007624964769692433,
+      "status": "pass",
+      "threshold": 0.000022875025960503577,
+      "step": [
+        0.000014323950214026549,
+        0.000015250017307002383,
+        0.000003726758813752529
+      ]
+    },
+    {
+      "name": "weightError",
+      "value": 0.000007629489574889625,
+      "status": "pass",
+      "threshold": 0.000030518043793392844
+    },
+    {
+      "name": "weightSum",
+      "value": 4.842877388000488e-8,
+      "status": "pass",
+      "threshold": 0.00001
+    },
+    {
+      "name": "bindDelta",
+      "value": 2.263319284189487e-8,
+      "status": "pass",
+      "threshold": 0.00001
+    },
+    {
+      "name": "clip:tpose",
+      "value": 0.5,
+      "status": "pass"
+    },
+    {
+      "name": "clip:guard",
+      "value": 0.3199999928474426,
+      "status": "pass"
+    },
+    {
+      "name": "clip:idle",
+      "value": 1.600000023841858,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jab",
+      "value": 0.5666666626930237,
+      "status": "pass"
+    },
+    {
+      "name": "clip:walkF",
+      "value": 0.7200000286102295,
+      "status": "pass"
+    },
+    {
+      "name": "clip:walkB",
+      "value": 0.800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouch",
+      "value": 2.4000000953674316,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchGuard",
+      "value": 0.699999988079071,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jump",
+      "value": 0.6000000238418579,
+      "status": "pass"
+    },
+    {
+      "name": "clip:land",
+      "value": 0.2800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:intro",
+      "value": 1.7000000476837158,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lightPunch",
+      "value": 0.5666666626930237,
+      "status": "pass"
+    },
+    {
+      "name": "clip:heavyPunch",
+      "value": 0.6833333373069763,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lightKick",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:heavyKick",
+      "value": 0.7833333611488342,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchPunch",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchKick",
+      "value": 0.6833333373069763,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jumpAttack",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grab",
+      "value": 0.7166666388511658,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grabHold",
+      "value": 0.6800000071525574,
+      "status": "pass"
+    },
+    {
+      "name": "clip:throw",
+      "value": 0.800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:hitHigh",
+      "value": 0.36000001430511475,
+      "status": "pass"
+    },
+    {
+      "name": "clip:hitLow",
+      "value": 0.3799999952316284,
+      "status": "pass"
+    },
+    {
+      "name": "clip:blockHit",
+      "value": 0.5,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grabbed",
+      "value": 0.5199999809265137,
+      "status": "pass"
+    },
+    {
+      "name": "clip:knockdown",
+      "value": 0.8999999761581421,
+      "status": "pass"
+    },
+    {
+      "name": "clip:getUp",
+      "value": 0.6600000262260437,
+      "status": "pass"
+    },
+    {
+      "name": "clip:dizzy",
+      "value": 1.2000000476837158,
+      "status": "pass"
+    },
+    {
+      "name": "clip:finisher",
+      "value": 1.1833332777023315,
+      "status": "pass"
+    },
+    {
+      "name": "clip:finisherVictim",
+      "value": 1.399999976158142,
+      "status": "pass"
+    },
+    {
+      "name": "clip:victory",
+      "value": 1.399999976158142,
+      "status": "pass"
+    },
+    {
+      "name": "clip:defeat",
+      "value": 1.100000023841858,
+      "status": "pass"
+    },
+    {
+      "name": "clip:backHop",
+      "value": 0.6499999761581421,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_bodyCheck",
+      "value": 0.6333333253860474,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_heelDrop",
+      "value": 0.8833333253860474,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_risingKnee",
+      "value": 0.75,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_powerStrike",
+      "value": 0.7333333492279053,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_hammerRush",
+      "value": 0.75,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_meteorKick",
+      "value": 0.8999999761581421,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_cyclone",
+      "value": 0.7333333492279053,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_groundBreaker",
+      "value": 0.7333333492279053,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_burstStrike",
+      "value": 1.25,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_uppercut",
+      "value": 0.7333333492279053,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_lungePunch",
+      "value": 0.75,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_retreatKick",
+      "value": 0.75,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_lightPunch",
+      "value": 0.5666666626930237,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_heavyPunch",
+      "value": 0.6833333373069763,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_lightKick",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_heavyKick",
+      "value": 0.7833333611488342,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_crouchPunch",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_crouchKick",
+      "value": 0.6833333373069763,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_jumpAttack",
+      "value": 0.5833333134651184,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_grab",
+      "value": 0.7166666388511658,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_throw",
+      "value": 0.800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lang_finisher",
+      "value": 1.1833332777023315,
+      "status": "pass"
+    }
+  ],
+  "ok": true
+}
