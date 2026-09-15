@@ -1,0 +1,86 @@
+{
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "bfi/pose_donor_kick"
+    }
+  },
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v8Rundiffusion.safetensors"
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Full body side-view fighting game character facing right. Mid roundhouse kick. One leg is raised and COMPLETELY straight out to the side at hip height, foot reaching far beyond the body. Supporting leg planted straight, arms out for balance. Leg fully extended, not bent, not standing. Full body from head to toe, both feet visible and planted on the ground, entire figure inside the frame with generous empty margin on all sides, no cropping, camera far back, whole body shot. Generic male fighter in a plain dark suit silhouette, clear limb read, chunky proportions, thick outline. Solid flat magenta background #FF00FF, no scenery, no text.",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photo, blurry, text, watermark, cropped limbs, missing feet, cut off, close-up, zoomed in, hands in pockets, idle standing, guard stance, fists at chest, bent arms, front view",
+      "clip": [
+        "1",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 29000001,
+      "steps": 28,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    }
+  }
+}

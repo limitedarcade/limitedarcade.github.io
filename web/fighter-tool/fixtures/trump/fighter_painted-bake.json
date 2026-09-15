@@ -1,0 +1,57 @@
+{
+ "kind": "atlas-bake-report",
+ "source": "refs/Hi3D_Cel-Shaded Cartoon Caricature Businessman 3D Model_allparts_20260903_235636.glb",
+ "target": "refs/Hi3D_Untitled_allparts_20260904_002203.glb",
+ "out": "build/fighter_painted.glb",
+ "scaleReferenceHeightM": 1.9,
+ "parts": [
+  {
+   "part": "Head",
+   "verts": 108523,
+   "medianMm": 0.441,
+   "p99Mm": 24.995,
+   "interiorVerts": 1778,
+   "interiorPct": 1.64
+  },
+  {
+   "part": "Torso",
+   "verts": 320999,
+   "medianMm": 0.39,
+   "p99Mm": 30.097,
+   "interiorVerts": 6887,
+   "interiorPct": 2.15
+  },
+  {
+   "part": "LeftArm",
+   "verts": 85553,
+   "medianMm": 0.431,
+   "p99Mm": 13.949,
+   "interiorVerts": 1194,
+   "interiorPct": 1.4
+  },
+  {
+   "part": "RightArm",
+   "verts": 101913,
+   "medianMm": 0.421,
+   "p99Mm": 6.408,
+   "interiorVerts": 1055,
+   "interiorPct": 1.04
+  },
+  {
+   "part": "LeftLeg",
+   "verts": 193591,
+   "medianMm": 0.317,
+   "p99Mm": 16.774,
+   "interiorVerts": 2673,
+   "interiorPct": 1.38
+  },
+  {
+   "part": "RightLeg",
+   "verts": 217441,
+   "medianMm": 0.319,
+   "p99Mm": 8.576,
+   "interiorVerts": 2545,
+   "interiorPct": 1.17
+  }
+ ]
+}

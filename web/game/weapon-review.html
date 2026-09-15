@@ -1,0 +1,8 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Weapon visual review</title></head><body style="margin:0;background:#17202c;color:white"><p style="position:absolute">Shuriken · Knife · Phantom hockey stick</p><script type="module">
+import * as T from './src/vendor/three.module.js';
+import { WeaponView } from './src/render/weapons.js';
+const scene=new T.Scene();scene.background=new T.Color('#17202c');scene.add(new T.HemisphereLight(0xffffff,0x536078,2));const light=new T.DirectionalLight(0xffffff,3);light.position.set(3,5,5);scene.add(light);
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);document.body.append(renderer.domElement);const camera=new T.PerspectiveCamera(35,innerWidth/innerHeight,.01,100);camera.position.set(0,1.2,7);camera.lookAt(0,1.2,0);
+const view=new WeaponView(scene,{group:new T.Group()});
+renderer.setAnimationLoop(()=>{view.update({phase:'fight',axeCooldown:0,fighters:[],projectiles:['shuriken','knife','hockey'].map((kind,i)=>({id:i,kind,x:(i-1)*1.8,y:1.2,facing:1,age:0}))});renderer.render(scene,camera);});
+</script></body></html>

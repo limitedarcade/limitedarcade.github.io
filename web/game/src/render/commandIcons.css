@@ -1,0 +1,42 @@
+/* Arcade command glyphs: colored attack pips, keyboard keycaps, Xbox pad faces. */
+.input-legend.cmd-legend { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; background: #080c18a8; border: 1px solid #ffc63d33; white-space: normal; line-height: 1.2; }
+.cmd-legend-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+.cmd-legend-side { min-width: 36px; font: 800 11px/1 'Segoe UI', sans-serif; letter-spacing: .18em; color: var(--gold); }
+.cmd-legend-1 .cmd-legend-side { color: var(--cyan, #80dbff); }
+.cmd-pair { display: inline-flex; align-items: center; gap: 5px; }
+.cmd-legend-note { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; color: var(--muted, #b1bed0); font-size: 13px; }
+.cmd-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cmd-line-label { font: 800 10px/1 'Segoe UI', sans-serif; letter-spacing: .16em; color: var(--muted, #b1bed0); min-width: 74px; text-transform: uppercase; }
+.cmd-strip, .cmd-notation { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.cmd-btn, .cmd-key, .cmd-pad, .cmd-dir {
+  display: inline-grid; place-items: center; min-width: 32px; height: 32px; padding: 0 7px;
+  font: 800 11px/1 'Segoe UI', sans-serif; letter-spacing: .04em; user-select: none;
+}
+.cmd-btn { border-radius: 50%; color: #080c18; box-shadow: inset 0 -3px 0 #0005, 0 2px 0 #0006, 0 0 10px #0005; }
+.cmd-lp { background: radial-gradient(circle at 32% 28%, #e7fbff, #80dbff 62%, #4aa8c8); }
+.cmd-hp { background: radial-gradient(circle at 32% 28%, #fff4c8, #ffc63d 62%, #e8871a); }
+.cmd-lk { background: radial-gradient(circle at 32% 28%, #c5d6ff, #2f6bff 64%, #1d3fad); color: #eef3ff; }
+.cmd-hk { background: radial-gradient(circle at 32% 28%, #ffb3b7, #d81f2a 64%, #7c0d14); color: #eef3ff; }
+.cmd-block { border-radius: 7px; background: radial-gradient(circle at 32% 28%, #e8eef8, #8a97ad 70%, #5c6778); min-width: 38px; }
+.cmd-grab { border-radius: 8px; min-width: 46px; color: #fff5f0; background: radial-gradient(circle at 32% 28%, #ffb3b7, #d81f2a 64%, #7c0d14); }
+.cmd-pad-xy { min-width: 46px; border-radius: 8px; background: linear-gradient(#4a566c, #2a3344); color: #eef3ff; font-size: 10px; }
+.cmd-key { border-radius: 6px; color: #eef3ff; background: linear-gradient(#33425c, #161d2c); border: 1px solid #b1bed055; border-bottom-width: 3px; box-shadow: inset 0 1px 0 #ffffff1a; }
+.cmd-key.cmd-key-num { height: 38px; }
+.cmd-key-num::after { content: 'NUM'; display: block; font-size: 7px; letter-spacing: .12em; color: #ffc63d; margin-top: 2px; }
+.cmd-key-wide { min-width: 64px; }
+.cmd-pad { border-radius: 7px; color: #080c18; font-size: 13px; box-shadow: inset 0 -3px 0 #0004, 0 2px 0 #0005; }
+.cmd-pad-x { background: radial-gradient(circle at 32% 28%, #9ec0ff, #2f6bff); color: #eef3ff; }
+.cmd-pad-y { background: radial-gradient(circle at 32% 28%, #ffe9a1, #ffc63d); }
+.cmd-pad-a { background: radial-gradient(circle at 32% 28%, #b6ffd4, #2fbe6a); }
+.cmd-pad-b { background: radial-gradient(circle at 32% 28%, #ffb3b7, #d81f2a); color: #eef3ff; }
+.cmd-pad-lb { min-width: 42px; border-radius: 5px 5px 11px 11px; background: linear-gradient(#4a566c, #2a3344); color: #eef3ff; font-size: 10px; letter-spacing: .12em; }
+.cmd-dir { min-width: 32px; border-radius: 6px; background: linear-gradient(#2a3548, #121826); border: 1px solid #ffc63d66; color: var(--gold); font-size: 16px; }
+.cmd-join { color: var(--gold); font: 800 13px/1 'Segoe UI', sans-serif; padding: 0 2px; }
+.cmd-text { color: var(--paper); font: 700 13px/1 'Segoe UI', sans-serif; }
+.cmd-practice { display: flex; flex-direction: column; gap: 8px; }
+kbd.move-input.cmd-notation { background: transparent; border: 0; padding: 0; display: inline-flex; color: inherit; }
+@media (max-width: 640px) {
+  .cmd-btn, .cmd-key, .cmd-pad, .cmd-dir { min-width: 28px; height: 28px; font-size: 10px; }
+  .cmd-key-wide { min-width: 52px; }
+  .cmd-legend-side { min-width: 28px; }
+}

@@ -1,0 +1,18 @@
+# Emberveil row char_dutchie
+# usage obj
+00 dutchie_clear r=0 g=0 b=0 hex=#000000 bgr555=0x0000
+01 dutchie_ink r=3 g=2 b=2 hex=#181010 bgr555=0x0843
+02 orange_dark r=18 g=6 b=2 hex=#943110 bgr555=0x08D2
+03 orange_mid r=26 g=12 b=3 hex=#D66318 bgr555=0x0D9A
+04 orange_lit r=31 g=18 b=6 hex=#FF9431 bgr555=0x1A5F
+05 hair_dark r=16 g=6 b=2 hex=#843110 bgr555=0x08D0
+06 hair_lit r=28 g=14 b=4 hex=#E67321 bgr555=0x11DC
+07 shade_black r=2 g=2 b=3 hex=#101018 bgr555=0x0C42
+08 gold_chain r=28 g=22 b=6 hex=#E6B531 bgr555=0x1ADC
+09 gold_lit r=31 g=28 b=12 hex=#FFE663 bgr555=0x339F
+10 stripe_white r=28 g=28 b=28 hex=#E6E6E6 bgr555=0x739C
+11 shoe_white r=31 g=31 b=31 hex=#FFFFFF bgr555=0x7FFF
+12 lion_badge r=31 g=24 b=4 hex=#FFC621 bgr555=0x131F
+13 skin r=28 g=20 b=15 hex=#E6A57B bgr555=0x3E9C
+14 skin_shade r=22 g=14 b=10 hex=#B57352 bgr555=0x29D6
+15 dutchie_flash r=31 g=31 b=24 hex=#FFFFC6 bgr555=0x63FF

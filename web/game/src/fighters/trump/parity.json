@@ -1,0 +1,314 @@
+{
+  "kind": "force-measured-parity",
+  "id": "trump",
+  "displayName": "Trump",
+  "source": "web/fighter-tool\\build\\trump\\trump_rigged.glb",
+  "outDir": "web/fighter-tool\\build\\trump\\threejs",
+  "ms": 173,
+  "verts": 105159,
+  "tris": 150000,
+  "bones": 25,
+  "clips": [
+    "tpose",
+    "guard",
+    "idle",
+    "jab",
+    "walkF",
+    "walkB",
+    "crouch",
+    "crouchGuard",
+    "jump",
+    "land",
+    "intro",
+    "lightPunch",
+    "heavyPunch",
+    "lightKick",
+    "heavyKick",
+    "crouchPunch",
+    "crouchKick",
+    "jumpAttack",
+    "grab",
+    "grabHold",
+    "throw",
+    "hitHigh",
+    "hitLow",
+    "blockHit",
+    "grabbed",
+    "knockdown",
+    "getUp",
+    "dizzy",
+    "finisher",
+    "finisherVictim",
+    "victory",
+    "defeat"
+  ],
+  "streamBytes": 3009388,
+  "surfaceJsBytes": 4016483,
+  "height": 0.9525889456272125,
+  "quantization": {
+    "origin": [
+      -0.499873548746109,
+      -0.47664010524749756,
+      -0.18447670340538025
+    ],
+    "extent": [
+      0.9998329877853394,
+      0.9525889456272125,
+      0.3690905421972275
+    ],
+    "step": [
+      0.0000152564734536559,
+      0.000014535575579876593,
+      0.000005631960665251049
+    ]
+  },
+  "gates": [
+    {
+      "name": "vertexCount",
+      "value": 105159,
+      "status": "pass",
+      "measured": 105159
+    },
+    {
+      "name": "triangleCount",
+      "value": 150000,
+      "status": "pass",
+      "measured": 150000
+    },
+    {
+      "name": "boneCount",
+      "value": 25,
+      "status": "pass",
+      "measured": 25
+    },
+    {
+      "name": "clipCount",
+      "value": 32,
+      "status": "pass",
+      "measured": [
+        "tpose",
+        "guard",
+        "idle",
+        "jab",
+        "walkF",
+        "walkB",
+        "crouch",
+        "crouchGuard",
+        "jump",
+        "land",
+        "intro",
+        "lightPunch",
+        "heavyPunch",
+        "lightKick",
+        "heavyKick",
+        "crouchPunch",
+        "crouchKick",
+        "jumpAttack",
+        "grab",
+        "grabHold",
+        "throw",
+        "hitHigh",
+        "hitLow",
+        "blockHit",
+        "grabbed",
+        "knockdown",
+        "getUp",
+        "dizzy",
+        "finisher",
+        "finisherVictim",
+        "victory",
+        "defeat"
+      ]
+    },
+    {
+      "name": "quantizationError",
+      "value": 0.000007628139864213068,
+      "status": "pass",
+      "threshold": 0.00002288471018048385,
+      "step": [
+        0.0000152564734536559,
+        0.000014535575579876593,
+        0.000005631960665251049
+      ]
+    },
+    {
+      "name": "weightError",
+      "value": 0.000007629500034245229,
+      "status": "pass",
+      "threshold": 0.000030518043793392844
+    },
+    {
+      "name": "weightSum",
+      "value": 4.71482053399086e-8,
+      "status": "pass",
+      "threshold": 0.00001
+    },
+    {
+      "name": "bindDelta",
+      "value": 2.4216436494141263e-8,
+      "status": "pass",
+      "threshold": 0.00001
+    },
+    {
+      "name": "clip:tpose",
+      "value": 0.5,
+      "status": "pass"
+    },
+    {
+      "name": "clip:guard",
+      "value": 2,
+      "status": "pass"
+    },
+    {
+      "name": "clip:idle",
+      "value": 3.4000000953674316,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jab",
+      "value": 0.6200000047683716,
+      "status": "pass"
+    },
+    {
+      "name": "clip:walkF",
+      "value": 0.7200000286102295,
+      "status": "pass"
+    },
+    {
+      "name": "clip:walkB",
+      "value": 0.800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouch",
+      "value": 2.4000000953674316,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchGuard",
+      "value": 2,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jump",
+      "value": 0.6000000238418579,
+      "status": "pass"
+    },
+    {
+      "name": "clip:land",
+      "value": 0.2800000011920929,
+      "status": "pass"
+    },
+    {
+      "name": "clip:intro",
+      "value": 1,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lightPunch",
+      "value": 0.41999998688697815,
+      "status": "pass"
+    },
+    {
+      "name": "clip:heavyPunch",
+      "value": 0.7400000095367432,
+      "status": "pass"
+    },
+    {
+      "name": "clip:lightKick",
+      "value": 0.5400000214576721,
+      "status": "pass"
+    },
+    {
+      "name": "clip:heavyKick",
+      "value": 0.8600000143051147,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchPunch",
+      "value": 0.3400000035762787,
+      "status": "pass"
+    },
+    {
+      "name": "clip:crouchKick",
+      "value": 0.8600000143051147,
+      "status": "pass"
+    },
+    {
+      "name": "clip:jumpAttack",
+      "value": 0.46000000834465027,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grab",
+      "value": 0.5199999809265137,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grabHold",
+      "value": 0.6800000071525574,
+      "status": "pass"
+    },
+    {
+      "name": "clip:throw",
+      "value": 0.8600000143051147,
+      "status": "pass"
+    },
+    {
+      "name": "clip:hitHigh",
+      "value": 0.36000001430511475,
+      "status": "pass"
+    },
+    {
+      "name": "clip:hitLow",
+      "value": 0.3799999952316284,
+      "status": "pass"
+    },
+    {
+      "name": "clip:blockHit",
+      "value": 0.25999999046325684,
+      "status": "pass"
+    },
+    {
+      "name": "clip:grabbed",
+      "value": 0.5199999809265137,
+      "status": "pass"
+    },
+    {
+      "name": "clip:knockdown",
+      "value": 0.8999999761581421,
+      "status": "pass"
+    },
+    {
+      "name": "clip:getUp",
+      "value": 0.6600000262260437,
+      "status": "pass"
+    },
+    {
+      "name": "clip:dizzy",
+      "value": 1.2000000476837158,
+      "status": "pass"
+    },
+    {
+      "name": "clip:finisher",
+      "value": 1.399999976158142,
+      "status": "pass"
+    },
+    {
+      "name": "clip:finisherVictim",
+      "value": 1.399999976158142,
+      "status": "pass"
+    },
+    {
+      "name": "clip:victory",
+      "value": 1.7999999523162842,
+      "status": "pass"
+    },
+    {
+      "name": "clip:defeat",
+      "value": 1.100000023841858,
+      "status": "pass"
+    }
+  ],
+  "ok": true
+}

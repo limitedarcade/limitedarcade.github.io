@@ -1,0 +1,3 @@
+﻿Same exact person as the reference photo: stocky young man, pale skin, light stubble, short ginger-orange hair buzzed on the sides with a small top knot, thick black rectangular sunglasses, thick gold chain necklace, bright orange zip-up jacket with a white zipper and a yellow lion badge on the chest, matching bright orange pants with a white stripe down the side, white sneakers, both hands in pockets, smug closed smile, head tilted.
+Full body game character sprite, side view facing right, thick dark outline, flat cel shading, limited colors, head to toe visible, centered with padding.
+Solid flat magenta background #FF00FF, no floor, no shadow, no scenery, no text.

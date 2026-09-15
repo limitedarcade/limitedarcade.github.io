@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Lake America · Stage review</title>
+  <link rel="stylesheet" href="./src/stageReview.css">
+</head>
+<body>
+  <main id="viewport" aria-label="Lake America environment review">
+    <canvas id="stage-canvas" tabindex="0" aria-label="3D Lake America. Drag to orbit, scroll to zoom, arrow keys to orbit, plus and minus to zoom."></canvas>
+    <header class="stage-title">
+      <p class="eyebrow"><span class="live-dot"></span> ARTIST REVIEW <span class="local-tag">LOCAL</span></p>
+      <h1>LAKE AMERICA</h1>
+      <p class="subtitle">The deep freeze.</p>
+    </header>
+    <div class="view-caption">
+      <strong id="view-name">Combat camera</strong>
+      <span>Drag to orbit · Scroll to explore · H hides controls · S saves image</span>
+    </div>
+    <div id="loading" role="status">Opening the Blender environment…</div>
+  </main>
+  <aside id="controls" aria-label="Stage review controls">
+    <div class="panel-heading"><span>FIELD NOTES / 01</span><button id="hide-controls" type="button" title="Hide controls (H)">Hide</button></div>
+    <p class="intro">Inspect the same scenery, lighting, water and weapons used in the match.</p>
+    <fieldset>
+      <legend>Camera</legend>
+      <div id="camera-presets" class="button-grid"></div>
+      <label class="toggle"><input id="orbit" type="checkbox"><span>Slow orbit</span></label>
+    </fieldset>
+    <fieldset>
+      <legend>Atmosphere</legend>
+      <button id="pause" type="button" class="wide" aria-pressed="false">Pause scene</button>
+      <label class="toggle"><input id="reduced-motion" type="checkbox"><span>Reduced motion</span></label>
+      <label class="toggle"><input id="fog" type="checkbox" checked><span>Distance haze</span></label>
+      <label class="toggle"><input id="grade" type="checkbox" checked><span>Game color grade</span></label>
+      <label class="range-label" for="exposure">Exposure <output id="exposure-value" for="exposure">1.13</output></label>
+      <input id="exposure" type="range" min="0.6" max="1.8" step="0.01" value="1.13">
+    </fieldset>
+    <fieldset>
+      <legend>Play space</legend>
+      <label class="toggle"><input id="guides" type="checkbox"><span>Combat lane &amp; fighter scale</span></label>
+      <label class="toggle"><input id="wireframe" type="checkbox"><span>Scenery wireframe</span></label>
+      <div class="button-grid"><button id="impact" type="button" disabled>Fracture ice</button><button id="reset" type="button" disabled>Reset round</button></div>
+      <div class="axe-card">
+        <div class="axe-heading"><strong>ICE AXE</strong><span id="axe-state">LOADING</span></div>
+        <p>At the left station, hold Down + LP + HP. One throw shared by both fighters each round.</p>
+        <button id="throw-axe" type="button" disabled>Preview axe throw</button>
+        <p id="axe-note" class="small-note" aria-live="polite">Loading the stage prop…</p>
+      </div>
+    </fieldset>
+    <div class="panel-actions"><button id="capture" type="button" disabled>Save clean image</button><a class="play-link" href="./?review=lake-play">Play Lake America <span aria-hidden="true">↗</span></a></div>
+    <p id="stats" class="stats">Preparing renderer…</p>
+    <p class="source-note">Live Blender export · Changes here are temporary.<br><a href="./?review=lake-endings">Win / lose endings</a> <span aria-hidden="true">·</span> <a href="./?review=finisher">Finisher review</a> <span aria-hidden="true">·</span> <a href="./">Game menu</a></p>
+  </aside>
+  <button id="show-controls" type="button" hidden>Show controls · H</button>
+  <script type="module" src="./src/stageReview.js"></script>
+</body>
+</html>

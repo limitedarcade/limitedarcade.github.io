@@ -1,0 +1,23 @@
+{
+  "id": "ui_hud",
+  "usage": "obj",
+  "description": "SNES fighter HUD — health bars, timer plate, name plaques.",
+  "colors": [
+    {"role": "transparent", "name": "ui_clear", "r": 0, "g": 0, "b": 0, "hex": "#000000"},
+    {"role": "outline", "name": "ui_ink", "r": 2, "g": 2, "b": 3, "hex": "#101018"},
+    {"role": "ramp_a0", "name": "panel_dark", "r": 6, "g": 6, "b": 10, "hex": "#313152"},
+    {"role": "ramp_a1", "name": "panel_mid", "r": 10, "g": 10, "b": 16, "hex": "#525284"},
+    {"role": "ramp_a2", "name": "panel_lit", "r": 16, "g": 16, "b": 22, "hex": "#8484B5"},
+    {"role": "ramp_b0", "name": "hp_red_dark", "r": 16, "g": 2, "b": 2, "hex": "#841010"},
+    {"role": "ramp_b1", "name": "hp_red", "r": 28, "g": 4, "b": 4, "hex": "#E62121"},
+    {"role": "ramp_b2", "name": "hp_red_lit", "r": 31, "g": 10, "b": 8, "hex": "#FF5242"},
+    {"role": "accent0", "name": "hp_yellow", "r": 31, "g": 26, "b": 4, "hex": "#FFD621"},
+    {"role": "accent1", "name": "hp_green", "r": 8, "g": 26, "b": 6, "hex": "#42D631"},
+    {"role": "accent2", "name": "timer_gold", "r": 28, "g": 22, "b": 6, "hex": "#E6B531"},
+    {"role": "hot0", "name": "name_orange", "r": 31, "g": 16, "b": 4, "hex": "#FF8421"},
+    {"role": "hot1", "name": "name_teal", "r": 6, "g": 22, "b": 22, "hex": "#31B5B5"},
+    {"role": "emissive", "name": "win_pip", "r": 31, "g": 28, "b": 10, "hex": "#FFE652"},
+    {"role": "skin_or_light", "name": "ui_white", "r": 31, "g": 31, "b": 31, "hex": "#FFFFFF"},
+    {"role": "flash", "name": "ui_flash", "r": 31, "g": 31, "b": 24, "hex": "#FFFFC6"}
+  ]
+}

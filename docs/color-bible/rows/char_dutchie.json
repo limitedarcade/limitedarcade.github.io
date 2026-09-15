@@ -1,0 +1,23 @@
+{
+  "id": "char_dutchie",
+  "usage": "obj",
+  "description": "Dutchie — orange tracksuit Amsterdam street fighter, gold chain, lion badge.",
+  "colors": [
+    {"role": "transparent", "name": "dutchie_clear", "r": 0, "g": 0, "b": 0, "hex": "#000000"},
+    {"role": "outline", "name": "dutchie_ink", "r": 3, "g": 2, "b": 2, "hex": "#181010"},
+    {"role": "ramp_a0", "name": "orange_dark", "r": 18, "g": 6, "b": 2, "hex": "#943110"},
+    {"role": "ramp_a1", "name": "orange_mid", "r": 26, "g": 12, "b": 3, "hex": "#D66318"},
+    {"role": "ramp_a2", "name": "orange_lit", "r": 31, "g": 18, "b": 6, "hex": "#FF9431"},
+    {"role": "ramp_b0", "name": "hair_dark", "r": 16, "g": 6, "b": 2, "hex": "#843110"},
+    {"role": "ramp_b1", "name": "hair_lit", "r": 28, "g": 14, "b": 4, "hex": "#E67321"},
+    {"role": "accent0", "name": "shade_black", "r": 2, "g": 2, "b": 3, "hex": "#101018"},
+    {"role": "accent1", "name": "gold_chain", "r": 28, "g": 22, "b": 6, "hex": "#E6B531"},
+    {"role": "accent2", "name": "gold_lit", "r": 31, "g": 28, "b": 12, "hex": "#FFE663"},
+    {"role": "hot0", "name": "stripe_white", "r": 28, "g": 28, "b": 28, "hex": "#E6E6E6"},
+    {"role": "hot1", "name": "shoe_white", "r": 31, "g": 31, "b": 31, "hex": "#FFFFFF"},
+    {"role": "emissive", "name": "lion_badge", "r": 31, "g": 24, "b": 4, "hex": "#FFC621"},
+    {"role": "skin_or_light", "name": "skin", "r": 28, "g": 20, "b": 15, "hex": "#E6A57B"},
+    {"role": "ramp_c0", "name": "skin_shade", "r": 22, "g": 14, "b": 10, "hex": "#B57352"},
+    {"role": "flash", "name": "dutchie_flash", "r": 31, "g": 31, "b": 24, "hex": "#FFFFC6"}
+  ]
+}

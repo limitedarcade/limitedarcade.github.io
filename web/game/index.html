@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#070b16" />
+    <meta name="mobile-web-app-capable" content="content" />
+    <meta
+      name="description"
+      content="A fictional arcade-fighter parody prototype built with Three.js."
+    />
+    <title>Battle for Independence</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="arena" aria-label="Fighting game arena"></canvas>
+      <div id="hud-root"></div>
+      <div id="touch-root"></div>
+
+      <!-- Title -->
+      <section id="screen-title" class="screen active" aria-label="Main menu" data-input="keyboard">
+        <div class="title-brand">
+          <p class="kicker">THE ARGUMENT ENDS HERE</p>
+          <h1 class="game-title">Battle<span>for</span><br />Independence</h1>
+        </div>
+        <div class="screen-inner title-rail">
+          <p class="menu-eyebrow">MAIN MENU</p>
+          <nav id="title-actions" aria-label="Main menu">
+            <button id="start-button" class="btn btn-primary" type="button">Play</button>
+            <button id="demo-button" class="btn btn-ghost" type="button">Demo</button>
+          </nav>
+          <p id="menu-description" class="menu-description">Choose your fighter. Settle it in the arena.</p>
+        </div>
+        <div class="demo-vignette" aria-hidden="true"></div>
+        <div class="demo-info">
+          <p class="menu-eyebrow live-label">LIVE EXHIBITION</p>
+          <strong id="demo-pair">Preparing exhibition…</strong>
+          <p id="demo-caption">Live combat showcase</p>
+        </div>
+        <footer class="title-footer">
+          <p class="title-controls keyboard-controls"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Select</span></p>
+          <p class="title-controls gamepad-controls"><span>D-pad · Navigate</span><span>A · Select</span></p>
+          <p class="title-controls touch-controls">Tap an option to begin</p>
+          <p id="demo-countdown" class="demo-countdown">Auto demo in 30s</p>
+          <a id="made-button" class="title-made" href="made.html" target="_blank" rel="noopener">How it's made <span aria-hidden="true">↗</span></a>
+        </footer>
+      </section>
+      <div class="demo-overlay">
+        <span>DEMO</span><p id="demo-full-caption">Live exhibition</p>
+        <button id="demo-exit" type="button">Press any button to return</button>
+      </div>
+
+      <!-- Versus setup -->
+      <section id="screen-setup" class="screen">
+        <div class="screen-inner setup">
+          <h2 class="screen-heading">Versus</h2>
+          <div class="setup-grid">
+            <div class="setup-side" data-side="0">
+              <span class="eyebrow">Player 1</span>
+              <div class="setup-portrait" data-portrait="0"></div>
+              <strong class="setup-name" data-name="0">—</strong>
+              <div class="seg" role="group" aria-label="Player 1 control">
+                <button type="button" class="seg-btn active" data-control="0" data-value="human">Human</button>
+                <button type="button" class="seg-btn" data-control="0" data-value="cpu">CPU</button>
+              </div>
+              <label class="field" data-difficulty-field="0" hidden>
+                <span>CPU level</span>
+                <select data-difficulty="0"></select>
+              </label>
+            </div>
+
+            <div class="setup-middle">
+              <span class="vs">VS</span>
+              <button id="swap-button" class="btn btn-ghost" type="button">Swap fighters</button>
+              <label class="field">
+                <span>Rounds</span>
+                <select id="rounds-select">
+                  <option value="2" selected>Best of 3</option>
+                  <option value="1">Single round</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="setup-side" data-side="1">
+              <span class="eyebrow">Player 2</span>
+              <div class="setup-portrait" data-portrait="1"></div>
+              <strong class="setup-name" data-name="1">—</strong>
+              <div class="seg" role="group" aria-label="Player 2 control">
+                <button type="button" class="seg-btn" data-control="1" data-value="human">Human</button>
+                <button type="button" class="seg-btn active" data-control="1" data-value="cpu">CPU</button>
+              </div>
+              <label class="field" data-difficulty-field="1">
+                <span>CPU level</span>
+                <select data-difficulty="1"></select>
+              </label>
+            </div>
+          </div>
+
+          <button id="fight-button" class="btn btn-primary" type="button">Fight</button>
+          <details class="controls-help">
+            <summary>Controls</summary>
+            <div class="controls-grid">
+              <div>
+                <h3>Player 1 keyboard</h3>
+                <p><kbd>A</kbd><kbd>D</kbd> move · <kbd>W</kbd> jump · <kbd>S</kbd> crouch</p>
+                <p><kbd>U</kbd> light punch · <kbd>I</kbd> heavy punch</p>
+                <p><kbd>J</kbd> light kick · <kbd>K</kbd> heavy kick</p>
+                <p><kbd>Space</kbd> block · <kbd>U</kbd>+<kbd>I</kbd> grab · <kbd>J</kbd>+<kbd>K</kbd> throw</p>
+                <p><kbd>Space</kbd>+<kbd>I</kbd> finisher (KO window only)</p>
+              </div>
+              <div>
+                <h3>Gamepad</h3>
+                <p>Stick / d-pad move, jump, crouch</p>
+                <p><b>X</b> light punch · <b>Y</b> heavy punch</p>
+                <p><b>A</b> light kick · <b>B</b> heavy kick</p>
+                <p><b>LB</b>/<b>LT</b> block · <b>RB</b> grab · <b>RT</b> throw</p>
+                <p><b>LB</b>+<b>Y</b> finisher · <b>Start</b> pause</p>
+                <p>In menus: stick / d-pad move · <b>A</b> select · <b>B</b> back · <b>LB</b>/<b>RB</b> switch tabs</p>
+              </div>
+              <div>
+                <h3>Player 2 keyboard</h3>
+                <p>Arrow keys move, jump, crouch</p>
+                <p>Numpad <b>4</b>/<b>5</b> punches · <b>1</b>/<b>2</b> kicks</p>
+                <p>Numpad <b>0</b> block</p>
+                <p>Pad 2 is used automatically when connected.</p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Pause -->
+      <section id="screen-pause" class="screen">
+        <div class="screen-inner">
+          <h2 class="screen-heading">Paused</h2>
+          <button id="resume-button" class="btn btn-primary" type="button">Resume</button>
+          <button id="moves-button" class="btn btn-ghost" type="button">Move list</button>
+          <details class="sound-settings"><summary>Sound mix</summary><div id="audio-settings"></div></details>
+          <button id="quit-button" class="btn btn-ghost" type="button">Back to versus</button>
+        </div>
+      </section>
+
+      <!-- Result -->
+      <section id="screen-result" class="screen">
+        <div class="screen-inner">
+          <p class="kicker" id="result-kicker">Match complete</p>
+          <h2 class="result-title" id="result-title">—</h2>
+          <p class="result-name" id="result-name"></p>
+          <p id="result-quote"></p>
+          <button id="rematch-button" class="btn btn-primary" type="button">Rematch</button>
+          <button id="setup-button" class="btn btn-ghost" type="button">Change setup</button>
+        </div>
+      </section>
+
+      <div id="loader" class="loader" role="status" aria-live="polite">
+        <span class="loader-mark"></span>
+        <span id="loader-copy">Loading fighters…</span>
+      </div>
+
+      <button id="pause-button" class="pause-button" type="button" aria-label="Pause">II</button>
+      <p class="disclaimer">Fictional parody. Not affiliated with any real person or organisation.</p>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

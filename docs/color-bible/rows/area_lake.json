@@ -1,0 +1,23 @@
+{
+  "id": "area_lake",
+  "usage": "bg",
+  "description": "Lake America — ice, snow, cold sky, maple flag, distant skyline.",
+  "colors": [
+    {"role": "sky0", "name": "sky_deep", "r": 8, "g": 14, "b": 24, "hex": "#4273C6"},
+    {"role": "sky1", "name": "sky_lit", "r": 16, "g": 22, "b": 28, "hex": "#84B5E6"},
+    {"role": "ramp_a0", "name": "ice_dark", "r": 12, "g": 16, "b": 20, "hex": "#6384A5"},
+    {"role": "ramp_a1", "name": "ice_mid", "r": 20, "g": 24, "b": 28, "hex": "#A5C6E6"},
+    {"role": "ramp_a2", "name": "ice_lit", "r": 28, "g": 30, "b": 31, "hex": "#E6F7FF"},
+    {"role": "ramp_b0", "name": "snow_shadow", "r": 14, "g": 16, "b": 18, "hex": "#738494"},
+    {"role": "ramp_b1", "name": "snow_mid", "r": 24, "g": 26, "b": 28, "hex": "#C6D6E6"},
+    {"role": "ramp_b2", "name": "snow_lit", "r": 30, "g": 30, "b": 31, "hex": "#F7F7FF"},
+    {"role": "accent0", "name": "flag_red", "r": 26, "g": 4, "b": 4, "hex": "#D62121"},
+    {"role": "accent1", "name": "flag_white", "r": 30, "g": 30, "b": 30, "hex": "#F7F7F7"},
+    {"role": "accent2", "name": "tower_grey", "r": 10, "g": 10, "b": 12, "hex": "#525263"},
+    {"role": "hot0", "name": "wood_dark", "r": 10, "g": 6, "b": 3, "hex": "#523118"},
+    {"role": "hot1", "name": "wood_lit", "r": 18, "g": 12, "b": 6, "hex": "#946331"},
+    {"role": "emissive", "name": "crack_blue", "r": 6, "g": 14, "b": 22, "hex": "#3173B5"},
+    {"role": "skin_or_light", "name": "skyline_mid", "r": 8, "g": 10, "b": 14, "hex": "#425273"},
+    {"role": "flash", "name": "highlight", "r": 31, "g": 31, "b": 31, "hex": "#FFFFFF"}
+  ]
+}

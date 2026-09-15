@@ -1,0 +1,313 @@
+{
+ "kind": "fighter-joint-measurement",
+ "source": "build/fighter_150k.glb",
+ "space": "model space of the source GLB: +Y up, +Z front, +X toward the figure LeftArm part",
+ "bounds": {
+  "min": [
+   -0.49999,
+   -0.40051,
+   -0.18746
+  ],
+  "max": [
+   0.49998,
+   0.40054,
+   0.1875
+  ]
+ },
+ "height": 0.80105,
+ "wristSkew": 0.0005,
+ "measured": {
+  "armL": {
+   "inner": 0.12179102003574371,
+   "outer": 0.4999839961528778,
+   "len": 0.3781929761171341,
+   "axisY": 0.21157599985599518,
+   "axisZ": -0.03508700057864189,
+   "shoulderX": 0.17662900157272815,
+   "elbowX": 0.29733559311678015,
+   "wristX": 0.4180421846608321,
+   "girthAtWrist": 0.06423666498934229,
+   "wristHow": "first girth minimum followed by a widening palm",
+   "palmLength": 0.08194181149204571,
+   "palmFrac": 0.217
+  },
+  "armR": {
+   "inner": -0.12158247083425522,
+   "outer": -0.4999940097332001,
+   "len": 0.37841153889894485,
+   "axisY": 0.2163510024547577,
+   "axisZ": -0.030741000548005104,
+   "shoulderX": -0.1764521439746022,
+   "elbowX": -0.2972284934731821,
+   "wristX": -0.418004842971762,
+   "girthAtWrist": 0.06460733494410913,
+   "wristHow": "first girth minimum followed by a widening palm",
+   "palmLength": 0.08198916676143808,
+   "palmFrac": 0.217
+  },
+  "legL": {
+   "ankleY": -0.32577451835386456,
+   "kneeY": -0.17296700853891672,
+   "axisX": 0.060350000858306885,
+   "footZ": 0.1835310012102127
+  },
+  "legR": {
+   "ankleY": -0.32670222309340413,
+   "kneeY": -0.1734494150034773,
+   "axisX": -0.048294998705387115,
+   "footZ": 0.18089700490236282
+  },
+  "hipY": 0.004590180586092174,
+  "neckY": 0.21379350125789642
+ },
+ "trunk": [
+  {
+   "y": -0.1025,
+   "halfX": 0.1736,
+   "halfZ": 0.0181
+  },
+  {
+   "y": -0.0845,
+   "halfX": 0.2028,
+   "halfZ": 0.0595
+  },
+  {
+   "y": -0.0664,
+   "halfX": 0.2247,
+   "halfZ": 0.093
+  },
+  {
+   "y": -0.0483,
+   "halfX": 0.2275,
+   "halfZ": 0.1873
+  },
+  {
+   "y": -0.0303,
+   "halfX": 0.2237,
+   "halfZ": 0.187
+  },
+  {
+   "y": -0.0122,
+   "halfX": 0.2182,
+   "halfZ": 0.1833
+  },
+  {
+   "y": 0.0058,
+   "halfX": 0.2184,
+   "halfZ": 0.1796
+  },
+  {
+   "y": 0.0239,
+   "halfX": 0.2123,
+   "halfZ": 0.1762
+  },
+  {
+   "y": 0.0419,
+   "halfX": 0.2046,
+   "halfZ": 0.1716
+  },
+  {
+   "y": 0.06,
+   "halfX": 0.1968,
+   "halfZ": 0.1671
+  },
+  {
+   "y": 0.078,
+   "halfX": 0.1916,
+   "halfZ": 0.1624
+  },
+  {
+   "y": 0.0961,
+   "halfX": 0.1877,
+   "halfZ": 0.1559
+  },
+  {
+   "y": 0.1142,
+   "halfX": 0.1812,
+   "halfZ": 0.1497
+  },
+  {
+   "y": 0.1322,
+   "halfX": 0.1758,
+   "halfZ": 0.142
+  },
+  {
+   "y": 0.1503,
+   "halfX": 0.1737,
+   "halfZ": 0.1343
+  },
+  {
+   "y": 0.1683,
+   "halfX": 0.1715,
+   "halfZ": 0.1271
+  },
+  {
+   "y": 0.1864,
+   "halfX": 0.17,
+   "halfZ": 0.1165
+  },
+  {
+   "y": 0.2044,
+   "halfX": 0.1677,
+   "halfZ": 0.1061
+  },
+  {
+   "y": 0.2225,
+   "halfX": 0.1663,
+   "halfZ": 0.0967
+  },
+  {
+   "y": 0.2406,
+   "halfX": 0.1647,
+   "halfZ": 0.0816
+  },
+  {
+   "y": 0.2586,
+   "halfX": 0.163,
+   "halfZ": 0.0647
+  },
+  {
+   "y": 0.2767,
+   "halfX": 0.1612,
+   "halfZ": 0.0447
+  }
+ ],
+ "joints": {
+  "neck": [
+   0,
+   0.2258092214167118,
+   0.050491247326135635
+  ],
+  "head": [
+   0,
+   0.2690658139884472,
+   0.050491247326135635
+  ],
+  "hips": [
+   0,
+   -0.010629731615073978,
+   0
+  ],
+  "upLegL": [
+   0.05716214060783386,
+   -0.007425539572723209,
+   0
+  ],
+  "upLegR": [
+   -0.05519674152135849,
+   -0.007425539572723209,
+   0
+  ],
+  "spine": [
+   0,
+   0.07016263221919536,
+   0.004005240052938461
+  ],
+  "chest": [
+   0,
+   0.15544346071092413,
+   0.004005240052938461
+  ],
+  "shoulderL": [
+   0.05115222841501236,
+   0.2396126802265644,
+   -0.021052200347185135
+  ],
+  "upperArmL": [
+   0.17662900157272815,
+   0.21157599985599518,
+   -0.03508700057864189
+  ],
+  "forearmL": [
+   0.29733559311678015,
+   0.21157599985599518,
+   -0.03508700057864189
+  ],
+  "handL": [
+   0.4180421846608321,
+   0.21157599985599518,
+   -0.03508700057864189
+  ],
+  "handEndL": [
+   0.4999839961528778,
+   0.21157599985599518,
+   -0.03508700057864189
+  ],
+  "shoulderR": [
+   -0.05106463775038719,
+   0.2443876828253269,
+   -0.018444600328803063
+  ],
+  "upperArmR": [
+   -0.1764521439746022,
+   0.2163510024547577,
+   -0.030741000548005104
+  ],
+  "forearmR": [
+   -0.2972284934731821,
+   0.2163510024547577,
+   -0.030741000548005104
+  ],
+  "handR": [
+   -0.418004842971762,
+   0.2163510024547577,
+   -0.030741000548005104
+  ],
+  "handEndR": [
+   -0.4999940097332001,
+   0.2163510024547577,
+   -0.030741000548005104
+  ],
+  "legL": [
+   0.060350000858306885,
+   -0.17296700853891672,
+   0.004
+  ],
+  "footL": [
+   0.060350000858306885,
+   -0.32577451835386456,
+   -0.006674500182271004
+  ],
+  "toeL": [
+   0.060350000858306885,
+   -0.38849327966570857,
+   0.0903333145081997
+  ],
+  "legR": [
+   -0.048294998705387115,
+   -0.1734494150034773,
+   0.004
+  ],
+  "footR": [
+   -0.048294998705387115,
+   -0.32670222309340413,
+   -0.007864500395953655
+  ],
+  "toeR": [
+   -0.048294998705387115,
+   -0.38848728939890864,
+   0.09020531353354455
+  ]
+ },
+ "notes": {
+  "neck": "head part cut plane y=0.2138, raised 1.5% of height; z from that slice's median",
+  "head": "neck base + 6.9% of height; pivot at the atlas, not the skull centroid",
+  "hips": "leg part tops y=0.0046, dropped 1.9% of height to the pelvis centre",
+  "upLegR": "hip socket at 62% of the leg part median x (sockets sit inboard of the thigh axis)",
+  "upLegL": "hip socket at 62% of the leg part median x (sockets sit inboard of the thigh axis)",
+  "chest": "split of pelvis to neck base; chest set high so the belly bends and the ribs do not",
+  "spine": "split of pelvis to neck base; chest set high so the belly bends and the ribs do not",
+  "shoulderL": "clavicle root: 42% out to the arm cut, 3.5% of height above the arm axis",
+  "upperArmL": "part cut x=0.1218, moved 14.5% of arm length into the deltoid",
+  "forearmL": "midpoint shoulder to wrist (upper arm and forearm are near equal here)",
+  "handL": "first girth minimum followed by a widening palm: x=0.4180, girth 0.0642",
+  "shoulderR": "clavicle root: 42% out to the arm cut, 3.5% of height above the arm axis",
+  "upperArmR": "part cut x=-0.1216, moved 14.5% of arm length into the deltoid",
+  "forearmR": "midpoint shoulder to wrist (upper arm and forearm are near equal here)",
+  "handR": "first girth minimum followed by a widening palm: x=-0.4180, girth 0.0646",
+  "legL": "knee at 52% hip to ankle (proportional: this sculpt has no girth minimum there)",
+  "footL": "ankle where the foot's z extent passes 62% of its maximum: y=-0.3258",
+  "legR": "knee at 52% hip to ankle (proportional: this sculpt has no girth minimum there)",
+  "footR": "ankle where the foot's z extent passes 62% of its maximum: y=-0.3267"
+ }
+}

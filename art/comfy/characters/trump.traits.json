@@ -1,0 +1,31 @@
+{
+  "slug": "trump",
+  "display_name": "TRUMP",
+  "role": "P1",
+  "satire": "Painted comic-book Street Fighter boss from trump_concept.png",
+  "reference": "art/comfy/refs/trump_concept_master_1024.png",
+  "concept": "trump_concept.png",
+  "scene_brief": "art/comfy/refs/scene_brief_trump_carney.png",
+  "traits": [
+    "cartoonishly bulky wide torso and thick arms",
+    "distinctive swept blond-orange hair",
+    "orange-tan skin, squinting smug face",
+    "navy blue suit jacket and trousers",
+    "white dress shirt",
+    "long bright red necktie hanging well below the belt",
+    "black dress shoes",
+    "both fists raised in a victory fighting pose"
+  ],
+  "forbid": [
+    "tracksuit",
+    "hoodie",
+    "top knot",
+    "gold chain",
+    "sunglasses",
+    "skinny proportions",
+    "photoreal portrait only",
+    "flat vector art"
+  ],
+  "palette_row": "char_trump",
+  "idle_pose": "fists raised victory / fighting stance, three-quarter view facing right"
+}

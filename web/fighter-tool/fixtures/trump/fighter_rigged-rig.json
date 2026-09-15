@@ -1,0 +1,408 @@
+{
+ "kind": "fighter-rig-report",
+ "mesh": "build/fighter_150k.glb",
+ "joints": "build/fighter_joints.json",
+ "output": "build/fighter_rigged.glb",
+ "bones": 25,
+ "deforming": 19,
+ "maxInfluences": 4,
+ "figureHeight": 0.80105,
+ "sigmaModelUnits": {
+  "hips": 0.13498,
+  "spine": 0.12496,
+  "chest": 0.13498,
+  "neck": 0.05503,
+  "head": 0.10502,
+  "shoulderL": 0.07498,
+  "upperArmL": 0.07498,
+  "forearmL": 0.062,
+  "handL": 0.04999,
+  "shoulderR": 0.07498,
+  "upperArmR": 0.07498,
+  "forearmR": 0.062,
+  "handR": 0.04999,
+  "upLegL": 0.10502,
+  "legL": 0.08499,
+  "footL": 0.062,
+  "upLegR": 0.10502,
+  "legR": 0.08499,
+  "footR": 0.062
+ },
+ "parts": [
+  {
+   "part": "Head",
+   "verts": 30002,
+   "allowed": [
+    "neck",
+    "head",
+    "chest"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    0,
+    30002,
+    0
+   ],
+   "minDominantWeight": 0.3552
+  },
+  {
+   "part": "Torso",
+   "verts": 16501,
+   "allowed": [
+    "hips",
+    "spine",
+    "chest",
+    "neck",
+    "shoulderL",
+    "shoulderR",
+    "upLegL",
+    "upLegR"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    0,
+    0,
+    16501
+   ],
+   "minDominantWeight": 0.2629
+  },
+  {
+   "part": "LeftArm",
+   "verts": 6752,
+   "allowed": [
+    "chest",
+    "neck",
+    "shoulderL",
+    "upperArmL",
+    "forearmL",
+    "handL"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    0,
+    2895,
+    3857
+   ],
+   "minDominantWeight": 0.3973
+  },
+  {
+   "part": "RightArm",
+   "verts": 6752,
+   "allowed": [
+    "chest",
+    "neck",
+    "shoulderR",
+    "upperArmR",
+    "forearmR",
+    "handR"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    0,
+    3137,
+    3615
+   ],
+   "minDominantWeight": 0.3918
+  },
+  {
+   "part": "LeftLeg",
+   "verts": 7481,
+   "allowed": [
+    "hips",
+    "spine",
+    "upLegL",
+    "legL",
+    "footL"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    0,
+    335,
+    7146
+   ],
+   "minDominantWeight": 0.3468
+  },
+  {
+   "part": "RightLeg",
+   "verts": 7446,
+   "allowed": [
+    "hips",
+    "spine",
+    "upLegR",
+    "legR",
+    "footR"
+   ],
+   "influenceHistogram": [
+    0,
+    0,
+    109,
+    351,
+    6986
+   ],
+   "minDominantWeight": 0.3425
+  }
+ ],
+ "clips": [
+  {
+   "name": "tpose",
+   "seconds": 0.5,
+   "keys": 2,
+   "tracks": 20,
+   "loop": true
+  },
+  {
+   "name": "guard",
+   "seconds": 2,
+   "keys": 2,
+   "tracks": 20,
+   "loop": true
+  },
+  {
+   "name": "idle",
+   "seconds": 3.4,
+   "keys": 5,
+   "tracks": 20,
+   "loop": true
+  },
+  {
+   "name": "jab",
+   "seconds": 0.62,
+   "keys": 6,
+   "tracks": 20,
+   "loop": true
+  }
+ ],
+ "bytes": 6042840,
+ "skeleton": [
+  {
+   "name": "root",
+   "parent": null,
+   "rest": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "hips",
+   "parent": "root",
+   "rest": [
+    0,
+    -0.01063,
+    0
+   ]
+  },
+  {
+   "name": "spine",
+   "parent": "hips",
+   "rest": [
+    0,
+    0.07016,
+    0.00401
+   ]
+  },
+  {
+   "name": "chest",
+   "parent": "spine",
+   "rest": [
+    0,
+    0.15544,
+    0.00401
+   ]
+  },
+  {
+   "name": "neck",
+   "parent": "chest",
+   "rest": [
+    0,
+    0.22581,
+    0.05049
+   ]
+  },
+  {
+   "name": "head",
+   "parent": "neck",
+   "rest": [
+    0,
+    0.26907,
+    0.05049
+   ]
+  },
+  {
+   "name": "headEnd",
+   "parent": "head",
+   "rest": [
+    0,
+    0.39907,
+    0.05049
+   ]
+  },
+  {
+   "name": "shoulderL",
+   "parent": "chest",
+   "rest": [
+    0.05115,
+    0.23961,
+    -0.02105
+   ]
+  },
+  {
+   "name": "upperArmL",
+   "parent": "shoulderL",
+   "rest": [
+    0.17663,
+    0.21158,
+    -0.03509
+   ]
+  },
+  {
+   "name": "forearmL",
+   "parent": "upperArmL",
+   "rest": [
+    0.29734,
+    0.21158,
+    -0.03509
+   ]
+  },
+  {
+   "name": "handL",
+   "parent": "forearmL",
+   "rest": [
+    0.41804,
+    0.21158,
+    -0.03509
+   ]
+  },
+  {
+   "name": "handEndL",
+   "parent": "handL",
+   "rest": [
+    0.49998,
+    0.21158,
+    -0.03509
+   ]
+  },
+  {
+   "name": "shoulderR",
+   "parent": "chest",
+   "rest": [
+    -0.05106,
+    0.24439,
+    -0.01844
+   ]
+  },
+  {
+   "name": "upperArmR",
+   "parent": "shoulderR",
+   "rest": [
+    -0.17645,
+    0.21635,
+    -0.03074
+   ]
+  },
+  {
+   "name": "forearmR",
+   "parent": "upperArmR",
+   "rest": [
+    -0.29723,
+    0.21635,
+    -0.03074
+   ]
+  },
+  {
+   "name": "handR",
+   "parent": "forearmR",
+   "rest": [
+    -0.418,
+    0.21635,
+    -0.03074
+   ]
+  },
+  {
+   "name": "handEndR",
+   "parent": "handR",
+   "rest": [
+    -0.49999,
+    0.21635,
+    -0.03074
+   ]
+  },
+  {
+   "name": "upLegL",
+   "parent": "hips",
+   "rest": [
+    0.05716,
+    -0.00743,
+    0
+   ]
+  },
+  {
+   "name": "legL",
+   "parent": "upLegL",
+   "rest": [
+    0.06035,
+    -0.17297,
+    0.004
+   ]
+  },
+  {
+   "name": "footL",
+   "parent": "legL",
+   "rest": [
+    0.06035,
+    -0.32577,
+    -0.00667
+   ]
+  },
+  {
+   "name": "toeL",
+   "parent": "footL",
+   "rest": [
+    0.06035,
+    -0.38849,
+    0.09033
+   ]
+  },
+  {
+   "name": "upLegR",
+   "parent": "hips",
+   "rest": [
+    -0.0552,
+    -0.00743,
+    0
+   ]
+  },
+  {
+   "name": "legR",
+   "parent": "upLegR",
+   "rest": [
+    -0.04829,
+    -0.17345,
+    0.004
+   ]
+  },
+  {
+   "name": "footR",
+   "parent": "legR",
+   "rest": [
+    -0.04829,
+    -0.3267,
+    -0.00786
+   ]
+  },
+  {
+   "name": "toeR",
+   "parent": "footR",
+   "rest": [
+    -0.04829,
+    -0.38849,
+    0.09021
+   ]
+  }
+ ]
+}

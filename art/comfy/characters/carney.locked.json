@@ -1,0 +1,39 @@
+{
+  "slug": "carney",
+  "display_name": "MARK CARNEY",
+  "locked_idle": "art/raw/carney/carney_idle_1024_01.png",
+  "source_option": "art/raw/carney/options/carney_opt06_01.png",
+  "locked_at": "2026-08-28T23:58:09.435890+00:00",
+  "traits": {
+    "slug": "carney",
+    "display_name": "MARK CARNEY",
+    "role": "P2",
+    "satire": "Street Fighter boss caricature from scene brief screenshot",
+    "reference": "art/comfy/refs/carney_satire_1024.png",
+    "scene_brief": "art/comfy/refs/scene_brief_trump_carney.png",
+    "traits": [
+      "tall lean-athletic build (less bulky than the opponent)",
+      "grey hair in a normal short neat side-parted cut",
+      "fair skin, laughing open-mouth grin",
+      "dark charcoal or black business suit",
+      "white dress shirt",
+      "light sky-blue necktie",
+      "black dress shoes",
+      "clenched-fist fighting stance, one fist forward"
+    ],
+    "forbid": [
+      "orange hair",
+      "blond hair",
+      "red necktie",
+      "tracksuit",
+      "hoodie",
+      "top knot",
+      "gold chain",
+      "sunglasses",
+      "cartoonishly obese bulk",
+      "photoreal portrait only"
+    ],
+    "palette_row": "char_carney",
+    "idle_pose": "clenched-fist fighting stance, side view facing right, laughing expression"
+  }
+}

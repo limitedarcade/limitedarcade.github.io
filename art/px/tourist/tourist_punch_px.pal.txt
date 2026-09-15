@@ -1,0 +1,18 @@
+# Emberveil row char_tourist
+# usage obj
+00 tourist_clear r=0 g=0 b=0 hex=#000000 bgr555=0x0000
+01 tourist_ink r=3 g=2 b=3 hex=#181018 bgr555=0x0C43
+02 shirt_teal_dark r=4 g=10 b=12 hex=#215263 bgr555=0x3144
+03 shirt_teal r=6 g=18 b=18 hex=#319494 bgr555=0x4A46
+04 shirt_teal_lit r=12 g=24 b=22 hex=#63C6B5 bgr555=0x5B0C
+05 khaki_dark r=14 g=12 b=5 hex=#736329 bgr555=0x158E
+06 khaki_mid r=22 g=18 b=8 hex=#B59442 bgr555=0x2256
+07 khaki_lit r=28 g=24 b=12 hex=#E6C663 bgr555=0x331C
+08 flower_pink r=28 g=8 b=14 hex=#E64273 bgr555=0x391C
+09 flower_yellow r=31 g=26 b=6 hex=#FFD631 bgr555=0x1B5F
+10 camera_silver r=18 g=18 b=20 hex=#9494A5 bgr555=0x5252
+11 sock_white r=30 g=30 b=30 hex=#F7F7F7 bgr555=0x7BDE
+12 sandal_brown r=12 g=7 b=3 hex=#633918 bgr555=0x0CEC
+13 flash_bulb r=31 g=31 b=20 hex=#FFFFA5 bgr555=0x53FF
+14 skin r=29 g=21 b=16 hex=#EFAD84 bgr555=0x42BD
+15 tourist_flash r=31 g=31 b=31 hex=#FFFFFF bgr555=0x7FFF

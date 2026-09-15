@@ -1,0 +1,23 @@
+{
+  "id": "char_tourist",
+  "usage": "obj",
+  "description": "Tourist — Hawaiian shirt, fanny pack, camera, socks-with-sandals rival.",
+  "colors": [
+    {"role": "transparent", "name": "tourist_clear", "r": 0, "g": 0, "b": 0, "hex": "#000000"},
+    {"role": "outline", "name": "tourist_ink", "r": 3, "g": 2, "b": 3, "hex": "#181018"},
+    {"role": "ramp_a0", "name": "shirt_teal_dark", "r": 4, "g": 10, "b": 12, "hex": "#215263"},
+    {"role": "ramp_a1", "name": "shirt_teal", "r": 6, "g": 18, "b": 18, "hex": "#319494"},
+    {"role": "ramp_a2", "name": "shirt_teal_lit", "r": 12, "g": 24, "b": 22, "hex": "#63C6B5"},
+    {"role": "ramp_b0", "name": "khaki_dark", "r": 14, "g": 12, "b": 5, "hex": "#736329"},
+    {"role": "ramp_b1", "name": "khaki_mid", "r": 22, "g": 18, "b": 8, "hex": "#B59442"},
+    {"role": "ramp_b2", "name": "khaki_lit", "r": 28, "g": 24, "b": 12, "hex": "#E6C663"},
+    {"role": "accent0", "name": "flower_pink", "r": 28, "g": 8, "b": 14, "hex": "#E64273"},
+    {"role": "accent1", "name": "flower_yellow", "r": 31, "g": 26, "b": 6, "hex": "#FFD631"},
+    {"role": "accent2", "name": "camera_silver", "r": 18, "g": 18, "b": 20, "hex": "#9494A5"},
+    {"role": "hot0", "name": "sock_white", "r": 30, "g": 30, "b": 30, "hex": "#F7F7F7"},
+    {"role": "hot1", "name": "sandal_brown", "r": 12, "g": 7, "b": 3, "hex": "#633918"},
+    {"role": "emissive", "name": "flash_bulb", "r": 31, "g": 31, "b": 20, "hex": "#FFFFA5"},
+    {"role": "skin_or_light", "name": "skin", "r": 29, "g": 21, "b": 16, "hex": "#EFAD84"},
+    {"role": "flash", "name": "tourist_flash", "r": 31, "g": 31, "b": 31, "hex": "#FFFFFF"}
+  ]
+}

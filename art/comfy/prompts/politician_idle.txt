@@ -1,0 +1,4 @@
+﻿Full body side-view SNES fighting game character sprite facing right, idle fighting stance.
+A male politician: blond hair with a normal short neat haircut (not a bun, not buzzed punk), clean-shaven or light stubble, navy blue business suit jacket and trousers, white dress shirt, conservative tie, black dress shoes, confident smug expression, athletic but not bodybuilder proportions.
+Chunky 16-bit fighter silhouette, thick dark outline, flat cel shading, limited saturated palette, head to toe visible, centered with padding.
+Solid flat magenta background #FF00FF, no floor, no shadow, no scenery, no text, no watermark.

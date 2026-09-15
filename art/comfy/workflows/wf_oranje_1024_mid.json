@@ -1,0 +1,126 @@
+{
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ref_fighter_1024.png"
+    }
+  },
+  "12": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 1024,
+      "height": 1024,
+      "crop": "center"
+    }
+  },
+  "11": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "12",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "bfi/oranje_1024_mid"
+    }
+  },
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v8Rundiffusion.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "pixel-art-xl-v1.1.safetensors",
+      "strength_model": 0.45,
+      "strength_clip": 0.45
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "\ufeffSame exact person as the reference photo: stocky young man, pale skin, light stubble, short ginger-orange hair buzzed on the sides with a small top knot, thick black rectangular sunglasses, thick gold chain necklace, bright orange zip-up jacket with a white zipper and a yellow lion badge on the chest, matching bright orange pants with a white stripe down the side, white sneakers, both hands in pockets, smug closed smile, head tilted.\nFull body game character sprite, side view facing right, thick dark outline, flat cel shading, limited colors, head to toe visible, centered with padding.\nSolid flat magenta background #FF00FF, no floor, no shadow, no scenery, no text.",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "different person, wrong face, skinny proportions, anime face, blurry, text, watermark, ui, cropped limbs",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 29110102,
+      "steps": 34,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 0.5,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "11",
+        0
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# Emberveil row char_trump
+# usage obj
+00 trump_clear r=0 g=0 b=0 hex=#000000 bgr555=0x0000
+01 trump_ink r=3 g=2 b=3 hex=#181018 bgr555=0x0C43
+02 suit_dark r=4 g=6 b=12 hex=#213163 bgr555=0x30C4
+03 suit_mid r=6 g=10 b=18 hex=#315294 bgr555=0x4946
+04 suit_lit r=10 g=14 b=22 hex=#5273B5 bgr555=0x59CA
+05 hair_dark r=20 g=12 b=4 hex=#A56321 bgr555=0x1194
+06 hair_mid r=28 g=18 b=6 hex=#E69431 bgr555=0x1A5C
+07 hair_lit r=31 g=24 b=10 hex=#FFC652 bgr555=0x2B1F
+08 tie_red_dark r=16 g=2 b=2 hex=#841010 bgr555=0x0850
+09 tie_red r=28 g=4 b=4 hex=#E62121 bgr555=0x109C
+10 shirt_white r=30 g=30 b=30 hex=#F7F7F7 bgr555=0x7BDE
+11 shoe_black r=2 g=2 b=2 hex=#101010 bgr555=0x0842
+12 flag_pin r=4 g=8 b=22 hex=#2142B5 bgr555=0x5904
+13 tan_lit r=31 g=22 b=14 hex=#FFB573 bgr555=0x3ADF
+14 tan_skin r=28 g=18 b=12 hex=#E69463 bgr555=0x325C
+15 trump_flash r=31 g=31 b=28 hex=#FFFFE6 bgr555=0x73FF

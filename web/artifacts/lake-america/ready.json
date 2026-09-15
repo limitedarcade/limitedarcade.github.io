@@ -1,0 +1,9 @@
+{
+  "pid": 24856,
+  "root": ".",
+  "port": 9876,
+  "blender": "5.2.1 LTS",
+  "scene": "stages\\lake_america\\blender\\lake-america.blend",
+  "addon_protocol": 5,
+  "telemetry": false
+}

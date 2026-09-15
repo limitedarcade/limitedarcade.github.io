@@ -1,0 +1,25 @@
+{
+  "name": "battle-for-independence-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare-vfx": "node tools/prepare-vfx.mjs",
+    "check-vfx": "node tools/prepare-vfx.mjs --check",
+    "export-mocap": "node tools/export-mocap.mjs",
+    "dev": "vite game --host 127.0.0.1 --port 5176 --strictPort",
+    "build": "vite build game --base=./ --outDir ../dist --emptyOutDir",
+    "preview": "vite preview --host 127.0.0.1 --port 4176 --strictPort",
+    "test": "node --test",
+    "export-combat": "node fighter-tool/runner/export-combat.mjs",
+    "export-specials": "node fighter-tool/runner/export-specials.mjs",
+    "fighter-tool": "npm --prefix fighter-tool start",
+    "pack-runtime": "node tools/pack-runtime.mjs"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.21"
+  }
+}

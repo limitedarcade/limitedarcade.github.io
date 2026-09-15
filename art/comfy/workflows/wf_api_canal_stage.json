@@ -1,0 +1,102 @@
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v8Rundiffusion.safetensors"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 576,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "bfi/canal_stage"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "pixel-art-xl-v1.1.safetensors",
+      "strength_model": 0.85,
+      "strength_clip": 0.85
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Full-frame SNES Street Fighter stage background, side-view fighting arena, no characters, no fighters, empty playfield.\nAmsterdam canal street on a bright sunny day: red brick canal houses with stepped gables, a Dutch red-white-blue flag hanging from a building, cobblestone walkway as the fighting floor in the lower third, canal water with small boats on the left, parked bikes and a scooter, street lamps, distant pedestrians as tiny background props only, lush green tree accents, clear blue sky.\nChunky 16-bit pixel art environment, saturated limited palette, crisp pixel edges, classic Final Fight / Street Fighter II SNES stage composition, horizontal readable depth, lower third clear for fighters to stand.\nNo player characters, no UI, no health bars, no text, no watermark, no photo, no 3d render., pixel art xl, crisp pixel edges, lush saturated SNES stage palette, full frame environment illustration, 16:9 fighting stage framing",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photo, photorealistic, 3d render, blurry, soft focus, characters, fighters, people in foreground, UI, health bars, text, watermark, magenta background, empty void, sprite sheet, top-down view, isometric",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 28082621,
+      "steps": 28,
+      "cfg": 6.5,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    }
+  }
+}

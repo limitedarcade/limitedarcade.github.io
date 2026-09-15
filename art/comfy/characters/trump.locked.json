@@ -1,0 +1,36 @@
+{
+  "slug": "trump",
+  "display_name": "TRUMP",
+  "locked_idle": "art/raw/trump/trump_idle_1024_01.png",
+  "source_option": "art/raw/trump/options/trump_opt05_01.png",
+  "locked_at": "2026-08-28T23:38:35.567119+00:00",
+  "traits": {
+    "slug": "trump",
+    "display_name": "TRUMP",
+    "role": "P1",
+    "satire": "Street Fighter boss caricature from scene brief screenshot",
+    "reference": "art/comfy/refs/trump_satire_1024.png",
+    "scene_brief": "art/comfy/refs/scene_brief_trump_carney.png",
+    "traits": [
+      "cartoonishly bulky wide torso and thick arms",
+      "distinctive swept blond-orange hair",
+      "orange-tan skin, squinting smug face",
+      "navy blue suit jacket and trousers",
+      "white dress shirt",
+      "long bright red necktie hanging well below the belt",
+      "black dress shoes",
+      "both fists raised in a victory fighting pose"
+    ],
+    "forbid": [
+      "tracksuit",
+      "hoodie",
+      "top knot",
+      "gold chain",
+      "sunglasses",
+      "skinny proportions",
+      "photoreal portrait only"
+    ],
+    "palette_row": "char_trump",
+    "idle_pose": "fists raised victory / fighting stance, side view facing right"
+  }
+}

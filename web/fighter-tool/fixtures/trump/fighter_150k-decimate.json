@@ -1,0 +1,68 @@
+{
+ "kind": "decimation-report",
+ "input": "build/fighter_painted.glb",
+ "output": "build/fighter_150k.glb",
+ "targetTotal": 150000,
+ "colourWeight": 0.8,
+ "flags": [
+  "LockBorder"
+ ],
+ "inTris": 2056204,
+ "outTris": 149972,
+ "parts": [
+  {
+   "part": "Head",
+   "srcTris": 217042,
+   "targetTris": 60000,
+   "tris": 60000,
+   "verts": 30002,
+   "keptPct": 27.64,
+   "relError": 0.00049
+  },
+  {
+   "part": "Torso",
+   "srcTris": 641994,
+   "targetTris": 33000,
+   "tris": 32998,
+   "verts": 16501,
+   "keptPct": 5.14,
+   "relError": 0.00051
+  },
+  {
+   "part": "LeftArm",
+   "srcTris": 171102,
+   "targetTris": 13500,
+   "tris": 13500,
+   "verts": 6752,
+   "keptPct": 7.89,
+   "relError": 0.00062
+  },
+  {
+   "part": "RightArm",
+   "srcTris": 203822,
+   "targetTris": 13500,
+   "tris": 13500,
+   "verts": 6752,
+   "keptPct": 6.62,
+   "relError": 0.00063
+  },
+  {
+   "part": "LeftLeg",
+   "srcTris": 387238,
+   "targetTris": 15000,
+   "tris": 14996,
+   "verts": 7481,
+   "keptPct": 3.87,
+   "relError": 0.00049
+  },
+  {
+   "part": "RightLeg",
+   "srcTris": 435006,
+   "targetTris": 15000,
+   "tris": 14978,
+   "verts": 7446,
+   "keptPct": 3.44,
+   "relError": 0.00056
+  }
+ ]
+}

@@ -1,0 +1,568 @@
+{
+  "generatedAt": "2026-09-10T04:52:17.262Z",
+  "fighter": "carney",
+  "evidence": "Source and exported-asset audit; no visual review or performance measurement.",
+  "asset": {
+    "path": "game/public/fighters/carney/carney-hero.glb",
+    "bytes": 13999876,
+    "skinBones": [
+      "root",
+      "hips",
+      "spine",
+      "chest",
+      "neck",
+      "head",
+      "headEnd",
+      "shoulderL",
+      "upperArmL",
+      "forearmL",
+      "handL",
+      "handEndL",
+      "shoulderR",
+      "upperArmR",
+      "forearmR",
+      "handR",
+      "handEndR",
+      "upLegL",
+      "legL",
+      "footL",
+      "toeL",
+      "upLegR",
+      "legR",
+      "footR",
+      "toeR"
+    ],
+    "meshes": 6,
+    "images": 6,
+    "morphTargetPrimitives": 0
+  },
+  "baseClips": [
+    "blockHit",
+    "crouch",
+    "crouchGuard",
+    "crouchKick",
+    "crouchPunch",
+    "defeat",
+    "dizzy",
+    "finisher",
+    "finisherVictim",
+    "getUp",
+    "grab",
+    "grabbed",
+    "grabHold",
+    "guard",
+    "heavyKick",
+    "heavyPunch",
+    "hitHigh",
+    "hitLow",
+    "idle",
+    "intro",
+    "jab",
+    "jump",
+    "jumpAttack",
+    "knockdown",
+    "land",
+    "lightKick",
+    "lightPunch",
+    "throw",
+    "tpose",
+    "victory",
+    "walkB",
+    "walkF"
+  ],
+  "extraClips": [
+    "bodyCheck",
+    "heelDrop",
+    "risingKnee",
+    "powerStrike",
+    "hammerRush",
+    "meteorKick",
+    "cyclone",
+    "groundBreaker",
+    "burstStrike",
+    "uppercut",
+    "lungePunch",
+    "retreatKick"
+  ],
+  "movement": [
+    {
+      "state": "guard",
+      "clip": "guard",
+      "dedicated": true
+    },
+    {
+      "state": "walkF",
+      "clip": "walkF",
+      "dedicated": true
+    },
+    {
+      "state": "walkB",
+      "clip": "walkB",
+      "dedicated": true
+    },
+    {
+      "state": "sprint",
+      "clip": "walkF",
+      "dedicated": false
+    },
+    {
+      "state": "backHop",
+      "clip": "jump",
+      "dedicated": false
+    },
+    {
+      "state": "jump",
+      "clip": "jump",
+      "dedicated": true
+    },
+    {
+      "state": "land",
+      "clip": "land",
+      "dedicated": true
+    },
+    {
+      "state": "juggle",
+      "clip": "hitHigh",
+      "dedicated": false
+    },
+    {
+      "state": "getUp",
+      "clip": "getUp",
+      "dedicated": true
+    }
+  ],
+  "moves": [
+    {
+      "id": "bodyCheck",
+      "name": "Body Check",
+      "declaredClip": "grab",
+      "selectedClip": "bodyCheck",
+      "source": "combat.bin",
+      "frames": [
+        7,
+        4,
+        18
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.117,
+        0.183
+      ],
+      "phaseDriftFrames": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "heelDrop",
+      "name": "Ice Pick",
+      "declaredClip": "heavyKick",
+      "selectedClip": "heelDrop",
+      "source": "combat.bin",
+      "frames": [
+        13,
+        5,
+        20
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.267,
+        0.35
+      ],
+      "phaseDriftFrames": [
+        0.511,
+        -0.267
+      ]
+    },
+    {
+      "id": "risingKnee",
+      "name": "Cold Shoulder",
+      "declaredClip": "lightKick",
+      "selectedClip": "risingKnee",
+      "source": "combat.bin",
+      "frames": [
+        7,
+        5,
+        18
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.167,
+        0.25
+      ],
+      "phaseDriftFrames": [
+        1.108,
+        0.162
+      ]
+    },
+    {
+      "id": "powerStrike",
+      "name": "Power Strike",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "powerStrike",
+      "source": "combat.bin",
+      "frames": [
+        18,
+        4,
+        29
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.3,
+        0.367
+      ],
+      "phaseDriftFrames": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "hammerRush",
+      "name": "Hammer Rush",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "hammerRush",
+      "source": "combat.bin",
+      "frames": [
+        11,
+        6,
+        24
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.183,
+        0.283
+      ],
+      "phaseDriftFrames": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "meteorKick",
+      "name": "Phantom Slapshot",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "meteorKick",
+      "source": "combat.bin",
+      "frames": [
+        22,
+        6,
+        30
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.267,
+        0.367
+      ],
+      "phaseDriftFrames": [
+        -2.255,
+        -0.851
+      ]
+    },
+    {
+      "id": "cyclone",
+      "name": "Whiteout",
+      "declaredClip": "crouchKick",
+      "selectedClip": "cyclone",
+      "source": "combat.bin",
+      "frames": [
+        10,
+        7,
+        22
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.217,
+        0.333
+      ],
+      "phaseDriftFrames": [
+        1.022,
+        -0.043
+      ]
+    },
+    {
+      "id": "groundBreaker",
+      "name": "Ground Breaker",
+      "declaredClip": "throw",
+      "selectedClip": "groundBreaker",
+      "source": "combat.bin",
+      "frames": [
+        19,
+        5,
+        30
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.317,
+        0.4
+      ],
+      "phaseDriftFrames": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "burstStrike",
+      "name": "Absolute Zero",
+      "declaredClip": "finisher",
+      "selectedClip": "burstStrike",
+      "source": "combat.bin",
+      "frames": [
+        18,
+        7,
+        34
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.367,
+        0.483
+      ],
+      "phaseDriftFrames": [
+        0.812,
+        -0.203
+      ]
+    },
+    {
+      "id": "uppercut",
+      "name": "Rising Uppercut",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "uppercut",
+      "source": "combat.bin",
+      "frames": [
+        8,
+        6,
+        23
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.133,
+        0.233
+      ],
+      "phaseDriftFrames": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "lungePunch",
+      "name": "Slipstream",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "lungePunch",
+      "source": "combat.bin",
+      "frames": [
+        10,
+        4,
+        20
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.217,
+        0.283
+      ],
+      "phaseDriftFrames": [
+        0.78,
+        0.098
+      ]
+    },
+    {
+      "id": "retreatKick",
+      "name": "Out of Office",
+      "declaredClip": "lightKick",
+      "selectedClip": "retreatKick",
+      "source": "combat.bin",
+      "frames": [
+        6,
+        4,
+        13
+      ],
+      "sampling": "whole duration",
+      "authoredPhaseSeconds": [
+        0.133,
+        0.2
+      ],
+      "phaseDriftFrames": [
+        0.345,
+        -0.483
+      ]
+    },
+    {
+      "id": "lightPunch",
+      "name": "Quick Edit",
+      "declaredClip": "lightPunch",
+      "selectedClip": "lightPunch",
+      "source": "GLB",
+      "frames": [
+        3,
+        3,
+        6
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.15,
+        0.21
+      ]
+    },
+    {
+      "id": "heavyPunch",
+      "name": "Clean Break",
+      "declaredClip": "heavyPunch",
+      "selectedClip": "heavyPunch",
+      "source": "GLB",
+      "frames": [
+        8,
+        4,
+        16
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.26,
+        0.36
+      ]
+    },
+    {
+      "id": "lightKick",
+      "name": "Cold Open",
+      "declaredClip": "lightKick",
+      "selectedClip": "lightKick",
+      "source": "GLB",
+      "frames": [
+        4,
+        3,
+        7
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.2,
+        0.28
+      ]
+    },
+    {
+      "id": "heavyKick",
+      "name": "Final Draft",
+      "declaredClip": "heavyKick",
+      "selectedClip": "heavyKick",
+      "source": "GLB",
+      "frames": [
+        10,
+        5,
+        19
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.32,
+        0.44
+      ]
+    },
+    {
+      "id": "crouchPunch",
+      "name": "Crouch Punch",
+      "declaredClip": "crouchPunch",
+      "selectedClip": "crouchPunch",
+      "source": "GLB",
+      "frames": [
+        5,
+        3,
+        8
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.1,
+        0.2
+      ]
+    },
+    {
+      "id": "crouchKick",
+      "name": "Black Ice",
+      "declaredClip": "crouchKick",
+      "selectedClip": "crouchKick",
+      "source": "GLB",
+      "frames": [
+        7,
+        4,
+        17
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.34,
+        0.46
+      ]
+    },
+    {
+      "id": "jumpAttack",
+      "name": "Jump Attack",
+      "declaredClip": "jumpAttack",
+      "selectedClip": "jumpAttack",
+      "source": "GLB",
+      "frames": [
+        5,
+        8,
+        4
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.14,
+        0.3
+      ]
+    },
+    {
+      "id": "grab",
+      "name": "Grab",
+      "declaredClip": "grab",
+      "selectedClip": "grab",
+      "source": "GLB",
+      "frames": [
+        3,
+        2,
+        26
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.16,
+        0.3
+      ]
+    },
+    {
+      "id": "throw",
+      "name": "Table Flip",
+      "declaredClip": "throw",
+      "selectedClip": "throw",
+      "source": "GLB",
+      "frames": [
+        4,
+        2,
+        27
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.3,
+        0.42
+      ]
+    },
+    {
+      "id": "finisher",
+      "name": "Finisher",
+      "declaredClip": "finisher",
+      "selectedClip": "finisher",
+      "source": "GLB",
+      "frames": [
+        18,
+        6,
+        40
+      ],
+      "sampling": "phase markers",
+      "markersSeconds": [
+        0.44,
+        0.6
+      ]
+    }
+  ],
+  "fingerprints": {
+    "game/public/fighters/carney/carney-hero.glb": "9a8edd562d31379a888d080c471b2ea417b960050955c309d6931b94a84239bc",
+    "game/public/fighters/carney/combat.bin": "0b44b043b67b06ab4cee173510ea535ab8197dec13036a923b20bd93f6e56735",
+    "game/src/fighters/carney.js": "79614f070e922a03cc4588f316020c274ce999d77cb768e146167f280b55ac3f",
+    "game/src/fighters/carney/moves.js": "f60c2ec86655bbbd068196b6f909cb86476eb772138f69f2791ce2e1f85dcf17",
+    "game/src/render/fighterView.js": "a71e6370ee93bcf01ec115832938281e8c8028042957cce7eb70b42f71998376",
+    "game/src/render/clipTiming.js": "d3c11b7c4684639e313316d79d4faca675cad02f9e1ae544128f54e4a7b60bb4",
+    "game/src/render/movementPose.js": "01f0021c2fe5d8cd8b09dfde94080af0b4230ae2316cfdd1022576e459a3837d",
+    "fighter-tool/tools/specialClips.mjs": "6bd28802cdfbe8ab25f68e209d7c9e70c7010b873e98fe6943a1079d027c1f20"
+  }
+}

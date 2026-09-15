@@ -1,0 +1,126 @@
+{
+  "10": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "vance_satire_1024.png"
+    }
+  },
+  "12": {
+    "class_type": "ImageScale",
+    "inputs": {
+      "image": [
+        "10",
+        0
+      ],
+      "upscale_method": "lanczos",
+      "width": 1024,
+      "height": 1024,
+      "crop": "center"
+    }
+  },
+  "11": {
+    "class_type": "VAEEncode",
+    "inputs": {
+      "pixels": [
+        "12",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "bfi/vance_opt01"
+    }
+  },
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v8Rundiffusion.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "pixel-art-xl-v1.1.safetensors",
+      "strength_model": 0.55,
+      "strength_clip": 0.55
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "Full body side-view Street Fighter character sprite facing right, both fists raised measured fighting stance, three-quarter view facing right, cold stern expression.\nSatirical arcade boss caricature of JD VANCE: tall lanky build, narrow shoulders, longer limbs; short brown hair in a neat conservative side part; pale fair skin, clean shaven or light stubble; thin rectangular black-framed eyeglasses; stern unsmiling expression, slight squint; dark charcoal / black suit jacket and trousers; crisp white dress shirt; narrow muted navy or dark blue necktie tucked short to the belt; black dress shoes; both fists raised in a sharp measured fighting stance.\nChunky 16-bit SNES fighter proportions, oversized readable silhouette, thick dark outline, flat cel shading, limited saturated palette, head to toe visible, centered with padding.\nSolid flat magenta background #FF00FF, no floor, no shadow, no scenery, no text, no watermark, no photo.",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "photo, photorealistic, blurry, soft focus, ground shadow, cast shadow, text, watermark, ui, logo, top-down view, isometric, front view facing camera, multiple characters, cropped limbs, missing feet, cut off head, purple background, different character, wrong outfit, blond hair, orange hair, red tie, bright teal suit, tracksuit, hoodie, t-shirt, tattoos visible, gold chain, sunglasses, round glasses, beard, goatee, wide bulky torso, obese proportions, photoreal portrait only, flat vector art",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 29500400,
+      "steps": 34,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 0.4,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "11",
+        0
+      ]
+    }
+  }
+}

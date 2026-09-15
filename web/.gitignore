@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vite/
+*.log
+__pycache__/
+fighter-tool/build/
+fighter-tool/output/
+
+# Live source-asset drop. The runtime model under game/public is intentionally kept.
+/*.glb
+/*.png
+/*.jpg

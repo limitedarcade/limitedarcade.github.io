@@ -1,0 +1,37 @@
+{
+  "slug": "carney",
+  "display_name": "MARK CARNEY",
+  "role": "P2",
+  "satire": "Painted comic-book Street Fighter boss from carney_concept.png",
+  "reference": "art/comfy/refs/carney_concept_master_1024.png",
+  "concept": "carney_concept.png",
+  "scene_brief": "art/comfy/refs/scene_brief_trump_carney.png",
+  "traits": [
+    "tall lean-athletic build (less bulky than the opponent)",
+    "grey hair in a normal short neat side-parted cut",
+    "fair skin, laughing open-mouth grin",
+    "bright teal / cyan business suit jacket and trousers",
+    "white dress shirt",
+    "light sky-blue necktie",
+    "black dress shoes",
+    "both fists raised in a fighting stance"
+  ],
+  "forbid": [
+    "orange hair",
+    "blond hair",
+    "red necktie",
+    "charcoal suit",
+    "black suit",
+    "navy suit",
+    "tracksuit",
+    "hoodie",
+    "top knot",
+    "gold chain",
+    "sunglasses",
+    "cartoonishly obese bulk",
+    "photoreal portrait only",
+    "flat vector art"
+  ],
+  "palette_row": "char_carney",
+  "idle_pose": "both fists raised fighting stance, three-quarter view facing right, laughing expression"
+}

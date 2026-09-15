@@ -1,0 +1,371 @@
+
+> battle-for-independence-web@0.1.0 test
+> node --test
+
+✔ tiny rigged GLB round-trips vertex, triangle, bone and clip counts (23.6561ms)
+✔ decoded tiny positions stay inside one quantisation step (17.3755ms)
+✔ Trump rigged GLB encodes with matching counts (423.1766ms)
+✔ environment has python+numpy or explains the miss (91.9119ms)
+﹣ classifies Trump pair without using filenames (0.4098ms) # Trump GLBs not in web/
+﹣ Trump pair PASSES the validator (0.3465ms) # Trump GLBs not in web/
+﹣ Carney pair PASSES the validator (0.3734ms) # Carney GLBs not in web/
+﹣ a single textured Trump GLB PASSES solo validate (0.3635ms) # Trump textured GLB not in web/
+﹣ two parts files FAIL with the textured-missing message (0.3156ms) # Carney parts GLB not in web/
+✔ every announcer cue resolves to a manifest entry and a file on disk (6.2121ms)
+✔ combo tiers escalate once each and never fire below four hits (2.5566ms)
+✔ a loud call interrupts a quiet one; a quiet call never interrupts a loud one (0.3181ms)
+✔ once-per-round calls latch, and the latch reopens on the next round (1.1932ms)
+✔ a dead fighter is not taunted for being in danger (0.3507ms)
+✔ game over belongs to a human losing, not to the CPU losing (1.9204ms)
+✔ the deciding round is only the round where both fighters are one win short (2.6883ms)
+✔ unconfirmed default fighters reserve neither slot; confirmed picks reserve only their owner (3.0194ms)
+✔ idle timeout requires 30 seconds of eligible menu time and resets for activity or a dialog (1.0642ms)
+✔ rotation covers each ordered matchup and excludes locked stages (0.5756ms)
+✔ trump: the complete attract playlist performs its commands and lets cinematics finish (277.3688ms)
+✔ carney: the complete attract playlist performs its commands and lets cinematics finish (269.2866ms)
+✔ officer_flock: the complete attract playlist performs its commands and lets cinematics finish (193.4712ms)
+✔ CPU exhibition reaches a result and transitions into a showcase (135.9452ms)
+✔ trump binary runtime preserves mesh and all authored animation samples (290.3382ms)
+✔ carney binary runtime preserves mesh and all authored animation samples (291.4679ms)
+✔ invalid binary pack headers fail early (0.8412ms)
+✔ Carney three-tap chain tolerates 6-frame taps on side 0 (9.5592ms)
+✔ Carney three-tap chain tolerates 8-frame taps on side 0 (3.194ms)
+✔ Carney three-tap chain tolerates 10-frame taps on side 0 (4.0896ms)
+✔ Carney three-tap chain tolerates 12-frame taps on side 0 (3.4801ms)
+✔ Carney three-tap chain tolerates 14-frame taps on side 0 (3.6491ms)
+✔ Carney three-tap chain tolerates 6-frame taps on side 1 (1.738ms)
+✔ Carney three-tap chain tolerates 8-frame taps on side 1 (1.703ms)
+✔ Carney three-tap chain tolerates 10-frame taps on side 1 (2.4842ms)
+✔ Carney three-tap chain tolerates 12-frame taps on side 1 (1.0252ms)
+✔ Carney three-tap chain tolerates 14-frame taps on side 1 (1.2394ms)
+✔ holding, blocking and whiffing never unlock an assisted chain (4.4983ms)
+✔ practice performs all three routes through real inputs, not injected hits (4.7573ms)
+✔ Polar Reversal spends a real stock and cannot be mashed into existence without it (0.2196ms)
+pose overrides: web\fighter-tool\build\trump\trump_pose.json  (written by fighter-tool runner from the fighter config)
+pose overrides: web\fighter-tool\build\carney\carney_pose.json  (written by fighter-tool runner from the fighter config)
+✔ all eleven chords resolve identically, simultaneous or rolled, without stray singles (5.7727ms)
+✔ both fighters can retreat, advance, crouch and jump in either world direction (1.7834ms)
+✔ directional commands mirror with facing and select documented moves (1.1347ms)
+✔ meter chords reject insufficient meter and debit only a successful start (0.2386ms)
+✔ pre-fight reel remains locked through the Fight slam and leaves timer untouched (13.6195ms)
+✔ simultaneous lethal active hits produce a real Double KO and retain impact state (2.7955ms)
+✔ KO has 32 slow frames, a freeze, KO plate, then victory; pause is external (16.1945ms)
+✔ flawless and fatality end cards stay distinct, with fatality taking priority (0.5447ms)
+✔ successful finisher enters its locked cinematic immediately, without waiting for recovery (2.2223ms)
+✔ every audio manifest entry and requested music track exists in the runtime (13.9297ms)
+✔ trump: both model formats bind the full move supplement and keep its joints floor-safe (984.8509ms)
+✔ carney: both model formats bind the full move supplement and keep its joints floor-safe (410.4472ms)
+✔ officer_flock finisher emits each cut and slapshot once, facing 0 (15.6562ms)
+✔ officer_flock finisher emits each cut and slapshot once, facing 1 (5.7127ms)
+✔ trump finisher emits each cut and slapshot once, facing 0 (6.7253ms)
+✔ trump finisher emits each cut and slapshot once, facing 1 (4.35ms)
+✔ unsupported opponents retain the original cold-cut sequence (0.5662ms)
+✔ camera is continuous, holds before the final contact, and does not restart slapshot animation (3.9164ms)
+✔ arms land before contact, stay still for the windup, and mirror their ice travel (0.6017ms)
+✔ actual Flock mesh yields solid arms and head; cinematic pieces survive, reset releases resources (664.7812ms)
+✔ Trump in both runtime formats yields his own complete surface limbs with floor-safe pursuit and clean resets (2730.0773ms)
+pose overrides: web\fighter-tool\build\trump\trump_pose.json  (written by fighter-tool runner from the fighter config)
+pose overrides: web\fighter-tool\build\carney\carney_pose.json  (written by fighter-tool runner from the fighter config)
+✔ paired inputs produce grab and throw without a stray single attack (2.5802ms)
+✔ seeded CPU matches terminate with finite bounded state on all difficulties (634.0608ms)
+✖ CPU reaches the whole move list, not just the buttons it can press alone (2216.3085ms)
+✔ debug-studio CPU tuning overrides the preset and survives a difficulty change (107.0595ms)
+✔ CPU jumps in, grabs and throws often enough to be seen playing (716.9721ms)
+✔ trump runtime includes every combat clip and a skin (6.9153ms)
+✔ trump baked body joints stay above the floor across every clip (86.2363ms)
+✔ carney runtime includes every combat clip and a skin (6.2346ms)
+✔ carney baked body joints stay above the floor across every clip (85.4405ms)
+✖ the CPU exercises the whole move list, including kit projectiles (547.9214ms)
+✔ CPU recovery timing is bounded and all three recovery choices appear on every difficulty (51.9644ms)
+✔ CPU waits out forced reactions and does not swing during a juggle or back hop (3.0893ms)
+✔ CPU recovery directions follow current facing and a new fall gets a fresh delay (1.2763ms)
+✔ CPU dash plans use released double taps while ordinary walking keeps a single hold (1.1796ms)
+✔ CPU sprint stops at striking distance instead of running through the opponent (0.3893ms)
+✔ raw CPU movement plans trigger both engine movement states on either side (7.3309ms)
+✔ hitstop preserves CPU double-tap pulses until the simulation resumes (4.8554ms)
+✔ on match point the CPU banks the gauge and spends no metered move (1.6684ms)
+✔ the CPU winner banks two stocks and executes the finisher when the window opens (141.4349ms)
+✔ CPU recovers from a real knockdown and resumes fighting on every difficulty (29.9205ms)
+✔ arcade loadouts own their overrides without mutating the universal move table (2.7457ms)
+✔ fighter timing, movement and contact resolve from its selected loadout (5.091ms)
+✔ every fighter secret works on either side and locks the authored cinematic immediately (46.6588ms)
+✔ stage secrets and joke share real input handling and keep distinct outcomes (31.9917ms)
+✔ finisher command rejects wrong range, stale directions, held repeats and input outside its window (19.0441ms)
+✖ cinematic beats are deterministic, finite, one-shot and terminate in match results (24.0894ms)
+✔ third-hit uppercut on match point earns brutality, while a double KO cannot (1.8685ms)
+✔ CPU uses the same range and sequence rules for both named fighters (83.9585ms)
+✔ nonfinal round interstitial does not replace the final result; timeout stays animated (0.9479ms)
+✔ both named fighters retain every ordinary chord and mirrored directional move (5.1129ms)
+✔ named CPU fighters finish matches across every arena with bounded legal state (1032.6562ms)
+✔ Blender export retains the skin and animation contract with embedded UV textures (50.4914ms)
+✔ a cinematic head cut removes the real Trump head and resets without damaging its source (662.6986ms)
+✖ cinematic clip edits sample finite poses, and the last camera pose holds after the result (2.9299ms)
+✔ fighter catalog exposes stable ids and an explicit default (2.6254ms)
+✔ ramped finisher has identical event order and progress at 30, 60 and 144 Hz (55.687ms)
+✔ both pursuit shots track the actual arm trajectory and mirror around the staged origin (3.4777ms)
+✔ every cinematic camera is finite and remains above the floor; accessibility keeps a stable wide view (4.6774ms)
+✔ pause at a review marker stops a catch-up batch immediately (0.4637ms)
+✔ pursuit targets mesh centers on either side and stays with fighters when gore is disabled (2.81ms)
+✔ Carney’s supporting hand reaches the shaft without stretching bones or leaking into the next pose (309.3289ms)
+✔ a pad that connects late or at a high index is still found (5.2957ms)
+✔ a disconnected pad hands its slot to the next one (0.4329ms)
+✔ analog triggers fire from their value, not only from pressed (0.3887ms)
+✔ the stick deadzone is radial, so diagonals cost the same push as cardinals (0.2615ms)
+✔ opposing directions cancel on both axes (0.2209ms)
+✔ a hat-axis d-pad works where buttons 12-15 are absent (1.2994ms)
+✔ connectedPads skips the null holes a disconnect leaves behind (0.192ms)
+✔ every region names bones that exist on both rig conventions (2.9201ms)
+✔ a region never claims the bone it hangs from (1.0874ms)
+✔ lethal regions sit below every survivable one (0.3883ms)
+✔ height buckets cover the body and only name real regions (0.3183ms)
+✔ every organ a region spills is a defined organ (0.2414ms)
+✔ every organ the atlas spills has a built prop, at the size it declares (125.9831ms)
+✔ a prop is the real-world size the atlas claims (221.8332ms)
+✔ debris falls back to generated props when the library is absent (68.5073ms)
+✔ impact vocabulary, intensity bounds and counter/KO priority (6.1792ms)
+✔ cosmetic pause and grade durations use seconds at 30, 60 and 144 Hz (0.6006ms)
+✔ counter slowdown starts after hold; KO suppresses counter slowdown in trades (0.3078ms)
+✔ camera dolly is exactly 0.4 metres toward contact, stable during freeze and reversible (6.6808ms)
+✔ sprite capacity is enforced and released sprites cannot have two owners (3.4607ms)
+✔ rumble is scaled, bounded and tolerates missing or rejected actuators (7.0295ms)
+✔ lethal contacts carry KO on the hit event itself, including simultaneous kills (3.8603ms)
+✔ trump: recoil works on both rig formats and restores every bone without drift (426.0586ms)
+✔ carney: recoil works on both rig formats and restores every bone without drift (344.0802ms)
+✔ raw uppercut into jab creates a real airborne combo from side 0 (9.4991ms)
+✔ raw uppercut into jab creates a real airborne combo from side 1 (2.3085ms)
+✔ rising knee launches through the normal chord input (0.7793ms)
+✔ juggled fighters cannot attack, block, move, or jump free before landing (4.3569ms)
+✔ airborne hits gain less lift and stop connecting at the juggle cap (24.3755ms)
+✔ floor strikes require an explicit ground hit and do not reset the recovery timer (1.9641ms)
+✔ wake protection is bounded for strikes while throws cannot grab the recovery (0.6261ms)
+✔ projectiles share floor eligibility and interrupt only unprotected recovery frames (0.4986ms)
+✔ projectile anti-air starts a juggle and simultaneous shots cannot exceed its limit (1.3658ms)
+✔ grapples miss both a jumping fighter and a launched fighter (0.5883ms)
+✔ a projectile keeps its launch direction after its owner turns around (0.3514ms)
+✔ combat snapshots expose juggle and recovery state (1.2395ms)
+✔ the exported lake is self-contained and stays within its scenery triangle budget (135.3017ms)
+✔ the actual GLB supports both arena edges with upward-facing level ground (634.7199ms)
+✔ the modeled scenery leaves the complete fighting corridor clear above the ground (32.9217ms)
+✔ the stage axe has a real 3D silhouette, local pivot, and an independent persistent stump (1.4453ms)
+✔ floating scenery exports independently named local pivots for runtime water motion (1.2092ms)
+✔ bilingual signs stay attached to their architecture behind the fighting lane (3.0347ms)
+✔ WeaponView throws actual exported axe meshes while leaving its stump and source intact (9.1892ms)
+✔ shore spindrift uses one bounded draw and follows elapsed scene time at 30/60/144 Hz (148.4034ms)
+✔ powder reacts locally, freezes on pause, disappears for reduced motion and clears on round reset (7.0018ms)
+✔ every Lake fighter has win and lose choreography on either side; other stages and draws retain their timing (3.9652ms)
+✔ finisher victims retain their final pose and submerged position (0.3049ms)
+✔ entrance and ending reach 180 degrees and return without crossing the orbit center (9.0332ms)
+✔ narrow preview panes retain full entrance and ending orbits in the actual camera rig (3.3226ms)
+✔ all six outcome clips have finite, normalized skeletal tracks and distinct authored motion (880.8837ms)
+✔ Flock salute reaches his own head with reversible arm constraints (166.145ms)
+✔ the real Blender sign changes, scrubs backward, and restores on rematch without accumulating props (271.474ms)
+✔ menu exhibition keeps the theme playing and restores combat music on entry (4.0687ms)
+✔ preview mix preserves preferences and suppresses announcer loading and ducking (0.5452ms)
+✔ d-pad and left stick both feed the direction set (10.7609ms)
+✔ a stick inside the deadzone reads as neutral (0.6773ms)
+✔ opposite directions from two sources cancel (0.3906ms)
+✔ face and shoulder buttons are read across every connected pad (0.3315ms)
+✔ carney: animation-only GLB binds every clip to the real fighter without meshes or textures (769.8996ms)
+✔ trump: animation-only GLB binds every clip to the real fighter without meshes or textures (614.5087ms)
+✔ foot fitting reaches an ankle target without stretching either bone (23.8171ms)
+✔ model effects preload once, obey both pool caps, reuse instances, and reject stale stop handles (16.5387ms)
+✔ an explicitly small total cap remains a hard limit (1.6969ms)
+✔ performance and reduced-motion settings reduce effect budgets and motion (3.6724ms)
+✔ each effect owns its tint and material arrays while source geometry and textures remain shared (1.8425ms)
+✔ skinned shield clones bind only their own bones and do not alter the source or another use (2.8748ms)
+✔ animated bounds include the full clip and normalization never overwrites placement (7.7689ms)
+✔ pause delta freezes animation, fade and trajectory; looping and pooled animation restart correctly (3.6146ms)
+✔ manual snapshot effects hold their pose, support clip windows, and ignore controls from a retired handle (2.7268ms)
+✔ instant contact envelopes are visible on the triggering frame and hold through hitstop (1.1251ms)
+✔ clear during a pending load never replays the missed contact; later use stays available (1.2983ms)
+✔ failed loads are suppressed during combat and retried by explicit preload (0.9737ms)
+✔ invalid skeleton load fails cleanly and can be replaced on explicit retry (1.6054ms)
+✔ release retains shared resources and full disposal releases each owned resource exactly once (1.0914ms)
+✔ disposal during loading releases the late template without adding instances or scene nodes (0.5092ms)
+✔ combat accents belong only to supported signature contacts and leave weapons and cinematics alone (0.8383ms)
+✔ combat shields follow authoritative frames and placement, freeze with snapshots, and retire at phase changes (0.4934ms)
+✔ shield cues reject unrelated fighters and moves, and end before the recovery finishes (0.246ms)
+✔ the shipped VFX pack matches its manifest, embeds dependencies and fits a small gameplay budget (45.8736ms)
+✔ trump: every movement lesson demonstrates its real controls (54.3716ms)
+✔ carney: every movement lesson demonstrates its real controls (15.8573ms)
+✔ officer_flock: every movement lesson demonstrates its real controls (20.6001ms)
+✔ standing practice dummy recovers after a knockdown without jumping or attacking (2.1169ms)
+✔ a completed knockdown stays at its final pose indefinitely and only rises on getUp (10.2146ms)
+✔ juggle, hop, sprint and directional recoveries remain still during hitstop (7.2379ms)
+✔ canonical rig rolls both ways and restores its pivot (2.8866ms)
+✔ imported Officer rig rolls both ways and restores its pivot (3.1484ms)
+✔ airborne views preserve the simulation height and all new states resolve without new assets (1.8717ms)
+✔ trump: the resting body surface stays above the floor (243.3767ms)
+✔ carney: the resting body surface stays above the floor (230.204ms)
+✔ double tap requires two distinct presses within its window (4.3337ms)
+✔ opposite directions, side switches and committed frames clear tap history (0.453ms)
+✔ holding through a side switch cannot manufacture a first tap (1.9539ms)
+✔ a directional attack takes priority over a back-hop chord-window conflict (2.3011ms)
+✔ side 0: double-forward sprints, release/block/crouch/attack interrupt (1.0308ms)
+✔ side 0: double-back hops without cancelling into a jump or attack (0.611ms)
+✔ side 0: remain down, then choose either roll or guarded stand (3.9074ms)
+✔ side 1: double-forward sprints, release/block/crouch/attack interrupt (0.4834ms)
+✔ side 1: double-back hops without cancelling into a jump or attack (0.4422ms)
+✔ side 1: remain down, then choose either roll or guarded stand (4.207ms)
+✔ airborne hit reactions stay helpless until landing, and round reset clears momentum/history (0.632ms)
+✔ inactive phases cannot queue a dash, and hops/rolls respect arena walls (1.3983ms)
+✔ Officer Flock retains textured geometry, closed hands and every standard move clip (214.5434ms)
+✔ the summon outlives its own move and walks the drone through every beat (22.0574ms)
+✔ the rake is an overhead: standing guard chips, crouching guard eats it (14.9612ms)
+✔ a fighter already on the floor passes under the rake (5.3726ms)
+✔ the sweep runs from in front of the caster to the wall he is facing (13.4145ms)
+✔ one drone at a time, and its cooldown is its own (8.32ms)
+✔ Forward + LK reaches the summon for Flock and nobody else (1.1599ms)
+✔ the kit command reaches the command list and the practice menu (1.1636ms)
+✔ the CPU can call the drone, and only from zoning range (261.5977ms)
+✔ beam geometry agrees with itself across the timeline (0.4146ms)
+✔ trump: pose gain scales the authored angle on both rig formats and restores without drift (446.6168ms)
+✔ carney: pose gain scales the authored angle on both rig formats and restores without drift (270.1527ms)
+✔ trump: every listed demonstration performs its real move or finisher (349.7192ms)
+✔ carney: every listed demonstration performs its real move or finisher (372.3372ms)
+✔ officer_flock: every listed demonstration performs its real move or finisher (218.1493ms)
+✔ training sustains health, meter and clock; reset clears cinematic and damage state (71.2704ms)
+✔ every action remains bound with unavailable, corrupt or partial preferences (3.5813ms)
+✔ remaps persist physical keys and drive the real input class for either single-player side (0.9012ms)
+✔ reserved and duplicate bindings are refused without erasing existing controls (0.4667ms)
+✔ display and feedback preferences are validated, observable and resolved for the device (0.3876ms)
+✔ profile recovers from damaged and unavailable storage without blocking a match (1.0152ms)
+✔ a match records the human side, discoveries and rewards exactly once (2.077ms)
+✔ draws, losses, spectators and abandoned matches do not become solo wins (0.4053ms)
+✔ progression remains bounded and unlock descriptions correspond to earned conditions (0.4022ms)
+✔ confirming player 1 hands the cursor to player 2 without changing the locked pair (4.7997ms)
+✔ a side cannot lock the other players fighter (0.284ms)
+✔ player 1 can swap to a free fighter and player 2 then takes the vacated one (0.2487ms)
+✔ player 2 confirming a free fighter stays on player 2 (0.3114ms)
+✔ command notation becomes arcade tokens instead of a run-on sentence (1.3054ms)
+✔ only Lake America is open and arena 3 is Reflecting Pool (0.2543ms)
+✔ real combat and hitstop replay identically at 30, 60, and 144 Hz (33.6508ms)
+✔ suspension catch-up is bounded and reset drops stale elapsed time (0.2444ms)
+✔ contact and release stay aligned when a fighter changes move speed (0.4694ms)
+✔ arena registry provides unique IDs, distinct atmospheres and non-damaging reactive dressing (1.4828ms)
+✔ alternate arenas provide bounded architecture and keep the fight lane at floor level (27.2061ms)
+✔ surface damage persists, remains bounded, resets and preserves source buffers and rim shaders (33.8649ms)
+✔ shared materials are extended once when a model has several meshes (5.2718ms)
+✔ stage ambience is lazy, owns a bounded loop graph and follows pause and effects bus (19.1383ms)
+✔ switching arenas disposes owned resources and releases a late lake GLB (105.0093ms)
+✔ surface damage follows a real animated skinned model in both runtime formats (362.5653ms)
+✔ hazards are opt-in, warn for fifty full ticks, and strike each zone only once (48.851ms)
+✔ outside the marked zone and airborne fighters avoid the burst (24.0188ms)
+✔ every arena exposes its hazard kind and cycles through fixed bounded zones (114.3926ms)
+✔ reels and hitstop suspend hazards; a fresh round clears an old telegraph (5.5132ms)
+✔ lethal stage hits use ordinary KO flow and simultaneous victims produce Double KO (49.3329ms)
+✔ a severed stump is a meat plug with lining, not an empty tube (32.1557ms)
+✔ hanging strands droop and lag the stump instead of staying rigid (16.5048ms)
+✔ taking the torso retires flesh that was hanging from a now-gone leg (24.6772ms)
+✔ reset clears plugs and hanging meshes so the next round starts clean (9.2321ms)
+✔ a real arm cut on Trump fills the stump instead of leaving a hollow sleeve (338.5333ms)
+✔ a grouped axe highlights all child materials and restores the original palette (5.6622ms)
+✔ a transformed GLB hierarchy throws around its geometry centre for either facing (9.2517ms)
+✔ old painted axe remains a visible centred projectile (18.6623ms)
+✔ round resets and stage changes retire projectiles and dispose only owned materials (2.9575ms)
+✔ late axe loading and projectile removal never retain stale clones (4.7152ms)
+✔ Flock projectiles travel before hitting once; both throws share a cooldown (8.756ms)
+✔ standing guard stops knives and crouching avoids them, with no chip damage (15.4068ms)
+✔ crouching avoids shuriken; interruption before release prevents a throw (51.9886ms)
+✔ axe prompt lists grounded actionable fighters in the lake zone only (5.0511ms)
+✔ axe requires nearby down + grab, throws once a round, and resets each round (1.8852ms)
+✔ a landed axe reports itself as an axe hit (2.3915ms)
+✔ either player can claim the axe and throw toward an opponent on either side (10.394ms)
+✔ standing and crouching guard both block the stage axe without chip damage (8.3919ms)
+ℹ tests 266
+ℹ suites 0
+ℹ pass 257
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 5
+ℹ todo 0
+ℹ duration_ms 5043.1595
+
+✖ failing tests:
+
+test at test\combat.test.js:42:1
+✖ CPU reaches the whole move list, not just the buttons it can press alone (2216.3085ms)
+  AssertionError [ERR_ASSERTION]: CPU never used: meteorKick
+  + actual - expected
+  
+  + [
+  +   'meteorKick'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///repo/web/test/combat.test.js:62:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ 'meteorKick' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test\combat.test.js:158:1
+✖ the CPU exercises the whole move list, including kit projectiles (547.9214ms)
+  AssertionError [ERR_ASSERTION]: CPU never used meteorKick
+      at TestContext.<anonymous> (file:///repo/web/test/combat.test.js:187:39)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test\fighter-identity.test.js:126:1
+✖ cinematic beats are deterministic, finite, one-shot and terminate in match results (24.0894ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'finisher'
+  - 'matchEnd'
+  
+      at TestContext.<anonymous> (file:///repo/web/test/fighter-identity.test.js:142:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'finisher',
+    expected: 'matchEnd',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\fighter-pipeline.test.js:46:1
+✖ cinematic clip edits sample finite poses, and the last camera pose holds after the result (2.9299ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  4 !== 3
+  
+      at TestContext.<anonymous> (file:///repo/web/test/fighter-pipeline.test.js:49:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 4,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

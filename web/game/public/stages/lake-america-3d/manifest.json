@@ -1,0 +1,87 @@
+{
+  "objects": 186,
+  "meshObjects": 158,
+  "vertices": 158405,
+  "triangles": 221564,
+  "source": "web/stages/lake_america/blender/lake-america.blend",
+  "seed": 7319,
+  "bounds": "Arena contact Y=0; layered skyline 178\u2013220m away; 360 degree island coverage",
+  "axe": {
+    "node": "lake-america-axe",
+    "position": [
+      -5,
+      0.85,
+      -0.65
+    ],
+    "bladeCenterLocal": [
+      0.12,
+      0.36,
+      0
+    ],
+    "stumpCollection": "lake-america-axe-stump",
+    "childrenUseLocalCoordinates": true
+  },
+  "rescueRing": {
+    "node": "lake-america-rescue-ring",
+    "position": [
+      5,
+      0.92,
+      -0.65
+    ],
+    "standCollection": "12 Rescue ring stand",
+    "childrenUseLocalCoordinates": true
+  },
+  "floatingNodes": [
+    "lake-america-floe-1",
+    "lake-america-floe-2",
+    "lake-america-floe-3",
+    "lake-america-floe-4",
+    "lake-america-floe-5",
+    "lake-america-floe-6",
+    "lake-america-floe-7",
+    "lake-america-floe-8",
+    "lake-america-floe-9",
+    "lake-america-floe-10",
+    "lake-america-floe-11",
+    "lake-america-floe-12",
+    "lake-america-floe-13",
+    "lake-america-floe-14",
+    "lake-america-floe-15",
+    "lake-america-floe-16",
+    "lake-america-floe-17",
+    "lake-america-floe-18",
+    "lake-america-floe-19",
+    "lake-america-floe-20",
+    "lake-america-floe-21",
+    "lake-america-floe-22",
+    "lake-america-floe-23",
+    "lake-america-floe-24",
+    "lake-america-buoy"
+  ],
+  "features": [
+    "Continuous reflective glacial fighting shelf",
+    "Framed park sign with mountain crest and editable English lettering",
+    "Illuminated cedar rescue hut and rope-lined dock",
+    "Independent rescue ring pickup and persistent stand",
+    "Canadian flag review equivalent",
+    "Layered Toronto skyline with a winter-toqued CN Tower",
+    "24 independent ice floes",
+    "Red navigation buoy and winter ferry",
+    "Snow-loaded individual pine boughs",
+    "Sculpted shoreline snowdrifts",
+    "Four waterfront lanterns",
+    "Separate axe and persistent stump",
+    "Waterfront benches, mooring bollards, pressure ice, chimney and stacked firewood",
+    "Traffic-cone-crowned goose marshal and two safety deputies",
+    "Binocular-wielding moose lifeguard",
+    "Snowman-driven maple-syrup Zamboni",
+    "Curling catastrophe and civic festival bunting"
+  ],
+  "previews": [
+    "lake-america-combat.png",
+    "lake-america-establishing.png",
+    "lake-america-axe-detail.png",
+    "lake-america-waterfront.png",
+    "lake-america-absurdity.png"
+  ]
+}

@@ -1,0 +1,4 @@
+Wide SNES fighting game stage background, empty arena, no characters.
+Amsterdam canal street on a sunny day: red brick canal houses with stepped gables across the midground, Dutch red white blue flag hanging from a building, cobblestone walkway as the clear fighting floor in the lower third, canal water with small boats on the left, parked bikes and a scooter, street lamps, tiny distant pedestrians only as background props, green trees, bright blue sky.
+Chunky 16-bit saturated environment, classic Street Fighter II stage composition, readable horizontal depth, lower third kept clear for fighters.
+No player characters, no UI, no health bars, no text.

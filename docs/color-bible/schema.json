@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "emberveil-color-row",
+  "title": "Emberveil Color Bible Row",
+  "type": "object",
+  "required": ["id", "usage", "colors"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "usage": {
+      "type": "string",
+      "enum": ["bg", "obj", "ui", "shared"]
+    },
+    "description": { "type": "string" },
+    "colors": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "required": ["role", "r", "g", "b", "name"],
+        "properties": {
+          "role": { "type": "string" },
+          "name": { "type": "string" },
+          "r": { "type": "integer", "minimum": 0, "maximum": 31 },
+          "g": { "type": "integer", "minimum": 0, "maximum": 31 },
+          "b": { "type": "integer", "minimum": 0, "maximum": 31 },
+          "hex": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "8-bit preview only; source of truth is r/g/b 0-31"
+          }
+        }
+      }
+    }
+  }
+}

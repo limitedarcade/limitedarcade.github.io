@@ -1,0 +1,102 @@
+{
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "bfi/carney_idle_a"
+    }
+  },
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "juggernautXL_v8Rundiffusion.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "clip": [
+        "1",
+        1
+      ],
+      "lora_name": "pixel-art-xl-v1.1.safetensors",
+      "strength_model": 0.85,
+      "strength_clip": 0.85
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "\ufeffFull body side-view SNES Street Fighter character sprite facing right, clenched-fist fighting stance.\nCaricature of a tall male politician: grey hair in a normal short neat cut, dark charcoal or black business suit, white shirt, light blue necktie, black dress shoes, laughing confident expression.\nChunky 16-bit fighter proportions, thick dark outline, flat cel shading, limited saturated palette, head to toe visible, centered with padding.\nSolid flat magenta background #FF00FF, no floor, no shadow, no scenery, no text, no watermark, no photo.",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "orange tracksuit, zip hoodie, gold chain, sunglasses, top knot, prisoner, photo, photorealistic, blurry, text, watermark, ui, cropped limbs, missing feet, magenta clothes, dutch, amsterdam",
+      "clip": [
+        "2",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 29300201,
+      "steps": 34,
+      "cfg": 5.0,
+      "sampler_name": "dpmpp_2m_sde",
+      "scheduler": "karras",
+      "denoise": 1.0,
+      "model": [
+        "2",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    }
+  }
+}

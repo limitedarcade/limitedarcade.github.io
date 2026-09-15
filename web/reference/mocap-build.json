@@ -1,0 +1,900 @@
+{
+  "source": "Motifect Combat Motion Pack",
+  "license": "See web/mocap/README.txt",
+  "targets": [
+    {
+      "id": "carney",
+      "inputSHA256": "9a8edd562d31379a888d080c471b2ea417b960050955c309d6931b94a84239bc",
+      "output": "fighters/carney/mocap.glb",
+      "bytes": 184672,
+      "clips": 6,
+      "library": "fighters/carney/mocap-library.glb",
+      "libraryBytes": 2451604,
+      "libraryClips": 40,
+      "details": [
+        {
+          "file": "back_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0.008252033247822976
+        },
+        {
+          "file": "block_high.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937797227622,
+          "maxAnkleReachResidual": 0.0014799038843867351
+        },
+        {
+          "file": "block_low.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937801212128,
+          "maxAnkleReachResidual": 0.012044616956476684
+        },
+        {
+          "file": "block_mid.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "body_punch_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937790920814,
+          "maxAnkleReachResidual": 0.0028301652219636098
+        },
+        {
+          "file": "choke_grab.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.002482250365466565
+        },
+        {
+          "file": "combo_hook_uppercut.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "combo_jab_cross.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937790920816,
+          "maxAnkleReachResidual": 0.01340184832375707
+        },
+        {
+          "file": "combo_punch_kick.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.05329395512916807
+        },
+        {
+          "file": "cross_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "cross_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "dodge_back.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "dodge_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937802373277,
+          "maxAnkleReachResidual": 0.0013570581416496585
+        },
+        {
+          "file": "dodge_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.0005398990724920227
+        },
+        {
+          "file": "elbow_strike_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937790920814,
+          "maxAnkleReachResidual": 0.0006733023832650176
+        },
+        {
+          "file": "front_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.0053469377960664735,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "get_up.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0.05535231639219462
+        },
+        {
+          "file": "grab_and_throw.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hit_react_body.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hit_react_chest.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.0009253729407616151
+        },
+        {
+          "file": "hit_react_face.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.0005038087608112418
+        },
+        {
+          "file": "hook_left.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hook_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jab_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jab_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937801212128,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jump_kick.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.005346937792081964,
+          "maxAnkleReachResidual": 0.005581208351740474
+        },
+        {
+          "file": "knee_strike.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "knockdown_fall.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0.05676964247564914
+        },
+        {
+          "file": "knocked_to_knees.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.005346937801212125,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "parry_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "roll_dodge_forward.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.01575059027446768
+        },
+        {
+          "file": "roundhouse_kick_left.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.05225981448171357
+        },
+        {
+          "file": "roundhouse_kick_right.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0.03938401653254325
+        },
+        {
+          "file": "side_kick_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0.04553441518576473
+        },
+        {
+          "file": "spinning_kick.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.005346937792081964,
+          "maxAnkleReachResidual": 0.008219551742431608
+        },
+        {
+          "file": "stagger_backward.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.0053469378012121265,
+          "maxAnkleReachResidual": 0.009400138091048893
+        },
+        {
+          "file": "stomp.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "sweep_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0.04296664913010234
+        },
+        {
+          "file": "uppercut_left.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.005346937796066473,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "uppercut_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.00534693779606647,
+          "maxAnkleReachResidual": 0
+        }
+      ],
+      "gameClips": [
+        {
+          "name": "lightPunch",
+          "label": "Piston jab",
+          "source": "Motifect / jab_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 2.966636896133423,
+          "sourceRange": [
+            0.05,
+            0.94
+          ],
+          "contactMarkers": [
+            0.2220224719101124,
+            0.28629213483146077
+          ]
+        },
+        {
+          "name": "heavyPunch",
+          "label": "Power cross",
+          "source": "Motifect / cross_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 2.966636896133423,
+          "sourceRange": [
+            0.28,
+            1.5
+          ],
+          "contactMarkers": [
+            0.27295081967213114,
+            0.33360655737704914
+          ]
+        },
+        {
+          "name": "lightKick",
+          "label": "Front kick",
+          "source": "Motifect / front_kick.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.58,
+            2.03
+          ],
+          "contactMarkers": [
+            0.3227586206896552,
+            0.38731034482758636
+          ],
+          "contactHeightTarget": 0.87
+        },
+        {
+          "name": "heavyKick",
+          "label": "Full-body roundhouse",
+          "source": "Motifect / roundhouse_kick_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 4.966617107391357,
+          "sourceRange": [
+            1.04,
+            3.13
+          ],
+          "contactMarkers": [
+            0.4636363636363636,
+            0.5466028708133973
+          ],
+          "contactHeightTarget": 1.48
+        },
+        {
+          "name": "uppercut",
+          "label": "Rising uppercut",
+          "source": "Motifect / uppercut_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.52,
+            1.65
+          ],
+          "contactMarkers": [
+            0.3305309734513274,
+            0.4039823008849558
+          ]
+        },
+        {
+          "name": "risingKnee",
+          "label": "Driving knee",
+          "source": "Motifect / knee_strike.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.43,
+            1.9
+          ],
+          "contactMarkers": [
+            0.323265306122449,
+            0.43700680272108844
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trump",
+      "inputSHA256": "7891c2962d15deded637f36cc96a0dde346c55433e32d57d6e907ca6d53f5cfc",
+      "output": "fighters/trump/mocap.glb",
+      "bytes": 182460,
+      "clips": 6,
+      "library": "fighters/trump/mocap-library.glb",
+      "libraryBytes": 2449392,
+      "libraryClips": 40,
+      "details": [
+        {
+          "file": "back_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "block_high.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347488043734,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "block_low.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347491404819,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "block_mid.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "body_punch_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347482723699,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "choke_grab.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0.00158973360333875
+        },
+        {
+          "file": "combo_hook_uppercut.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "combo_jab_cross.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347482723702,
+          "maxAnkleReachResidual": 0.00805596268224884
+        },
+        {
+          "file": "combo_punch_kick.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0.03952192355827816
+        },
+        {
+          "file": "cross_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "cross_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "dodge_back.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "dodge_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347492384293,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "dodge_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "elbow_strike_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347482723699,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "front_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064262,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "get_up.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0.04212523758453346
+        },
+        {
+          "file": "grab_and_throw.bvh",
+          "duration": 5.966607093811035,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hit_react_body.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hit_react_chest.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hit_react_face.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hook_left.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "hook_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jab_left.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jab_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347491404819,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "jump_kick.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347483703174,
+          "maxAnkleReachResidual": 0.003325127069634004
+        },
+        {
+          "file": "knee_strike.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "knockdown_fall.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0.04281949785462885
+        },
+        {
+          "file": "knocked_to_knees.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347491404816,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "parry_right.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "roll_dodge_forward.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0.012654624943561732
+        },
+        {
+          "file": "roundhouse_kick_left.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0.017929814803572697
+        },
+        {
+          "file": "roundhouse_kick_right.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0.02806648431729647
+        },
+        {
+          "file": "side_kick_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0.008050628480286703
+        },
+        {
+          "file": "spinning_kick.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.004510347483703174,
+          "maxAnkleReachResidual": 0.005114515999310065
+        },
+        {
+          "file": "stagger_backward.bvh",
+          "duration": 4.966617107391357,
+          "scale": 0.0045103474914048175,
+          "maxAnkleReachResidual": 0.008030771109274248
+        },
+        {
+          "file": "stomp.bvh",
+          "duration": 2.966636896133423,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "sweep_kick.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0.03202149429041401
+        },
+        {
+          "file": "uppercut_left.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064261,
+          "maxAnkleReachResidual": 0
+        },
+        {
+          "file": "uppercut_right.bvh",
+          "duration": 3.9666268825531006,
+          "scale": 0.004510347487064259,
+          "maxAnkleReachResidual": 0
+        }
+      ],
+      "gameClips": [
+        {
+          "name": "lightPunch",
+          "label": "Piston jab",
+          "source": "Motifect / jab_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 2.966636896133423,
+          "sourceRange": [
+            0.05,
+            0.94
+          ],
+          "contactMarkers": [
+            0.2220224719101124,
+            0.28629213483146077
+          ]
+        },
+        {
+          "name": "heavyPunch",
+          "label": "Power cross",
+          "source": "Motifect / cross_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 2.966636896133423,
+          "sourceRange": [
+            0.28,
+            1.5
+          ],
+          "contactMarkers": [
+            0.27295081967213114,
+            0.33360655737704914
+          ]
+        },
+        {
+          "name": "lightKick",
+          "label": "Front kick",
+          "source": "Motifect / front_kick.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.58,
+            2.03
+          ],
+          "contactMarkers": [
+            0.3227586206896552,
+            0.38731034482758636
+          ],
+          "contactHeightTarget": 0.87
+        },
+        {
+          "name": "heavyKick",
+          "label": "Full-body roundhouse",
+          "source": "Motifect / roundhouse_kick_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 4.966617107391357,
+          "sourceRange": [
+            1.04,
+            3.13
+          ],
+          "contactMarkers": [
+            0.4636363636363636,
+            0.5466028708133973
+          ],
+          "contactHeightTarget": 1.23
+        },
+        {
+          "name": "uppercut",
+          "label": "Rising uppercut",
+          "source": "Motifect / uppercut_right.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.52,
+            1.65
+          ],
+          "contactMarkers": [
+            0.3305309734513274,
+            0.4039823008849558
+          ]
+        },
+        {
+          "name": "risingKnee",
+          "label": "Driving knee",
+          "source": "Motifect / knee_strike.bvh",
+          "retargeted": true,
+          "sourceDuration": 3.9666268825531006,
+          "sourceRange": [
+            0.43,
+            1.9
+          ],
+          "contactMarkers": [
+            0.323265306122449,
+            0.43700680272108844
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "file": "back_kick.bvh",
+      "sha256": "045e543a8d030a6557bd64ae0119d9a2aaac1b2ca802cc0b6b867d2cbb727bd5",
+      "frames": 120
+    },
+    {
+      "file": "block_high.bvh",
+      "sha256": "564e6fc7f66b8154f029fd817190dc86ecd5e821c7469372738ca0625b2ba1bc",
+      "frames": 90
+    },
+    {
+      "file": "block_low.bvh",
+      "sha256": "5ceb7a27e0582bc21513abc16b8cd8d5802bc4a255891b23c6af2348f8e8325a",
+      "frames": 90
+    },
+    {
+      "file": "block_mid.bvh",
+      "sha256": "9f2ca8152d7926b1a24e55189e33410147c0533007aa5f9de1c3e8eb3873a3a7",
+      "frames": 90
+    },
+    {
+      "file": "body_punch_right.bvh",
+      "sha256": "5d8a4d7ece445843ebcccd14711c2e0458d0e0b16a0be787b6fcd741aa1bb9d9",
+      "frames": 90
+    },
+    {
+      "file": "choke_grab.bvh",
+      "sha256": "08ef7b1d730e2d3a85c06b1fc1895e017e5c6b835326fc92dabee8d026ca2349",
+      "frames": 120
+    },
+    {
+      "file": "combo_hook_uppercut.bvh",
+      "sha256": "4f45f3a59fe124b139eb8fa151b0bf8bee6ff38b533e89d2901ec267cde0c55a",
+      "frames": 150
+    },
+    {
+      "file": "combo_jab_cross.bvh",
+      "sha256": "24dbe526c79b14ceded0f9886e53f81fc966c0d6fd7f9d4d5c561ea618e0da0c",
+      "frames": 120
+    },
+    {
+      "file": "combo_punch_kick.bvh",
+      "sha256": "91e4cc522e6d73792714b102025bec53b896bd0562578947f264ec3f21f37bdc",
+      "frames": 180
+    },
+    {
+      "file": "cross_left.bvh",
+      "sha256": "2f0f1f2896384918a61d7ea5f718e8faefe5cfb14382b56eea98e7e0f70e7cca",
+      "frames": 90
+    },
+    {
+      "file": "cross_right.bvh",
+      "sha256": "56da7ea7c76b9694f79af679b9a9e28cad29f172287eb50e6ce7c193c5a86556",
+      "frames": 90
+    },
+    {
+      "file": "dodge_back.bvh",
+      "sha256": "453d982c2498f7168e96d6ac9d1178e0126b52d34ce195524415dc6a8a4ba9a9",
+      "frames": 90
+    },
+    {
+      "file": "dodge_left.bvh",
+      "sha256": "478ab80d8c32d258aaa119531f9f6b682e3194d0e303b85dce2c130fe2033dd0",
+      "frames": 90
+    },
+    {
+      "file": "dodge_right.bvh",
+      "sha256": "0bf28e8dce52a8ac30dd08c622534e54dd56c768fb671847fedea20924f7e0e8",
+      "frames": 90
+    },
+    {
+      "file": "elbow_strike_right.bvh",
+      "sha256": "2f5e4171e8c5fb82901dd72679f26b7a5b3c753b2286d5dc7c7b5ef74c7b244e",
+      "frames": 90
+    },
+    {
+      "file": "front_kick.bvh",
+      "sha256": "9221be29bcc4824d622861e2e5e77186effd0e8e3f946b9a23447375712f33c5",
+      "frames": 120
+    },
+    {
+      "file": "get_up.bvh",
+      "sha256": "4b9eb8264436b72c45c7bc4cc7cbe4b3659f19e0ca30bdf49b6454ef4ef3caa3",
+      "frames": 180
+    },
+    {
+      "file": "grab_and_throw.bvh",
+      "sha256": "de6629c51d934345c3c75ac18897fdec8b2993e92fffdeeb8936594bd066b7bd",
+      "frames": 180
+    },
+    {
+      "file": "hit_react_body.bvh",
+      "sha256": "fcbb1669660b652c54f9794fee268f7bc944acbe2a5d1bf87733db85e07e2b34",
+      "frames": 120
+    },
+    {
+      "file": "hit_react_chest.bvh",
+      "sha256": "6a3c640642e177678adc368e7d18841b2a64dee56e4147d30a6d8cbf2233a756",
+      "frames": 120
+    },
+    {
+      "file": "hit_react_face.bvh",
+      "sha256": "2a1e459f6466c9c9d01d1df19c5275ea8fc8362f817ba1d2f53de51ce2cf2f98",
+      "frames": 120
+    },
+    {
+      "file": "hook_left.bvh",
+      "sha256": "e1be74754aa6f2d54cbfcfd4400904f60e65eadfc310001b6fc9b473f6e7adfc",
+      "frames": 120
+    },
+    {
+      "file": "hook_right.bvh",
+      "sha256": "5f9bf8f1900027c77ab4e5c80f343cecc9637e83c91d0eda94ed8a0a11722986",
+      "frames": 120
+    },
+    {
+      "file": "jab_left.bvh",
+      "sha256": "9d831875fdf69cf81c956f4540ed1f078c6d8ac424bbd8a3ef3147e90ceef682",
+      "frames": 90
+    },
+    {
+      "file": "jab_right.bvh",
+      "sha256": "55b75b8b4518f87860fb37b7eaf41fabb46e7cdddbf003745a66f9bc31bdba7c",
+      "frames": 90
+    },
+    {
+      "file": "jump_kick.bvh",
+      "sha256": "3eee07605f8ad483e864c8aa9a59d39891e4a8ad49f6f6393e0b2beb2aee9199",
+      "frames": 150
+    },
+    {
+      "file": "knee_strike.bvh",
+      "sha256": "e69de1cf37f485ae4a6796ab2d10e77500492d38d1ea8376aa379d2ef7a756f6",
+      "frames": 120
+    },
+    {
+      "file": "knockdown_fall.bvh",
+      "sha256": "ed1e65c97d033b9bb8245c5d233bcfeab0ec81608e8ef199e10287f6fe984c9d",
+      "frames": 150
+    },
+    {
+      "file": "knocked_to_knees.bvh",
+      "sha256": "613ddba2ea6ea443905c3f603dde404b1739fe6bad71a5c72a0f220db5a2352e",
+      "frames": 150
+    },
+    {
+      "file": "parry_right.bvh",
+      "sha256": "518eda63d879b1e29f493b1b6653d28d7a8df93c5e841053b95a6d12e977e41c",
+      "frames": 90
+    },
+    {
+      "file": "roll_dodge_forward.bvh",
+      "sha256": "d226eb1ee76fc77743760f06164e17277756d07fccdba26890d0472dee9a2dd3",
+      "frames": 150
+    },
+    {
+      "file": "roundhouse_kick_left.bvh",
+      "sha256": "d7829012b9798d29f4e60dd9fccc0abb4373a3efa222170893c6493f2695cc06",
+      "frames": 150
+    },
+    {
+      "file": "roundhouse_kick_right.bvh",
+      "sha256": "2cfc4cbc91e1b13825e2f09d2bea90b604c6042d5755ece21ee82ef239613a5b",
+      "frames": 150
+    },
+    {
+      "file": "side_kick_right.bvh",
+      "sha256": "debbb133936399a04e8a891017ba08713cb514c574e4439b78846d8aad31622a",
+      "frames": 120
+    },
+    {
+      "file": "spinning_kick.bvh",
+      "sha256": "80e1bb0616d6cc5262f78485adba20a2f430646c62f00f3d640eadbd52273c8b",
+      "frames": 150
+    },
+    {
+      "file": "stagger_backward.bvh",
+      "sha256": "a058d907c687aadc375c92a72a577a0611b348b74777d1a391cc77c030dea1fd",
+      "frames": 150
+    },
+    {
+      "file": "stomp.bvh",
+      "sha256": "1dd0eb967b3000ddff7c1b2787638277112d82a60d3fd0fa7f5b7ae97c9eff1d",
+      "frames": 90
+    },
+    {
+      "file": "sweep_kick.bvh",
+      "sha256": "a5392113aa459ce14a5f42a3a905f52f62b30f1c47a45910d4876d3e070f6966",
+      "frames": 120
+    },
+    {
+      "file": "uppercut_left.bvh",
+      "sha256": "d541fd6a09f1031316fd8809aa042d1142038e849217b860a96fd6463c42cc95",
+      "frames": 120
+    },
+    {
+      "file": "uppercut_right.bvh",
+      "sha256": "85e88fd87b8852a8aaa7ec680b907cd08387bd987e883ee8c6e26b0ad382f91b",
+      "frames": 120
+    }
+  ]
+}

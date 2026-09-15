@@ -1,0 +1,244 @@
+{
+  "decimate": {
+    "total": 150000,
+    "budget": {
+      "Head": 0.4,
+      "Torso": 0.22,
+      "LeftArm": 0.09,
+      "RightArm": 0.09,
+      "LeftLeg": 0.1,
+      "RightLeg": 0.1
+    }
+  },
+  "fists": {
+    "enabled": false
+  },
+  "rig": {
+    "sigma": null,
+    "aimOffset": [
+      0,
+      0,
+      0
+    ],
+    "elbowPole": {
+      "L": [
+        0.434,
+        -0.8971,
+        0.0832
+      ],
+      "R": [
+        -1.42,
+        -1,
+        -0.24
+      ]
+    },
+    "guard": {
+      "hips": {
+        "r": [
+          [
+            "y",
+            -16
+          ]
+        ],
+        "t": [
+          0,
+          -0.012,
+          0.004
+        ]
+      },
+      "spine": {
+        "r": [
+          [
+            "y",
+            -5
+          ]
+        ]
+      },
+      "chest": {
+        "r": [
+          [
+            "y",
+            -8
+          ],
+          [
+            "x",
+            -5
+          ]
+        ]
+      },
+      "neck": {
+        "r": [
+          [
+            "y",
+            12
+          ],
+          [
+            "x",
+            -4
+          ]
+        ]
+      },
+      "head": {
+        "r": [
+          [
+            "y",
+            8
+          ],
+          [
+            "x",
+            3
+          ]
+        ]
+      },
+      "shoulderL": {
+        "r": [
+          [
+            "y",
+            -10
+          ],
+          [
+            "z",
+            -4
+          ]
+        ]
+      },
+      "shoulderR": {
+        "r": [
+          [
+            "y",
+            6
+          ],
+          [
+            "z",
+            6
+          ]
+        ]
+      },
+      "handL": {
+        "r": [
+          [
+            "z",
+            8
+          ],
+          [
+            "y",
+            -18
+          ]
+        ]
+      },
+      "handR": {
+        "r": [
+          [
+            "z",
+            -10
+          ],
+          [
+            "y",
+            14
+          ]
+        ]
+      },
+      "upLegL": {
+        "r": [
+          [
+            "x",
+            -11
+          ],
+          [
+            "z",
+            -4
+          ]
+        ]
+      },
+      "legL": {
+        "r": [
+          [
+            "x",
+            9
+          ]
+        ]
+      },
+      "footL": {
+        "r": [
+          [
+            "x",
+            2
+          ]
+        ]
+      },
+      "upLegR": {
+        "r": [
+          [
+            "x",
+            11
+          ],
+          [
+            "z",
+            5
+          ]
+        ]
+      },
+      "legR": {
+        "r": [
+          [
+            "x",
+            11
+          ]
+        ]
+      },
+      "footR": {
+        "r": [
+          [
+            "x",
+            -13
+          ]
+        ]
+      },
+      "aim": {
+        "L": [
+          0.3,
+          1.42,
+          0.42
+        ],
+        "R": [
+          -0.34,
+          1.46,
+          0.14
+        ]
+      }
+    }
+  },
+  "gates": {
+    "minIoU": 0.985,
+    "maxDE50": 4,
+    "maxDE95": 25,
+    "minTrunkClearance": -0.03,
+    "maxWristDisagreement": 0.03,
+    "maxBakeMedianMm": 0.5,
+    "maxFloor": -0.015
+  },
+  "reference": {
+    "id": "trump",
+    "label": "Trump 150k / head 40%",
+    "headTris": 60000,
+    "heroIoU": 0.99146,
+    "threeQuarterIoU": 0.99318,
+    "headDE50": 3,
+    "headDE95": 20.27
+  },
+  "id": "trump",
+  "displayName": "Trump",
+  "notes": {
+    "wrist": "This sculpt ships with closed fists, so the wrist girth scan finds no knuckle bulge on the left arm and falls back to 0.72 -- 13% off its own right arm, which did resolve. 0.85 is the right arm's measured value and Carney's on both sides. With the override, wristSkew drops from 13.49% to 0.16%.",
+    "guard": "Re-swept for this sculpt. Its arms are 0.354 of height against the previous Trump's ~0.42, so the old targets sat past the right arm's reach and locked it straight (94% extension). The rear hand is the constrained one: pulling it in to a 65% extension buries the elbow in the belly, so 78% with 0.08 m of clearance is the trade this figure actually allows."
+  },
+  "measure": {
+    "wristFrac": {
+      "L": 0.85
+    }
+  },
+  "source": {
+    "textured": "web/Hi3D_Stylized Cartoon Politician 3D Character Model_allparts_20260904_143129.glb",
+    "parts": "web/Hi3D_Segmented Stylized Caricature Businessman 3D Model_allparts_20260904_143148.glb"
+  }
+}

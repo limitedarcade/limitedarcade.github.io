@@ -1,0 +1,21 @@
+{
+  "name": "fighter-tool",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --host 127.0.0.1 --port 5179 --strictPort",
+    "dev": "vite --host 127.0.0.1 --port 5179 --strictPort",
+    "validate": "node runner/validate.mjs",
+    "build-fighter": "node runner/build-fighter.mjs",
+    "encode": "node runner/encode.mjs",
+    "test": "node --test runner/*.test.mjs"
+  },
+  "dependencies": {
+    "meshoptimizer": "^1.2.0",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.21"
+  }
+}

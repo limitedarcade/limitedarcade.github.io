@@ -1,0 +1,23 @@
+{
+  "id": "char_vance",
+  "usage": "obj",
+  "description": "JD VANCE — satirical SF boss; dark charcoal suit, navy tie, brown hair, glasses, pale skin.",
+  "colors": [
+    {"role": "transparent", "name": "vance_clear", "r": 0, "g": 0, "b": 0, "hex": "#000000"},
+    {"role": "outline", "name": "vance_ink", "r": 2, "g": 2, "b": 3, "hex": "#101018"},
+    {"role": "ramp_a0", "name": "suit_dark", "r": 3, "g": 3, "b": 4, "hex": "#18181C"},
+    {"role": "ramp_a1", "name": "suit_mid", "r": 6, "g": 6, "b": 8, "hex": "#31313A"},
+    {"role": "ramp_a2", "name": "suit_lit", "r": 11, "g": 11, "b": 13, "hex": "#5C5C6B"},
+    {"role": "ramp_b0", "name": "hair_dark", "r": 7, "g": 5, "b": 3, "hex": "#3A2D1A"},
+    {"role": "ramp_b1", "name": "hair_mid", "r": 12, "g": 9, "b": 6, "hex": "#634A30"},
+    {"role": "ramp_b2", "name": "hair_lit", "r": 18, "g": 13, "b": 9, "hex": "#946A4A"},
+    {"role": "accent0", "name": "tie_navy_dark", "r": 4, "g": 6, "b": 14, "hex": "#212A52"},
+    {"role": "accent1", "name": "tie_navy", "r": 7, "g": 11, "b": 22, "hex": "#384B94"},
+    {"role": "accent2", "name": "shirt_white", "r": 30, "g": 30, "b": 30, "hex": "#F7F7F7"},
+    {"role": "hot0", "name": "shoe_black", "r": 2, "g": 2, "b": 2, "hex": "#101010"},
+    {"role": "hot1", "name": "frame_glass", "r": 1, "g": 1, "b": 1, "hex": "#080808"},
+    {"role": "emissive", "name": "stare_flash", "r": 31, "g": 31, "b": 28, "hex": "#FFFFE6"},
+    {"role": "skin_or_light", "name": "skin_pale", "r": 30, "g": 26, "b": 22, "hex": "#F7D6B5"},
+    {"role": "flash", "name": "vance_flash", "r": 31, "g": 31, "b": 28, "hex": "#FFFFE6"}
+  ]
+}

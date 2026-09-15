@@ -1,0 +1,23 @@
+{
+  "id": "char_carney",
+  "usage": "obj",
+  "description": "MARK CARNEY — satirical SF boss; dark suit, light-blue tie, grey hair.",
+  "colors": [
+    {"role": "transparent", "name": "carney_clear", "r": 0, "g": 0, "b": 0, "hex": "#000000"},
+    {"role": "outline", "name": "carney_ink", "r": 2, "g": 2, "b": 3, "hex": "#101018"},
+    {"role": "ramp_a0", "name": "suit_dark", "r": 3, "g": 3, "b": 4, "hex": "#181821"},
+    {"role": "ramp_a1", "name": "suit_mid", "r": 6, "g": 6, "b": 8, "hex": "#313142"},
+    {"role": "ramp_a2", "name": "suit_lit", "r": 10, "g": 10, "b": 12, "hex": "#525263"},
+    {"role": "ramp_b0", "name": "hair_dark", "r": 10, "g": 10, "b": 11, "hex": "#52525A"},
+    {"role": "ramp_b1", "name": "hair_mid", "r": 16, "g": 16, "b": 17, "hex": "#84848C"},
+    {"role": "ramp_b2", "name": "hair_lit", "r": 22, "g": 22, "b": 23, "hex": "#B5B5BD"},
+    {"role": "accent0", "name": "tie_blue_dark", "r": 4, "g": 10, "b": 18, "hex": "#215294"},
+    {"role": "accent1", "name": "tie_blue", "r": 8, "g": 16, "b": 26, "hex": "#4284D6"},
+    {"role": "accent2", "name": "shirt_white", "r": 30, "g": 30, "b": 30, "hex": "#F7F7F7"},
+    {"role": "hot0", "name": "shoe_black", "r": 2, "g": 2, "b": 2, "hex": "#101010"},
+    {"role": "hot1", "name": "maple_accent", "r": 26, "g": 4, "b": 4, "hex": "#D62121"},
+    {"role": "emissive", "name": "laugh_teeth", "r": 31, "g": 31, "b": 30, "hex": "#FFFFF7"},
+    {"role": "skin_or_light", "name": "skin", "r": 28, "g": 20, "b": 16, "hex": "#E6A584"},
+    {"role": "flash", "name": "carney_flash", "r": 31, "g": 31, "b": 28, "hex": "#FFFFE6"}
+  ]
+}

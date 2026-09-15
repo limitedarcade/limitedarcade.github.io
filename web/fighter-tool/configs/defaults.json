@@ -1,0 +1,58 @@
+{
+  "decimate": {
+    "total": 150000,
+    "budget": {
+      "Head": 0.40,
+      "Torso": 0.22,
+      "LeftArm": 0.09,
+      "RightArm": 0.09,
+      "LeftLeg": 0.10,
+      "RightLeg": 0.10
+    }
+  },
+  "fists": { "enabled": true },
+  "rig": {
+    "sigma": null,
+    "aimOffset": [0, 0, 0],
+    "elbowPole": {
+      "L": [0.42, -1, -0.30],
+      "R": [-1.42, -1.00, -0.24]
+    },
+    "guard": {
+      "hips": { "r": [["y", -16]], "t": [0, -0.012, 0.004] },
+      "spine": { "r": [["y", -5]] },
+      "chest": { "r": [["y", -8], ["x", -5]] },
+      "neck": { "r": [["y", 12], ["x", -4]] },
+      "head": { "r": [["y", 8], ["x", 3]] },
+      "shoulderL": { "r": [["y", -10], ["z", -4]] },
+      "shoulderR": { "r": [["y", 6], ["z", 6]] },
+      "handL": { "r": [["z", 8], ["y", -18]] },
+      "handR": { "r": [["z", -10], ["y", 14]] },
+      "upLegL": { "r": [["x", -11], ["z", -4]] },
+      "legL": { "r": [["x", 9]] },
+      "footL": { "r": [["x", 2]] },
+      "upLegR": { "r": [["x", 11], ["z", 5]] },
+      "legR": { "r": [["x", 11]] },
+      "footR": { "r": [["x", -13]] },
+      "aim": { "L": [0.32, 1.30, 0.40], "R": [-0.32, 1.38, 0.22] }
+    }
+  },
+  "gates": {
+    "minIoU": 0.985,
+    "maxDE50": 4.0,
+    "maxDE95": 25.0,
+    "minTrunkClearance": -0.03,
+    "maxWristDisagreement": 0.03,
+    "maxBakeMedianMm": 0.5,
+    "maxFloor": -0.015
+  },
+  "reference": {
+    "id": "trump",
+    "label": "Trump 150k / head 40%",
+    "headTris": 60000,
+    "heroIoU": 0.99146,
+    "threeQuarterIoU": 0.99318,
+    "headDE50": 3.00,
+    "headDE95": 20.27
+  }
+}

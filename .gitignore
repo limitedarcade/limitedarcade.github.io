@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vite/
+web/fighter-tool/build/
+web/fighter-tool/output/
+
+# Live source-asset drops. These are raw exports from the 3D/image pipelines
+# that get processed into tracked assets; the runtime models under
+# web/game/public and the pixel art under art/px are intentionally kept.
+/web/*.glb
+/web/*.png
+/web/*.jpg
+/web/*.jpeg
+/web/fighters/
+/web/vfx/
+
+# Parallel/backup project tree — not part of this repo's shipped game.
+/take2/
+
+# Emulator / toolchain scratch
+*.log
+*.sym
+*.srm
+*.bak
+__pycache__/
+*.pyc
+
+# OS noise
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Machine-local assistant permissions
+.claude/settings.local.json
+
+# Build-time Blender masters and their renders. build-lake-america.py authors
+# these from scratch and emits the runtime GLB under web/game/public, which is
+# the artifact the game actually loads and the only one worth tracking.
+/web/stages/*/blender/
+*.blend
+*.blend1
+
+# Working-tree snapshots taken for before/after comparison during a change.
+/.verification/
+
+# Reference video captures. The stills in web/reference are tracked; the
+# footage they were pulled from is too large to carry in git.
+/web/reference/*.mp4

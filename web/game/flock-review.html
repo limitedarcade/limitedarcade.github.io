@@ -1,0 +1,206 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Fighter pose board</title><style>
+  :root{color-scheme:dark}
+  body{margin:0;background:#17202c;color:#eef2f8;font:14px/1.4 system-ui,sans-serif;overflow:hidden}
+  canvas{display:block}
+  #rail{position:fixed;top:0;left:0;bottom:0;width:212px;padding:12px;box-sizing:border-box;
+    background:#111823ee;border-right:1px solid #2b3849;overflow-y:auto}
+  h1{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#8fa3bd;margin:0 0 10px}
+  h2{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#66788f;margin:14px 0 6px}
+  .poses{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .poses button{font:11px/1 system-ui;padding:7px 4px;border:1px solid #2b3849;border-radius:4px;
+    background:#1b2534;color:#c3d0e0;cursor:pointer;text-align:center;overflow:hidden;text-overflow:ellipsis}
+  .poses button:hover{background:#243146;color:#fff}
+  .poses button[aria-pressed=true]{background:#e8a33d;border-color:#e8a33d;color:#17202c;font-weight:600}
+  #transport{position:fixed;left:212px;right:0;bottom:0;height:52px;padding:0 16px;box-sizing:border-box;
+    background:#111823ee;border-top:1px solid #2b3849;display:flex;align-items:center;gap:12px}
+  #transport button{font:12px/1 system-ui;padding:8px 14px;border:1px solid #3a4a60;border-radius:4px;
+    background:#1b2534;color:#eef2f8;cursor:pointer}
+  #pause{min-width:88px}
+  #pause[aria-pressed=true]{background:#e8a33d;border-color:#e8a33d;color:#17202c;font-weight:600}
+  .stepper{font-family:ui-monospace,monospace;min-width:34px}
+  #scrub{flex:1;accent-color:#e8a33d}
+  #readout{font:12px/1 ui-monospace,monospace;color:#8fa3bd;min-width:190px;text-align:right}
+  #status{position:fixed;top:12px;left:228px;font:12px/1.5 ui-monospace,monospace;color:#8fa3bd;
+    white-space:pre-wrap;pointer-events:none;margin:0}
+  kbd{font:10px/1 ui-monospace,monospace;background:#243146;border:1px solid #3a4a60;
+    border-radius:3px;padding:2px 4px;color:#8fa3bd}
+</style></head><body>
+<div id="rail"><h1 id="title">Pose board</h1><div id="groups"></div>
+  <h2>Keys</h2><p style="color:#66788f;font-size:11px;margin:0">
+  <kbd>space</kbd> pause &middot; <kbd>&larr;</kbd><kbd>&rarr;</kbd> step frame &middot; <kbd>R</kbd> restart &middot; drag to orbit</p></div>
+<div id="transport">
+  <button id="pause" aria-pressed="false">Pause</button>
+  <button id="back" class="stepper" title="Previous frame" aria-label="Previous frame">&#9664;|</button>
+  <button id="forward" class="stepper" title="Next frame" aria-label="Next frame">|&#9654;</button>
+  <input id="scrub" type="range" min="0" max="1" step="0.001" value="0" aria-label="Clip time">
+  <span id="readout">&mdash;</span>
+</div>
+<p id="status">Loading&hellip;</p>
+<script type="module">
+import * as T from './src/vendor/three.module.js';
+import { FighterView } from './src/render/fighterView.js';
+import { getFighter } from './src/fighters/catalog.js';
+
+// One clip plays at a time, and only because a button was pressed. Nothing here
+// advances the selection on its own: the old <select> stepped through all 32
+// poses whenever it had focus and an arrow key was pressed, which made judging
+// a single stance impossible.
+const GROUPS = [
+  ['Stance', ['tpose', 'bind', 'idle', 'guard', 'crouch', 'crouchGuard', 'walkF', 'walkB', 'jump', 'land']],
+  ['Attacks', ['jab', 'lightPunch', 'heavyPunch', 'lightKick', 'heavyKick', 'crouchPunch', 'crouchKick', 'jumpAttack', 'grab', 'grabHold', 'throw', 'finisher']],
+  ['Reactions', ['hitHigh', 'hitLow', 'blockHit', 'grabbed', 'knockdown', 'getUp', 'dizzy', 'finisherVictim']],
+  ['Cinematic', ['intro', 'victory', 'defeat']],
+];
+
+const status = document.querySelector('#status');
+const scene = new T.Scene();
+scene.background = new T.Color('#17202c');
+scene.add(new T.HemisphereLight(0xffffff, 0x536078, 2));
+const keyLight = new T.DirectionalLight(0xffffff, 3);
+keyLight.position.set(3, 5, 5); scene.add(keyLight);
+scene.add(new T.GridHelper(10, 20, 0x35455c, 0x243146));
+
+const renderer = new T.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+document.body.append(renderer.domElement);
+const camera = new T.PerspectiveCamera(35, 1, .01, 100);
+renderer.domElement.style.marginLeft = '212px';
+const resize = () => {
+  const w = Math.max(1, innerWidth - 212), h = Math.max(1, innerHeight - 52);
+  renderer.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+};
+addEventListener('resize', resize); resize();
+
+const id = new URLSearchParams(location.search).get('fighter') || 'officer_flock';
+let view, action, paused = false, held = null;
+const clock = new T.Clock();
+
+try {
+  const definition = getFighter(id);
+  document.querySelector('#title').textContent = definition.label || id;
+  view = new FighterView(definition, { scene });
+  await view.load();
+  status.textContent = `${definition.label} · ${view.available.length} clips · via game FighterView`;
+} catch (e) { status.textContent = e.stack; throw e; }
+
+// Buttons come from the rig, not from the wish list: a clip the export skipped
+// should be visibly absent rather than a button that silently falls back to
+// something else and tells you the pose is fine.
+const available = new Set(view.available);
+const groups = document.querySelector('#groups');
+const buttons = new Map();
+const listed = new Set(GROUPS.flatMap(([, names]) => names));
+for (const [label, names] of [...GROUPS, ['Other', view.available.filter(name => !listed.has(name))]]) {
+  const present = names.filter(name => available.has(name));
+  if (!present.length) continue;
+  const heading = document.createElement('h2'); heading.textContent = label; groups.append(heading);
+  const grid = document.createElement('div'); grid.className = 'poses'; groups.append(grid);
+  for (const name of present) {
+    const button = document.createElement('button');
+    button.textContent = name; button.title = name;
+    button.setAttribute('aria-pressed', 'false');
+    button.onclick = () => select(name);
+    grid.append(button); buttons.set(name, button);
+  }
+}
+
+// Always from zero, always looping, always alone -- including a second press of
+// the button that is already lit, which is how you re-watch a 12-frame startup.
+// stopAllAction() rather than a crossfade: a blend from the previous pose is
+// exactly the contamination you are here to rule out.
+function select(name) {
+  view.mixer.stopAllAction();
+  action = view.actions[name];
+  action.reset();
+  action.setLoop(T.LoopRepeat, Infinity);
+  action.clampWhenFinished = false;
+  action.timeScale = 1;
+  action.play();
+  view.mixer.update(0);
+  held = name;
+  for (const [key, button] of buttons) button.setAttribute('aria-pressed', String(key === name));
+  refresh();
+}
+
+const pauseButton = document.querySelector('#pause');
+const scrub = document.querySelector('#scrub');
+const readout = document.querySelector('#readout');
+
+// The pause is global and independent of the selection: it freezes the mixer and
+// leaves the chosen pose where it is, so you can pick a clip, stop on the
+// contact frame, and orbit around it. Switching clips while paused stays paused.
+function setPaused(next) {
+  paused = next;
+  pauseButton.textContent = paused ? 'Play' : 'Pause';
+  pauseButton.setAttribute('aria-pressed', String(paused));
+}
+pauseButton.onclick = () => setPaused(!paused);
+
+// Stepping implies pausing. Nudging a frame while the clip is still running
+// just gets overwritten by the next mixer update, which reads as the button
+// doing nothing at all.
+function step(seconds) {
+  if (!action) return;
+  setPaused(true);
+  const duration = action.getClip().duration || 1;
+  action.time = (action.time + seconds + duration) % duration;
+  view.mixer.update(0);
+  refresh();
+}
+document.querySelector('#back').onclick = () => step(-1 / 60);
+document.querySelector('#forward').onclick = () => step(1 / 60);
+
+scrub.oninput = () => {
+  if (!action) return;
+  setPaused(true);
+  action.time = Number(scrub.value) * action.getClip().duration;
+  view.mixer.update(0);
+  refresh();
+};
+
+// Called from the render loop and again after any manual seek, so the readout
+// is right while paused rather than lagging a frame behind the pose.
+function refresh() {
+  if (!action) return;
+  const duration = action.getClip().duration;
+  scrub.value = String(duration ? action.time / duration : 0);
+  readout.textContent = `${held}  f${String(Math.round(action.time * 60)).padStart(3)}/${Math.round(duration * 60)}  ${duration.toFixed(2)}s`;
+}
+
+addEventListener('keydown', event => {
+  if (event.target.tagName === 'INPUT') return;
+  if (event.code === 'Space') { event.preventDefault(); setPaused(!paused); }
+  else if (event.code === 'ArrowLeft') { event.preventDefault(); step(-1 / 60); }
+  else if (event.code === 'ArrowRight') { event.preventDefault(); step(1 / 60); }
+  else if (event.code === 'KeyR' && held) select(held);
+});
+
+let drag = false, lastX = 0, lastY = 0, yaw = 0, pitch = 0, radius = 4.4;
+renderer.domElement.onpointerdown = e => { drag = true; lastX = e.clientX; lastY = e.clientY; };
+addEventListener('pointerup', () => { drag = false; });
+addEventListener('pointermove', e => {
+  if (!drag) return;
+  yaw -= (e.clientX - lastX) * .01;
+  pitch = Math.max(-0.8, Math.min(0.8, pitch + (e.clientY - lastY) * .006));
+  lastX = e.clientX; lastY = e.clientY;
+});
+renderer.domElement.onwheel = e => {
+  e.preventDefault();
+  radius = Math.max(1.2, Math.min(9, radius + e.deltaY * .002));
+};
+
+select(available.has('guard') ? 'guard' : view.available[0]);
+setPaused(false);
+
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(clock.getDelta(), .05);
+  if (!paused && action) { view.mixer.update(dt); refresh(); }
+  camera.position.set(
+    Math.sin(yaw) * Math.cos(pitch) * radius,
+    1.0 + Math.sin(pitch) * radius,
+    Math.cos(yaw) * Math.cos(pitch) * radius);
+  camera.lookAt(0, 1, 0);
+  renderer.render(scene, camera);
+});
+</script></body></html>

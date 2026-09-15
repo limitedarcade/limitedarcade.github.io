@@ -1,0 +1,38 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "battlefi",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "web",
+        "run",
+        "dev"
+      ],
+      "port": 5176
+    },
+    {
+      "name": "dist-subfolder",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "18767", "--bind", "127.0.0.1", "--directory", "web"],
+      "port": 18767,
+      "url": "http://127.0.0.1:18767"
+    },
+    {
+      "name": "made-page",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "18766",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "web/site"
+      ],
+      "port": 18766,
+      "url": "http://127.0.0.1:18766"
+    }
+  ]
+}

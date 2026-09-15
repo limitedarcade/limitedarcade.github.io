@@ -1,0 +1,49 @@
+{
+  "slug": "vance",
+  "display_name": "JD VANCE",
+  "locked_idle": "art/raw/vance/vance_idle_1024_01.png",
+  "source_option": "art/raw/vance/options/vance_opt03_01.png",
+  "locked_at": "2026-08-30T21:45:57.580645+00:00",
+  "traits": {
+    "slug": "vance",
+    "display_name": "JD VANCE",
+    "role": "P3",
+    "satire": "Painted comic-book Street Fighter boss; lanky tech-bro senator with sharp suits and cold stare",
+    "reference": null,
+    "concept": null,
+    "scene_brief": "art/comfy/refs/scene_brief_trump_carney.png",
+    "traits": [
+      "tall lanky build, narrow shoulders, longer limbs",
+      "short brown hair in a neat conservative side part",
+      "pale fair skin, clean shaven or light stubble",
+      "thin rectangular black-framed eyeglasses",
+      "stern unsmiling expression, slight squint",
+      "dark charcoal / black suit jacket and trousers",
+      "crisp white dress shirt",
+      "narrow muted navy or dark blue necktie tucked short to the belt",
+      "black dress shoes",
+      "both fists raised in a sharp measured fighting stance"
+    ],
+    "forbid": [
+      "blond hair",
+      "orange hair",
+      "red tie",
+      "bright teal suit",
+      "tracksuit",
+      "hoodie",
+      "t-shirt",
+      "tattoos visible",
+      "gold chain",
+      "sunglasses",
+      "round glasses",
+      "beard",
+      "goatee",
+      "wide bulky torso",
+      "obese proportions",
+      "photoreal portrait only",
+      "flat vector art"
+    ],
+    "palette_row": "char_vance",
+    "idle_pose": "both fists raised measured fighting stance, three-quarter view facing right, cold stern expression"
+  }
+}

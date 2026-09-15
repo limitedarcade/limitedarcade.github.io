@@ -1,0 +1,1120 @@
+{
+  "format": "emberveil-color-bible-master-v1",
+  "note": "r/g/b are SNES 0-31. hex is 8-bit preview only.",
+  "rows": {
+    "area_canal": {
+      "usage": "bg",
+      "description": "Amsterdam canal fight stage \u2014 brick houses, water, boats, flag, cobbles.",
+      "bgr555": [
+        29258,
+        32530,
+        4268,
+        6452,
+        9690,
+        16708,
+        23046,
+        27342,
+        4250,
+        31710,
+        22788,
+        8456,
+        14832,
+        11103,
+        4398,
+        25500
+      ],
+      "names": [
+        "sky_deep",
+        "sky_lit",
+        "brick_dark",
+        "brick_mid",
+        "brick_lit",
+        "water_dark",
+        "water_mid",
+        "water_lit",
+        "flag_red",
+        "flag_white",
+        "flag_blue",
+        "cobble_dark",
+        "cobble_lit",
+        "window_glow",
+        "wood_boat",
+        "canal_highlight"
+      ]
+    },
+    "area_lake": {
+      "usage": "bg",
+      "description": "Lake America \u2014 ice, snow, cold sky, maple flag, distant skyline.",
+      "bgr555": [
+        25032,
+        29392,
+        21004,
+        29460,
+        32732,
+        18958,
+        29528,
+        32734,
+        4250,
+        31710,
+        12618,
+        3274,
+        6546,
+        22982,
+        14664,
+        32767
+      ],
+      "names": [
+        "sky_deep",
+        "sky_lit",
+        "ice_dark",
+        "ice_mid",
+        "ice_lit",
+        "snow_shadow",
+        "snow_mid",
+        "snow_lit",
+        "flag_red",
+        "flag_white",
+        "tower_grey",
+        "wood_dark",
+        "wood_lit",
+        "crack_blue",
+        "skyline_mid",
+        "highlight"
+      ]
+    },
+    "char_carney": {
+      "usage": "obj",
+      "description": "MARK CARNEY \u2014 satirical SF boss; dark suit, light-blue tie, grey hair.",
+      "bgr555": [
+        0,
+        3138,
+        4195,
+        8390,
+        12618,
+        11594,
+        17936,
+        24278,
+        18756,
+        27144,
+        31710,
+        2114,
+        4250,
+        31743,
+        17052,
+        29695
+      ],
+      "names": [
+        "carney_clear",
+        "carney_ink",
+        "suit_dark",
+        "suit_mid",
+        "suit_lit",
+        "hair_dark",
+        "hair_mid",
+        "hair_lit",
+        "tie_blue_dark",
+        "tie_blue",
+        "shirt_white",
+        "shoe_black",
+        "maple_accent",
+        "laugh_teeth",
+        "skin",
+        "carney_flash"
+      ]
+    },
+    "char_dutchie": {
+      "usage": "obj",
+      "description": "Dutchie \u2014 orange tracksuit Amsterdam street fighter, gold chain, lion badge.",
+      "bgr555": [
+        0,
+        2115,
+        2258,
+        3482,
+        6751,
+        2256,
+        4572,
+        3138,
+        6876,
+        13215,
+        29596,
+        32767,
+        4895,
+        16028,
+        10710,
+        25599
+      ],
+      "names": [
+        "dutchie_clear",
+        "dutchie_ink",
+        "orange_dark",
+        "orange_mid",
+        "orange_lit",
+        "hair_dark",
+        "hair_lit",
+        "shade_black",
+        "gold_chain",
+        "gold_lit",
+        "stripe_white",
+        "shoe_white",
+        "lion_badge",
+        "skin",
+        "skin_shade",
+        "dutchie_flash"
+      ]
+    },
+    "char_oranje": {
+      "usage": "obj",
+      "description": "Oranje \u2014 orange tracksuit street fighter; shades, gold chain, lion badge. Visual-trait locked (no nationality tags).",
+      "bgr555": [
+        0,
+        2115,
+        2258,
+        3482,
+        6751,
+        2256,
+        4572,
+        3138,
+        6876,
+        13215,
+        29596,
+        32767,
+        4895,
+        16028,
+        10710,
+        25599
+      ],
+      "names": [
+        "oranje_clear",
+        "oranje_ink",
+        "orange_dark",
+        "orange_mid",
+        "orange_lit",
+        "hair_dark",
+        "hair_lit",
+        "shade_black",
+        "gold_chain",
+        "gold_lit",
+        "stripe_white",
+        "shoe_white",
+        "lion_badge",
+        "skin",
+        "skin_shade",
+        "oranje_flash"
+      ]
+    },
+    "char_tourist": {
+      "usage": "obj",
+      "description": "Tourist \u2014 Hawaiian shirt, fanny pack, camera, socks-with-sandals rival.",
+      "bgr555": [
+        0,
+        3139,
+        12612,
+        19014,
+        23308,
+        5518,
+        8790,
+        13084,
+        14620,
+        7007,
+        21074,
+        31710,
+        3308,
+        21503,
+        17085,
+        32767
+      ],
+      "names": [
+        "tourist_clear",
+        "tourist_ink",
+        "shirt_teal_dark",
+        "shirt_teal",
+        "shirt_teal_lit",
+        "khaki_dark",
+        "khaki_mid",
+        "khaki_lit",
+        "flower_pink",
+        "flower_yellow",
+        "camera_silver",
+        "sock_white",
+        "sandal_brown",
+        "flash_bulb",
+        "skin",
+        "tourist_flash"
+      ]
+    },
+    "char_trump": {
+      "usage": "obj",
+      "description": "TRUMP \u2014 satirical SF boss; navy suit, red tie, orange-blond hair, tan skin.",
+      "bgr555": [
+        0,
+        3139,
+        12484,
+        18758,
+        22986,
+        4500,
+        6748,
+        11039,
+        2128,
+        4252,
+        31710,
+        2114,
+        22788,
+        15071,
+        12892,
+        29695
+      ],
+      "names": [
+        "trump_clear",
+        "trump_ink",
+        "suit_dark",
+        "suit_mid",
+        "suit_lit",
+        "hair_dark",
+        "hair_mid",
+        "hair_lit",
+        "tie_red_dark",
+        "tie_red",
+        "shirt_white",
+        "shoe_black",
+        "flag_pin",
+        "tan_lit",
+        "tan_skin",
+        "trump_flash"
+      ]
+    },
+    "ui_hud": {
+      "usage": "obj",
+      "description": "SNES fighter HUD \u2014 health bars, timer plate, name plaques.",
+      "bgr555": [
+        0,
+        3138,
+        10438,
+        16714,
+        23056,
+        2128,
+        4252,
+        8543,
+        4959,
+        6984,
+        6876,
+        4639,
+        23238,
+        11167,
+        32767,
+        25599
+      ],
+      "names": [
+        "ui_clear",
+        "ui_ink",
+        "panel_dark",
+        "panel_mid",
+        "panel_lit",
+        "hp_red_dark",
+        "hp_red",
+        "hp_red_lit",
+        "hp_yellow",
+        "hp_green",
+        "timer_gold",
+        "name_orange",
+        "name_teal",
+        "win_pip",
+        "ui_white",
+        "ui_flash"
+      ]
+    }
+  },
+  "colors": {
+    "sky_deep": {
+      "r": 8,
+      "g": 14,
+      "b": 24,
+      "hex": "#4273C6",
+      "bgr555": 25032,
+      "row": "area_lake"
+    },
+    "sky_lit": {
+      "r": 16,
+      "g": 22,
+      "b": 28,
+      "hex": "#84B5E6",
+      "bgr555": 29392,
+      "row": "area_lake"
+    },
+    "brick_dark": {
+      "r": 12,
+      "g": 5,
+      "b": 4,
+      "hex": "#632921",
+      "bgr555": 4268,
+      "row": "area_canal"
+    },
+    "brick_mid": {
+      "r": 20,
+      "g": 9,
+      "b": 6,
+      "hex": "#A54A31",
+      "bgr555": 6452,
+      "row": "area_canal"
+    },
+    "brick_lit": {
+      "r": 26,
+      "g": 14,
+      "b": 9,
+      "hex": "#D6734A",
+      "bgr555": 9690,
+      "row": "area_canal"
+    },
+    "water_dark": {
+      "r": 4,
+      "g": 10,
+      "b": 16,
+      "hex": "#215284",
+      "bgr555": 16708,
+      "row": "area_canal"
+    },
+    "water_mid": {
+      "r": 6,
+      "g": 16,
+      "b": 22,
+      "hex": "#3184B5",
+      "bgr555": 23046,
+      "row": "area_canal"
+    },
+    "water_lit": {
+      "r": 14,
+      "g": 22,
+      "b": 26,
+      "hex": "#73B5D6",
+      "bgr555": 27342,
+      "row": "area_canal"
+    },
+    "flag_red": {
+      "r": 26,
+      "g": 4,
+      "b": 4,
+      "hex": "#D62121",
+      "bgr555": 4250,
+      "row": "area_lake"
+    },
+    "flag_white": {
+      "r": 30,
+      "g": 30,
+      "b": 30,
+      "hex": "#F7F7F7",
+      "bgr555": 31710,
+      "row": "area_lake"
+    },
+    "flag_blue": {
+      "r": 4,
+      "g": 8,
+      "b": 22,
+      "hex": "#2142B5",
+      "bgr555": 22788,
+      "row": "area_canal"
+    },
+    "cobble_dark": {
+      "r": 8,
+      "g": 8,
+      "b": 8,
+      "hex": "#424242",
+      "bgr555": 8456,
+      "row": "area_canal"
+    },
+    "cobble_lit": {
+      "r": 16,
+      "g": 15,
+      "b": 14,
+      "hex": "#847B73",
+      "bgr555": 14832,
+      "row": "area_canal"
+    },
+    "window_glow": {
+      "r": 31,
+      "g": 26,
+      "b": 10,
+      "hex": "#FFD652",
+      "bgr555": 11103,
+      "row": "area_canal"
+    },
+    "wood_boat": {
+      "r": 14,
+      "g": 9,
+      "b": 4,
+      "hex": "#734A21",
+      "bgr555": 4398,
+      "row": "area_canal"
+    },
+    "canal_highlight": {
+      "r": 28,
+      "g": 28,
+      "b": 24,
+      "hex": "#E6E6C6",
+      "bgr555": 25500,
+      "row": "area_canal"
+    },
+    "ice_dark": {
+      "r": 12,
+      "g": 16,
+      "b": 20,
+      "hex": "#6384A5",
+      "bgr555": 21004,
+      "row": "area_lake"
+    },
+    "ice_mid": {
+      "r": 20,
+      "g": 24,
+      "b": 28,
+      "hex": "#A5C6E6",
+      "bgr555": 29460,
+      "row": "area_lake"
+    },
+    "ice_lit": {
+      "r": 28,
+      "g": 30,
+      "b": 31,
+      "hex": "#E6F7FF",
+      "bgr555": 32732,
+      "row": "area_lake"
+    },
+    "snow_shadow": {
+      "r": 14,
+      "g": 16,
+      "b": 18,
+      "hex": "#738494",
+      "bgr555": 18958,
+      "row": "area_lake"
+    },
+    "snow_mid": {
+      "r": 24,
+      "g": 26,
+      "b": 28,
+      "hex": "#C6D6E6",
+      "bgr555": 29528,
+      "row": "area_lake"
+    },
+    "snow_lit": {
+      "r": 30,
+      "g": 30,
+      "b": 31,
+      "hex": "#F7F7FF",
+      "bgr555": 32734,
+      "row": "area_lake"
+    },
+    "tower_grey": {
+      "r": 10,
+      "g": 10,
+      "b": 12,
+      "hex": "#525263",
+      "bgr555": 12618,
+      "row": "area_lake"
+    },
+    "wood_dark": {
+      "r": 10,
+      "g": 6,
+      "b": 3,
+      "hex": "#523118",
+      "bgr555": 3274,
+      "row": "area_lake"
+    },
+    "wood_lit": {
+      "r": 18,
+      "g": 12,
+      "b": 6,
+      "hex": "#946331",
+      "bgr555": 6546,
+      "row": "area_lake"
+    },
+    "crack_blue": {
+      "r": 6,
+      "g": 14,
+      "b": 22,
+      "hex": "#3173B5",
+      "bgr555": 22982,
+      "row": "area_lake"
+    },
+    "skyline_mid": {
+      "r": 8,
+      "g": 10,
+      "b": 14,
+      "hex": "#425273",
+      "bgr555": 14664,
+      "row": "area_lake"
+    },
+    "highlight": {
+      "r": 31,
+      "g": 31,
+      "b": 31,
+      "hex": "#FFFFFF",
+      "bgr555": 32767,
+      "row": "area_lake"
+    },
+    "carney_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "char_carney"
+    },
+    "carney_ink": {
+      "r": 2,
+      "g": 2,
+      "b": 3,
+      "hex": "#101018",
+      "bgr555": 3138,
+      "row": "char_carney"
+    },
+    "suit_dark": {
+      "r": 4,
+      "g": 6,
+      "b": 12,
+      "hex": "#213163",
+      "bgr555": 12484,
+      "row": "char_trump"
+    },
+    "suit_mid": {
+      "r": 6,
+      "g": 10,
+      "b": 18,
+      "hex": "#315294",
+      "bgr555": 18758,
+      "row": "char_trump"
+    },
+    "suit_lit": {
+      "r": 10,
+      "g": 14,
+      "b": 22,
+      "hex": "#5273B5",
+      "bgr555": 22986,
+      "row": "char_trump"
+    },
+    "hair_dark": {
+      "r": 20,
+      "g": 12,
+      "b": 4,
+      "hex": "#A56321",
+      "bgr555": 4500,
+      "row": "char_trump"
+    },
+    "hair_mid": {
+      "r": 28,
+      "g": 18,
+      "b": 6,
+      "hex": "#E69431",
+      "bgr555": 6748,
+      "row": "char_trump"
+    },
+    "hair_lit": {
+      "r": 31,
+      "g": 24,
+      "b": 10,
+      "hex": "#FFC652",
+      "bgr555": 11039,
+      "row": "char_trump"
+    },
+    "tie_blue_dark": {
+      "r": 4,
+      "g": 10,
+      "b": 18,
+      "hex": "#215294",
+      "bgr555": 18756,
+      "row": "char_carney"
+    },
+    "tie_blue": {
+      "r": 8,
+      "g": 16,
+      "b": 26,
+      "hex": "#4284D6",
+      "bgr555": 27144,
+      "row": "char_carney"
+    },
+    "shirt_white": {
+      "r": 30,
+      "g": 30,
+      "b": 30,
+      "hex": "#F7F7F7",
+      "bgr555": 31710,
+      "row": "char_trump"
+    },
+    "shoe_black": {
+      "r": 2,
+      "g": 2,
+      "b": 2,
+      "hex": "#101010",
+      "bgr555": 2114,
+      "row": "char_trump"
+    },
+    "maple_accent": {
+      "r": 26,
+      "g": 4,
+      "b": 4,
+      "hex": "#D62121",
+      "bgr555": 4250,
+      "row": "char_carney"
+    },
+    "laugh_teeth": {
+      "r": 31,
+      "g": 31,
+      "b": 30,
+      "hex": "#FFFFF7",
+      "bgr555": 31743,
+      "row": "char_carney"
+    },
+    "skin": {
+      "r": 29,
+      "g": 21,
+      "b": 16,
+      "hex": "#EFAD84",
+      "bgr555": 17085,
+      "row": "char_tourist"
+    },
+    "carney_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 28,
+      "hex": "#FFFFE6",
+      "bgr555": 29695,
+      "row": "char_carney"
+    },
+    "dutchie_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "char_dutchie"
+    },
+    "dutchie_ink": {
+      "r": 3,
+      "g": 2,
+      "b": 2,
+      "hex": "#181010",
+      "bgr555": 2115,
+      "row": "char_dutchie"
+    },
+    "orange_dark": {
+      "r": 18,
+      "g": 6,
+      "b": 2,
+      "hex": "#943110",
+      "bgr555": 2258,
+      "row": "char_oranje"
+    },
+    "orange_mid": {
+      "r": 26,
+      "g": 12,
+      "b": 3,
+      "hex": "#D66318",
+      "bgr555": 3482,
+      "row": "char_oranje"
+    },
+    "orange_lit": {
+      "r": 31,
+      "g": 18,
+      "b": 6,
+      "hex": "#FF9431",
+      "bgr555": 6751,
+      "row": "char_oranje"
+    },
+    "shade_black": {
+      "r": 2,
+      "g": 2,
+      "b": 3,
+      "hex": "#101018",
+      "bgr555": 3138,
+      "row": "char_oranje"
+    },
+    "gold_chain": {
+      "r": 28,
+      "g": 22,
+      "b": 6,
+      "hex": "#E6B531",
+      "bgr555": 6876,
+      "row": "char_oranje"
+    },
+    "gold_lit": {
+      "r": 31,
+      "g": 28,
+      "b": 12,
+      "hex": "#FFE663",
+      "bgr555": 13215,
+      "row": "char_oranje"
+    },
+    "stripe_white": {
+      "r": 28,
+      "g": 28,
+      "b": 28,
+      "hex": "#E6E6E6",
+      "bgr555": 29596,
+      "row": "char_oranje"
+    },
+    "shoe_white": {
+      "r": 31,
+      "g": 31,
+      "b": 31,
+      "hex": "#FFFFFF",
+      "bgr555": 32767,
+      "row": "char_oranje"
+    },
+    "lion_badge": {
+      "r": 31,
+      "g": 24,
+      "b": 4,
+      "hex": "#FFC621",
+      "bgr555": 4895,
+      "row": "char_oranje"
+    },
+    "skin_shade": {
+      "r": 22,
+      "g": 14,
+      "b": 10,
+      "hex": "#B57352",
+      "bgr555": 10710,
+      "row": "char_oranje"
+    },
+    "dutchie_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 24,
+      "hex": "#FFFFC6",
+      "bgr555": 25599,
+      "row": "char_dutchie"
+    },
+    "oranje_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "char_oranje"
+    },
+    "oranje_ink": {
+      "r": 3,
+      "g": 2,
+      "b": 2,
+      "hex": "#181010",
+      "bgr555": 2115,
+      "row": "char_oranje"
+    },
+    "oranje_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 24,
+      "hex": "#FFFFC6",
+      "bgr555": 25599,
+      "row": "char_oranje"
+    },
+    "tourist_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "char_tourist"
+    },
+    "tourist_ink": {
+      "r": 3,
+      "g": 2,
+      "b": 3,
+      "hex": "#181018",
+      "bgr555": 3139,
+      "row": "char_tourist"
+    },
+    "shirt_teal_dark": {
+      "r": 4,
+      "g": 10,
+      "b": 12,
+      "hex": "#215263",
+      "bgr555": 12612,
+      "row": "char_tourist"
+    },
+    "shirt_teal": {
+      "r": 6,
+      "g": 18,
+      "b": 18,
+      "hex": "#319494",
+      "bgr555": 19014,
+      "row": "char_tourist"
+    },
+    "shirt_teal_lit": {
+      "r": 12,
+      "g": 24,
+      "b": 22,
+      "hex": "#63C6B5",
+      "bgr555": 23308,
+      "row": "char_tourist"
+    },
+    "khaki_dark": {
+      "r": 14,
+      "g": 12,
+      "b": 5,
+      "hex": "#736329",
+      "bgr555": 5518,
+      "row": "char_tourist"
+    },
+    "khaki_mid": {
+      "r": 22,
+      "g": 18,
+      "b": 8,
+      "hex": "#B59442",
+      "bgr555": 8790,
+      "row": "char_tourist"
+    },
+    "khaki_lit": {
+      "r": 28,
+      "g": 24,
+      "b": 12,
+      "hex": "#E6C663",
+      "bgr555": 13084,
+      "row": "char_tourist"
+    },
+    "flower_pink": {
+      "r": 28,
+      "g": 8,
+      "b": 14,
+      "hex": "#E64273",
+      "bgr555": 14620,
+      "row": "char_tourist"
+    },
+    "flower_yellow": {
+      "r": 31,
+      "g": 26,
+      "b": 6,
+      "hex": "#FFD631",
+      "bgr555": 7007,
+      "row": "char_tourist"
+    },
+    "camera_silver": {
+      "r": 18,
+      "g": 18,
+      "b": 20,
+      "hex": "#9494A5",
+      "bgr555": 21074,
+      "row": "char_tourist"
+    },
+    "sock_white": {
+      "r": 30,
+      "g": 30,
+      "b": 30,
+      "hex": "#F7F7F7",
+      "bgr555": 31710,
+      "row": "char_tourist"
+    },
+    "sandal_brown": {
+      "r": 12,
+      "g": 7,
+      "b": 3,
+      "hex": "#633918",
+      "bgr555": 3308,
+      "row": "char_tourist"
+    },
+    "flash_bulb": {
+      "r": 31,
+      "g": 31,
+      "b": 20,
+      "hex": "#FFFFA5",
+      "bgr555": 21503,
+      "row": "char_tourist"
+    },
+    "tourist_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 31,
+      "hex": "#FFFFFF",
+      "bgr555": 32767,
+      "row": "char_tourist"
+    },
+    "trump_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "char_trump"
+    },
+    "trump_ink": {
+      "r": 3,
+      "g": 2,
+      "b": 3,
+      "hex": "#181018",
+      "bgr555": 3139,
+      "row": "char_trump"
+    },
+    "tie_red_dark": {
+      "r": 16,
+      "g": 2,
+      "b": 2,
+      "hex": "#841010",
+      "bgr555": 2128,
+      "row": "char_trump"
+    },
+    "tie_red": {
+      "r": 28,
+      "g": 4,
+      "b": 4,
+      "hex": "#E62121",
+      "bgr555": 4252,
+      "row": "char_trump"
+    },
+    "flag_pin": {
+      "r": 4,
+      "g": 8,
+      "b": 22,
+      "hex": "#2142B5",
+      "bgr555": 22788,
+      "row": "char_trump"
+    },
+    "tan_lit": {
+      "r": 31,
+      "g": 22,
+      "b": 14,
+      "hex": "#FFB573",
+      "bgr555": 15071,
+      "row": "char_trump"
+    },
+    "tan_skin": {
+      "r": 28,
+      "g": 18,
+      "b": 12,
+      "hex": "#E69463",
+      "bgr555": 12892,
+      "row": "char_trump"
+    },
+    "trump_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 28,
+      "hex": "#FFFFE6",
+      "bgr555": 29695,
+      "row": "char_trump"
+    },
+    "ui_clear": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "hex": "#000000",
+      "bgr555": 0,
+      "row": "ui_hud"
+    },
+    "ui_ink": {
+      "r": 2,
+      "g": 2,
+      "b": 3,
+      "hex": "#101018",
+      "bgr555": 3138,
+      "row": "ui_hud"
+    },
+    "panel_dark": {
+      "r": 6,
+      "g": 6,
+      "b": 10,
+      "hex": "#313152",
+      "bgr555": 10438,
+      "row": "ui_hud"
+    },
+    "panel_mid": {
+      "r": 10,
+      "g": 10,
+      "b": 16,
+      "hex": "#525284",
+      "bgr555": 16714,
+      "row": "ui_hud"
+    },
+    "panel_lit": {
+      "r": 16,
+      "g": 16,
+      "b": 22,
+      "hex": "#8484B5",
+      "bgr555": 23056,
+      "row": "ui_hud"
+    },
+    "hp_red_dark": {
+      "r": 16,
+      "g": 2,
+      "b": 2,
+      "hex": "#841010",
+      "bgr555": 2128,
+      "row": "ui_hud"
+    },
+    "hp_red": {
+      "r": 28,
+      "g": 4,
+      "b": 4,
+      "hex": "#E62121",
+      "bgr555": 4252,
+      "row": "ui_hud"
+    },
+    "hp_red_lit": {
+      "r": 31,
+      "g": 10,
+      "b": 8,
+      "hex": "#FF5242",
+      "bgr555": 8543,
+      "row": "ui_hud"
+    },
+    "hp_yellow": {
+      "r": 31,
+      "g": 26,
+      "b": 4,
+      "hex": "#FFD621",
+      "bgr555": 4959,
+      "row": "ui_hud"
+    },
+    "hp_green": {
+      "r": 8,
+      "g": 26,
+      "b": 6,
+      "hex": "#42D631",
+      "bgr555": 6984,
+      "row": "ui_hud"
+    },
+    "timer_gold": {
+      "r": 28,
+      "g": 22,
+      "b": 6,
+      "hex": "#E6B531",
+      "bgr555": 6876,
+      "row": "ui_hud"
+    },
+    "name_orange": {
+      "r": 31,
+      "g": 16,
+      "b": 4,
+      "hex": "#FF8421",
+      "bgr555": 4639,
+      "row": "ui_hud"
+    },
+    "name_teal": {
+      "r": 6,
+      "g": 22,
+      "b": 22,
+      "hex": "#31B5B5",
+      "bgr555": 23238,
+      "row": "ui_hud"
+    },
+    "win_pip": {
+      "r": 31,
+      "g": 28,
+      "b": 10,
+      "hex": "#FFE652",
+      "bgr555": 11167,
+      "row": "ui_hud"
+    },
+    "ui_white": {
+      "r": 31,
+      "g": 31,
+      "b": 31,
+      "hex": "#FFFFFF",
+      "bgr555": 32767,
+      "row": "ui_hud"
+    },
+    "ui_flash": {
+      "r": 31,
+      "g": 31,
+      "b": 24,
+      "hex": "#FFFFC6",
+      "bgr555": 25599,
+      "row": "ui_hud"
+    }
+  }
+}
