@@ -1,8 +1,8 @@
 {
-  "objects": 154,
-  "meshObjects": 126,
-  "vertices": 173738,
-  "triangles": 234730,
+  "objects": 186,
+  "meshObjects": 158,
+  "vertices": 158405,
+  "triangles": 221564,
   "source": "web/stages/lake_america/blender/lake-america.blend",
   "seed": 7319,
   "bounds": "Arena contact Y=0; layered skyline 178\u2013220m away; 360 degree island coverage",
@@ -64,19 +64,24 @@
     "Illuminated cedar rescue hut and rope-lined dock",
     "Independent rescue ring pickup and persistent stand",
     "Canadian flag review equivalent",
-    "Layered Toronto skyline and CN Tower",
+    "Layered Toronto skyline with a winter-toqued CN Tower",
     "24 independent ice floes",
     "Red navigation buoy and winter ferry",
     "Snow-loaded individual pine boughs",
     "Sculpted shoreline snowdrifts",
     "Four waterfront lanterns",
     "Separate axe and persistent stump",
-    "Waterfront benches, mooring bollards, pressure ice, chimney and stacked firewood"
+    "Waterfront benches, mooring bollards, pressure ice, chimney and stacked firewood",
+    "Traffic-cone-crowned goose marshal and two safety deputies",
+    "Binocular-wielding moose lifeguard",
+    "Snowman-driven maple-syrup Zamboni",
+    "Curling catastrophe and civic festival bunting"
   ],
   "previews": [
     "lake-america-combat.png",
     "lake-america-establishing.png",
     "lake-america-axe-detail.png",
-    "lake-america-waterfront.png"
+    "lake-america-waterfront.png",
+    "lake-america-absurdity.png"
   ]
 }
