@@ -1,6 +1,7 @@
 # Battle for Independence
 
 A stylized arcade fighting game where larger-than-life rivals settle their arguments in the arena.
+(inspired by this Reddit post https://www.reddit.com/r/aivideos/s/oTANiZJWjz)
 
 **Play now:** [limitedarcade.github.io](https://limitedarcade.github.io/)
 
