@@ -13,10 +13,12 @@ import { loadBinaryModel } from './binaryModel.js';
 import { buildFighter } from '../fighters/_shared/meshCodec.js';
 import { PoseAmp } from './poseAmp.js';
 import { MovementPose, movementClipTime } from './movementPose.js';
+import { StrikePose } from './strikePose.js';
 import { FighterRim } from './rimLight.js';
 import { FighterDamage } from './fighterDamage.js';
 import { Dismemberment } from './dismemberment.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
+import { loadScenePack } from './scenePack.js';
 import { moveOf, totalFrames, TICK } from '../engine/frameData.js';
 
 // Every clip the full combat set wants, and what to fall back to when the rig
@@ -204,6 +206,7 @@ export class FighterView {
     this.recoil = new HitRecoil(model, this.pivot);
     this.poseAmp = new PoseAmp(model);
     this.movementPose = new MovementPose(model, this.pivot);
+    this.strikePose = new StrikePose(model, this.pivot, this.definition.id);
     // After dress(): it swaps in geometry carrying the damage attribute and
     // extends the materials dress() has just built.
     this.damage = new FighterDamage(model);
@@ -233,7 +236,10 @@ export class FighterView {
 
   async loadFactory() {
     if (this.definition.sceneAsset) {
-      const model = await new THREE.ObjectLoader().loadAsync(`${import.meta.env.BASE_URL}${this.definition.sceneAsset}`);
+      // A .bin is the packed form tools/pack-scene.mjs builds from the JSON;
+      // the JSON master still loads for tools and tests that point at it.
+      const url = `${import.meta.env.BASE_URL}${this.definition.sceneAsset}`;
+      const model = url.endsWith('.bin') ? await loadScenePack(url) : await new THREE.ObjectLoader().loadAsync(url);
       this.dress(model);
       this.place(model);
       const mixer = new THREE.AnimationMixer(model);
@@ -252,7 +258,7 @@ export class FighterView {
 
   async loadGltf() {
     const url = `${import.meta.env.BASE_URL}${this.definition.runtimeAsset || `fighters/${this.definition.id}/${this.definition.id}-rigged.glb`}`;
-    const gltf = await new GLTFLoader().loadAsync(url);
+    const gltf = await createGltfLoader().loadAsync(url);
     const model = gltf.scene;
     this.dress(model);
     this.place(model);
@@ -332,6 +338,7 @@ export class FighterView {
     // pose rather than being flattened back toward the authored one.
     this.poseAmp.apply();
     if (!view.cinematicClip && !this.current?.getClip().userData?.authoredMovement) this.movementPose.apply(view);
+    if (!view.cinematicClip) this.strikePose?.apply(view);
     this.rim.setFacing(view.facing);
     this.rim.update(dt);
   }

@@ -15,9 +15,9 @@ npm run dev
 
 Open http://127.0.0.1:5176/. Choose Play, confirm both fighters, then Enter the arena.
 
-The main menu runs a live combat vignette beside its button rail. **Demo** expands it to a full-screen attract mode, also entered after 30 seconds of menu inactivity. Any key, pointer button or gamepad input returns to the menu without activating a menu choice. Options, Profile, Practice setup and inactive tabs suspend the countdown. Exhibition bouts rotate through every ordered fighter pairing and unlocked arena (currently Lake America), alternating with a persistent playlist of movement, combos, signature moves, weapons, supers and complete finishers. Demonstrations use the real combat inputs and leave match configuration, profile statistics and achievements unchanged. The full showcase gradually covers each fighter's entire move list.
+The main menu runs a live combat vignette beside its button rail. **Demo** expands it to a full-screen attract mode, also entered after 30 seconds of menu inactivity. Any key, pointer button or gamepad input returns to the menu without activating a menu choice. Options, Profile, Practice setup and inactive tabs suspend the countdown. Exhibition bouts rotate through every ordered Carney pairing in Lake America. Their seeded CPU fights use the same legal ground and juggle routes as players, keep ordinary move variety, and still finish with Carney's complete Cold Cut/result sequence. Demonstrations use real combat inputs and leave match configuration, profile statistics and achievements unchanged; there is no separate inter-match move playlist.
 
-For a guided demo, choose **Practice · Learn every move** on the title or pause menu. Pick a fighter, partner and arena, then select a lesson or move. **Watch move** performs the real inputs; **Try it** restores control and the required starting conditions. All specials and finishers are revealed. Practice has an unlimited clock, replenishing health, full meter, dummy behaviors, input history, slow motion and contact boxes. Overkill sets up the first two combo hits so you can practice its final uppercut. Practice does not award match statistics. Pause → Back to versus restores the previous match setup.
+For a guided demo, choose **Practice · Learn every move** on the title or pause menu. Pick a fighter, partner and arena, then select a lesson, combo, or move. The **Combos** tab is generated from the fighter's supported routes and separates Ground, Launch & follow up, and Carney chains. **Watch move** submits the real inputs; **Try it** requires both the displayed presses and confirmed contacts in one true combo. Reset, dummy behavior, arena-side swap, normal/half/quarter speed, contact boxes, and unlimited or exact route-cost meter are available. Successful routes report measured damage; blocks, interruptions, wrong moves, dropped juggles, and missing stock fail honestly. Lang remains a training partner but has no advertised combo routes. Practice does not award match statistics. Pause → Back to versus restores the previous match setup.
 
 The **How this game was made** link opens `/made` in a new tab. Vite serves the existing interactive page and includes it in production builds. Restart a dev server that was already running before the Vite configuration was added.
 
@@ -49,7 +49,7 @@ In single-player, WASD or arrows control the human fighter on either side; the f
 
 Forward and back are relative to your opponent. Double-tap within 12 simulation frames (0.2 seconds at normal speed): forward starts a sprint while held; back commits to a short airborne hop. Release forward, block, crouch or attack to leave the sprint. After knockdown, wait as long as you want before choosing to rise in place or roll forward/back; holding Down overrides the other recovery choices. The HUD shows arrow prompts while a human fighter is down. Rising takes 22 frames; a directional roll takes 28.
 
-Uppercuts and rising knees launch opponents into juggles. A launched fighter cannot act until landing and recovering; place the next strike so its hitbox reaches the falling opponent. Combo damage and available lift diminish as gravity increases, with a five-hit airborne limit including the launcher. Only designated sweeps hit grounded opponents, at reduced damage without restarting their recovery timer. Practice lessons 04–07 teach sprinting, back hops, delayed recovery and an uppercut-to-jab juggle through real inputs.
+Uppercuts and rising knees launch opponents into juggles. A launched fighter cannot act until landing and recovering; place the next strike so its hitbox reaches the falling opponent. Combo damage and available lift diminish as gravity increases, with a five-hit airborne limit including the launcher. Only designated sweeps hit grounded opponents, at reduced damage without restarting their recovery timer. Practice lessons 04–06 teach sprinting, back hops, and delayed recovery; the Combos tab teaches the catalogued ground strings and two- or three-hit juggles through real inputs. Launch, airborne follow-up, route completion, and landing use distinct bounded effects and audio cues without adding gameplay hitstop.
 
 The move archive still describes the current prototype moves; a bespoke character move list and descriptions come next. Future violence should emphasize exaggerated, comedic spectacle and physical impact, with persistent limb loss offering new play choices. Further dismemberment work is deferred until that move design is established.
 
@@ -103,7 +103,7 @@ npm run build
 
 The export reuses local optimized meshes, joint measurements, and pose sidecars in `fighter-tool/build/{fighter}/`; it does not repeat texture baking or decimation. It updates both playable GLBs and their clip manifests. These intermediate assets are ignored by Git and must be generated by the fighter pipeline on a fresh checkout.
 
-`pose_check.mjs` remains an authoring diagnostic for the raw key poses. Its warnings can differ from the corrected exported tracks. Floor regression tests measure body joints, not the complete deformed mesh surface; arm/trunk intersections, foot sliding, contact reach, and final finisher choreography still need visual polish. Physical gamepad and mobile performance testing remain outstanding.
+`pose_check.mjs` remains an authoring diagnostic for the raw key poses. Its warnings can differ from the corrected exported tracks. Floor regression tests measure body joints, not the complete deformed mesh surface; arm/trunk intersections, foot sliding, contact reach, and final finisher choreography still need visual polish. A scripted phone pass (`npm run smoke -- --phone`) now runs the full flow with touch input; physical gamepads and real phones still need hands-on testing (checklist in `docs/ROADMAP.md`).
 
 ## Runtime layout
 
@@ -133,7 +133,23 @@ Secret finishers require a completed relative-direction sequence inside the disp
 
 The four arenas are Lake America, Capitol After Dark, Gilded Palms and Executive Lawn. Each has its own lighting, grade, procedural ambience and reactive scenery. Arena hazards can be toggled during selection: their marked zones warn before striking, and can be avoided by moving clear or jumping. Cosmetic scenery reactions remain active independently of the hazard rule.
 
-Impact profiles synchronize typed punch/kick/block/counter/KO sparks, 4–12 rendered frames of hitpause, a 0.4 metre heavy-hit dolly, a three-frame grade kick, bone flinch, controller rumble and sound. Only counters and KOs use slow motion. Pooled effects are bounded. Blood, bruises and fabric wear stay attached to the skinned surface and reset each round; clothing wear is a surface effect, not torn mesh topology.
+Impact profiles synchronize typed punch/kick/block/counter/KO sparks, 2–12 presentation frames of hitpause, a 0.4 metre heavy-hit dolly, a three-frame grade kick, bone flinch, controller rumble and sound. Only counters and KOs use slow motion. Pooled effects are bounded. Blood, bruises and fabric wear stay attached to the skinned surface and reset each round; clothing wear is a surface effect, not torn mesh topology.
+
+### Combat polish · October 7, 2026
+
+The combat camera frames fighters closer while fitting wide spacing, jumps and
+screen edges, with room for the HUD and landscape touch controls. Light hits,
+heavies, blocks, counters and KOs share coordinated shake, recoil and sound;
+weak attacks retain a smaller response. Shake settles during hitstop and is
+suppressed by reduced motion. Authored finisher shots retain their exact cuts.
+All four fighters have basic attack planting and body drive, with restrained
+Lang profiles and support for Flock's imported bone names.
+
+Rematches and subsequent rounds use a 96-frame Round/Fight entrance; first
+encounters, demonstrations and practice retain their existing full entrance.
+Attack rules, damage, input mappings and save formats are unchanged. See the
+[saved comparison](artifacts/polish-2026-10-07/comparison.html) and
+[verification record](artifacts/polish-2026-10-07/VALIDATION.md) for checks and limits.
 
 ### Binary runtime pipeline
 
@@ -146,3 +162,28 @@ Next high-value passes: replayable training scenarios with input history and pun
 ### Reusable effects studio
 
 Open [Effects Studio](http://127.0.0.1:5176/vfx-studio.html) while `npm run dev` is running to tune five GLB effects with size, color, glow, timing, orientation, playback, and frame scrubbing. Presets save locally and can be copied for reuse. The studio is included in production builds. See [runtime and combat integration](docs/vfx-runtime.md) and [asset inventory and credits](docs/vfx-assets.md). `npm run check-vfx` verifies the reproducible 3.37 MiB asset pack.
+
+## Shipping: downloads, checks and releases (Wave 1, 2026-09-22)
+
+The first fight now downloads about 25.5 MB, down from over 100 MB, and the menu
+about 0.55 MB. How, and the rules for new assets: "Asset budget" in
+`docs/web-fighter-and-stage-workflow.md`.
+
+| Command | What it does |
+|---|---|
+| `npm run optimize-assets` | Build/refresh every optimised asset in `tools/asset-pipeline.json` and print sizes. Optional: `vite build` and the dev server do this on demand. |
+| `npm run render-portraits` | Re-render `public/portraits/*.webp` with the real portrait studio. |
+| `npm run smoke` | Headless Chrome/Edge pass through title, select, fight, KO and results on `dist/`, with screenshots in `artifacts/smoke/`. `-- --dev` targets the dev server, `-- --phone` a touch phone, `-- --gore-off` the Blood/gore option off, `-- --headed` shows the window. |
+| `npm run check-budget` | Size caps on `dist/` plus a measured menu and first-fight download (`-- --static` skips the browser). |
+| `npm run capture-storefront` | Recapture the README screenshots, GIF and social card into `public/storefront/`. Look at every image before committing. |
+| `npm run release` | Dry run of a publish: tests, build, budget, smoke, PNG metadata stripping, a leak scan for machine paths and personal identifiers, and the diff against the live `limitedarcade` branches. `-- --publish` commits and fast-forward-pushes both branches; it refuses with uncommitted changes, a failed gate or a leak. |
+
+The scripted checks use the Chrome or Edge already installed (`playwright-core`,
+no browser download); set `BROWSER_CHANNEL` to pick one. Music: menus play
+"Stage Cleared!", rounds "Stage Two", the deciding round "Final Round Mayhem",
+FINISH IT and finishers "KO Overdrive", a round win "Victory Fanfare", the match
+win "Victory" and the results screen "Winner Take All". Options → Announcer
+captions shows each call as a subtitle: automatically whenever the announcer
+can't be heard, always, or never. Options → "Blood, gore and dismemberment" off
+now removes blood sprays, ice stains, lens splatter and wound decals, not just
+severing.

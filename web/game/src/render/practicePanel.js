@@ -2,8 +2,8 @@ import { MOVEMENT_LESSONS } from '../game/practice.js';
 import { fillPracticeCommands, fillCompactCommand } from './commandIcons.js';
 import './practice.css';
 
-const TABS = Object.freeze(['Fundamentals', 'Basics', 'Specials', 'Supers', 'Finishers']);
-const TAB_LABEL = Object.freeze({ Fundamentals: 'Learn', Basics: 'Basics', Specials: 'Specials', Supers: 'Supers', Finishers: 'Finishers' });
+const TABS = Object.freeze(['Fundamentals', 'Combos', 'Basics', 'Specials', 'Supers', 'Finishers']);
+const TAB_LABEL = Object.freeze({ Fundamentals: 'Learn', Combos: 'Combos', Basics: 'Basics', Specials: 'Specials', Supers: 'Supers', Finishers: 'Finishers' });
 
 const LEVEL_COPY = Object.freeze({ mid: 'Mid', low: 'Low', overhead: 'Overhead', throw: 'Throw' });
 
@@ -57,7 +57,13 @@ export class PracticePanel {
     const head = el('header');
     this.heading = node('span', 'practice-heading', 'PRACTICE');
     const fold = node('button', 'practice-fold', 'Hide');
-    fold.onclick = () => { const hidden = this.body.hidden = !this.body.hidden; fold.textContent = hidden ? 'Show' : 'Hide'; };
+    this.fold = fold;
+    fold.onclick = () => {
+      if (this.body.hidden) this.body.hidden = false;
+      else if (this.root.classList.contains('is-previewing')) this.root.classList.remove('is-previewing');
+      else this.body.hidden = true;
+      this.updateFold();
+    };
     head.append(this.heading, fold);
 
     this.body = el('div'); this.body.className = 'practice-body';
@@ -79,11 +85,15 @@ export class PracticePanel {
     this.status = el('p', 'Choose a move. Watch the demonstration or try the inputs.'); this.status.setAttribute('role', 'status');
     const actions = el('div'); actions.className = 'practice-actions';
     for (const [label, action] of [['Watch move', 'watch'], ['Try it', 'try'], ['Reset positions', 'reset']]) {
-      const b = el('button', label); b.onclick = () => { onAction(action, this.entry); b.blur(); }; actions.append(b);
+      const b = el('button', label); b.onclick = () => {
+        if (action === 'watch') this.setPreviewing(true);
+        onAction(action, this.entry); b.blur();
+      }; actions.append(b);
     }
     this.stats = node('p', 'practice-stats');
     this.history = node('p', 'practice-history');
-    this.detail.append(this.title, this.copy, this.keys, this.frames, actions, this.status, this.stats, this.history);
+    this.steps = node('ol', 'practice-steps');
+    this.detail.append(this.title, this.copy, this.keys, this.frames, this.steps, actions, this.status, this.stats, this.history);
 
     const settings = el('div'); settings.className = 'practice-settings';
     const dummy = el('select'); dummy.setAttribute('aria-label', 'Training partner behavior');
@@ -94,21 +104,32 @@ export class PracticePanel {
     speed.onchange = () => { onSettings('speed', Number(speed.value)); speed.blur(); };
     const boxes = node('label', 'practice-toggle', 'Contact boxes');
     const check = el('input'); check.type = 'checkbox'; check.onchange = () => onSettings('boxes', check.checked); boxes.prepend(check);
-    settings.append(dummy, speed, boxes);
+    const resource = el('select'); resource.setAttribute('aria-label', 'Practice meter mode');
+    for (const [v, t] of [['free', 'Meter: unlimited'], ['cost', 'Meter: route cost']]) { const o = el('option', t); o.value = v; resource.append(o); }
+    resource.onchange = () => { onSettings('resources', resource.value); resource.blur(); };
+    const swap = el('button', 'Swap arena side'); swap.type = 'button'; swap.onclick = () => { onSettings('side', 'swap'); swap.blur(); };
+    settings.append(dummy, speed, resource, swap, boxes);
     const more = el('a', 'How this game was made ↗'); more.href = 'made.html'; more.target = '_blank'; more.rel = 'noopener';
 
     this.body.append(this.tabs, this.list, this.detail, settings, more);
-    this.root.append(head, this.body); document.body.append(this.root);
+    this.root.append(head, this.body); document.body.append(this.root); this.updateFold();
   }
   open() { this.dialog.showModal(); }
+  updateFold() {
+    this.fold.textContent = this.body.hidden ? 'Show panel'
+      : this.root.classList.contains('is-previewing') ? 'Show moves' : 'Hide panel';
+  }
+  setPreviewing(previewing) {
+    this.root.classList.toggle('is-previewing', previewing);
+    this.updateFold();
+  }
   label(fighter, opponent) { this.heading.textContent = `PRACTICE · ${fighter} vs ${opponent}`; }
   populate(entries) {
     this.entries = [
       { id: 'lesson-move', name: '01 · Find your feet', group: 'Fundamentals', sub: 'First steps', keys: ['left', 'right'], description: 'Walk both ways. Keep your opponent in front of you; forward and back follow the side they are on.' },
       { id: 'lesson-jump', name: '02 · Jump and crouch', group: 'Fundamentals', sub: 'First steps', keys: ['up', 'down'], description: 'Jump, then crouch. Jumping commits you to the air; crouching makes you a smaller target.' },
       { id: 'lesson-block', name: '03 · Hold your ground', group: 'Fundamentals', sub: 'First steps', keys: ['block'], description: 'Hold block to stop the incoming jab. Low sweeps need crouching guard; overhead attacks need standing guard.' },
-      ...MOVEMENT_LESSONS.filter(lesson => lesson.id !== 'lesson-juggle'
-        || entries.some(move => move.id === 'uppercut' && move.hit?.launch > 0)), ...entries];
+      ...MOVEMENT_LESSONS.filter(lesson => lesson.id !== 'lesson-juggle'), ...entries];
     this.entry = null;
     this.rows = new Map();
     this.list.replaceChildren();
@@ -149,6 +170,7 @@ export class PracticePanel {
   select(id) {
     const entry = this.entries.find(e => e.id === id);
     if (!entry) return;
+    this.setPreviewing(false);
     this.entry = entry;
     for (const [key, row] of this.rows) {
       row.classList.toggle('is-selected', key === id);
@@ -160,10 +182,25 @@ export class PracticePanel {
       : `${LEVEL_COPY[entry.hit?.level] || 'Mid'} attack. ${entry.cost ? `Costs ${entry.cost} meter stock${entry.cost > 1 ? 's' : ''}; practice keeps your meter full.` : 'Try it close to your partner, then experiment with spacing.'}`);
     fillPracticeCommands(this.keys, { keys: entry.keys, steps: entry.steps, bindings: this.preferences.bindings, join: this.joinFor(entry) });
     this.frames.textContent = entry.endsName ? `Chain ends in ${entry.endsName}`
+      : entry.group === 'Combos' ? `${entry.expectedHits} confirmed hits · start ${entry.setup.distance.toFixed(2)} m · route cost ${entry.setup.stocks} stock${entry.setup.stocks === 1 ? '' : 's'}`
       : entry.startup === undefined ? ''
       : `Startup ${entry.startup} · active ${entry.active} · recovery ${entry.recovery} frames`;
     this.frames.hidden = !this.frames.textContent;
+    this.steps.replaceChildren();
+    for (const [index, step] of (entry.route?.steps || []).entries()) {
+      const item = el('li', `${index + 1}. ${entry.moveNames?.[index] || step.expectedMove} · ${step.contact}`);
+      item.dataset.step = String(index); this.steps.append(item);
+    }
+    this.steps.hidden = !entry.route;
     this.onAction('try', entry);
+  }
+  progress(session) {
+    for (const item of this.steps.children) {
+      const index = Number(item.dataset.step);
+      item.classList.toggle('is-pressed', index < (session?.pressedSteps || 0));
+      item.classList.toggle('is-confirmed', index < (session?.confirmedSteps || 0));
+      item.classList.toggle('is-current', index === (session?.confirmedSteps || 0) && !session?.done);
+    }
   }
   // Kept for callers that re-run the current entry rather than picking a new one.
   choose() { this.select(this.entry?.id || this.entries?.[0]?.id); }

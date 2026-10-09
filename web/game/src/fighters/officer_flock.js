@@ -5,7 +5,8 @@ export const officer_flockFighter = Object.freeze({
   label: 'Officer Flock',
   combat: combatKitFor('officer_flock'),
   runtime: 'threejs',
-  sceneAsset: 'fighters/officer_flock/model.json',
+  // Built from model.json by the asset pipeline (tools/asset-pipeline.json).
+  sceneAsset: 'fighters/officer_flock/model.bin',
   extraClips: false,
   preserveMaterials: true,
   authoredHeight: 1.92,

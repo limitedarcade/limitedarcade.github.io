@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
 import { CinematicGrip } from './cinematicGrip.js';
 import { TRIBUTE, tributeImpact, tributeTime, tributePose, smooth, lerp } from '../engine/beaverTribute.js';
 
@@ -43,7 +43,7 @@ export class BeaverTribute {
   async load() {
     if (this.ready) return this.ready;
     this.ready = (async () => {
-      const loader = new GLTFLoader();
+      const loader = createGltfLoader();
       const [asset, sign] = await Promise.all([loader.loadAsync(`${BASE}props/beaver/beaver.glb`), loader.loadAsync(`${BASE}props/beaver/signpost.glb`)]);
       this.sign = sign.scene; this.sign.name = 'Lake Ontario trophy sign';
       const face = signFace(); face.position.set(0, .96, .086); this.sign.add(face); this.root.add(this.sign);

@@ -10,6 +10,21 @@
       content="A fictional arcade-fighter parody prototype built with Three.js."
     />
     <title>Battle for Independence</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <!-- Link previews. Crawlers need absolute URLs; the images are captured by
+         `npm run capture-storefront` into public/storefront/. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Battle for Independence" />
+    <meta property="og:title" content="Battle for Independence" />
+    <meta property="og:description" content="A free 3D arcade fighting-game parody that runs in your browser. Pick a fighter, settle it on the ice." />
+    <meta property="og:url" content="https://limitedarcade.github.io/" />
+    <meta property="og:image" content="https://limitedarcade.github.io/storefront/social-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The Battle for Independence title screen, with a live exhibition fight on a frozen lake." />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <main id="app">
@@ -40,7 +55,7 @@
         <footer class="title-footer">
           <p class="title-controls keyboard-controls"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Select</span></p>
           <p class="title-controls gamepad-controls"><span>D-pad · Navigate</span><span>A · Select</span></p>
-          <p class="title-controls touch-controls">Tap an option to begin</p>
+          <p class="title-controls touch-hint">Tap an option to begin</p>
           <p id="demo-countdown" class="demo-countdown">Auto demo in 30s</p>
           <a id="made-button" class="title-made" href="made.html" target="_blank" rel="noopener">How it's made <span aria-hidden="true">↗</span></a>
         </footer>
@@ -155,6 +170,8 @@
       <div id="loader" class="loader" role="status" aria-live="polite">
         <span class="loader-mark"></span>
         <span id="loader-copy">Loading fighters…</span>
+        <span id="loader-bytes" class="loader-bytes" aria-hidden="true"></span>
+        <span class="loader-bar" aria-hidden="true"><span id="loader-fill"></span></span>
       </div>
 
       <button id="pause-button" class="pause-button" type="button" aria-label="Pause">II</button>

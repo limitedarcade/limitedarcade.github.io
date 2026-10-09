@@ -6,6 +6,7 @@ import { fatalityOf } from '../engine/fatalities.js';
 import { MOVEMENT_LESSONS, practiceMoves } from './practice.js';
 
 export const ATTRACT_IDLE_MS = 30000;
+const DEMO_COMBO_SEEDS = Object.freeze([4, 2, 1, 1, 15, 1]);
 
 // Exhibitions never hand these fighters a win: their opponents cannot be KO'd,
 // and a timeout goes against them.
@@ -57,7 +58,19 @@ export class AttractDirector {
     for (const f of match.fighters) f.cannotWin = DEMO_CANNOT_WIN.includes(f.id)
       || (this.featuredSide >= 0 && f.side !== this.featuredSide);
     for (const f of match.fighters) f.healthFloor = match.opponentOf(f).cannotWin ? 1 : 0;
-    this.cpus = [0, 1].map(side => new CpuController({ side, difficulty: 'hard', seed: 3109 + this.pairIndex * 991 + side }));
+    this.comboFeaturedSide = match.fighters.findIndex(fighter => fighter.id !== 'carney' && fighter.kit.id !== 'flincher');
+    if (this.comboFeaturedSide < 0) this.comboFeaturedSide = this.featuredSide;
+    this.cpus = [0, 1].map(side => new CpuController({ side,
+      difficulty: side === this.comboFeaturedSide ? 'hard' : 'easy',
+      seed: side === this.comboFeaturedSide ? DEMO_COMBO_SEEDS[this.pairIndex % DEMO_COMBO_SEEDS.length]
+        : 3109 + this.pairIndex * 991 + side,
+      comboRoutes: side === this.comboFeaturedSide }));
+    for (const [side, cpu] of this.cpus.entries()) {
+      const fighter = match.fighters[side];
+      if (fighter.kit.id === 'flincher') continue;
+      if (side !== this.comboFeaturedSide) continue;
+      cpu.preferComboKinds([this.pairIndex < 3 ? 'ground' : 'juggle']);
+    }
     match.timer = 25;
     this.label = 'Exhibition · CPU vs CPU';
   }
@@ -83,7 +96,10 @@ export class AttractDirector {
       match.phaseFrame = Math.min(match.phaseFrame, 160);
     }
   }
-  afterStep(match) { this.frame++; }
+  afterStep(match, events = match.events, snapshot = match.snapshot()) {
+    for (const cpu of this.cpus || []) cpu.observe(events, snapshot);
+    this.frame++;
+  }
   ready(match) {
     if (match.phase === PHASE.MATCH_END) return match.phaseFrame >= resultDuration(match.snapshot(), REEL.resultFrames);
     // Stay in the fight / finisher until Cold Cut and the result plate finish.

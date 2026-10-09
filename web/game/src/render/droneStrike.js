@@ -13,7 +13,7 @@
 // reads as burning air.
 
 import * as THREE from '../vendor/three.module.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
 import { BEAM } from '../engine/overwatch.js';
 
 // Danger amber shifting to red, straight off the colour bible: the telegraph is
@@ -55,7 +55,7 @@ function additive(color, opacity, { depthWrite = false, side = THREE.DoubleSide 
 }
 
 export class DroneStrike {
-  constructor(scene, { stage = null, vfx = null, quality = 1, reducedMotion = false } = {}) {
+  constructor(scene, { stage = null, vfx = null, quality = 1, reducedMotion = false, autoload = true } = {}) {
     this.scene = scene;
     this.stage = stage;
     this.vfx = vfx;
@@ -135,12 +135,16 @@ export class DroneStrike {
     this.reticle.position.y = 0.014;
     this.root.add(this.reticle);
 
-    this.load();
+    if (autoload) this.load();
   }
 
+  // Idempotent. The game calls this only when a fighter who can summon the
+  // drone is in the match, so the other pairings never download it.
   load() {
+    if (this.loadStarted) return;
+    this.loadStarted = true;
     const base = import.meta.env?.BASE_URL ?? '/';
-    const loader = new GLTFLoader();
+    const loader = createGltfLoader();
     loader.load(`${base}fx/surveillance_drone.glb`, gltf => {
       const model = gltf.scene;
       // Sketchfab exports arrive at arbitrary scale and origin. Normalise both

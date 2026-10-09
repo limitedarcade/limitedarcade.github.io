@@ -6,7 +6,7 @@ export const moves = extendMoves({
     hit: { damage: 47, box: [0.26, 0.97, 1.24, 1.62] } },
   heavyPunch: { name: 'Bell Ringer', startup: 12, recovery: 23,
     hit: { damage: 126, chip: 11, bloodScale: 1.65, push: [0.12, 0.46] } },
-  lightKick: { name: 'Kickback', startup: 6, recovery: 10 },
+  lightKick: { name: 'Kickback', startup: 6, recovery: 10, hit: { hitStun: 20 } },
   heavyKick: { name: 'Last Call', startup: 15, recovery: 26,
     hit: { damage: 132, bloodScale: 1.8 } },
   grab: { name: 'Iron Clinch', grabHold: 52, hit: { hitStun: 52 } },

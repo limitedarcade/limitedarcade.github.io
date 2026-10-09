@@ -4,7 +4,11 @@
 
 **Battle for Independence** is a fast, ridiculous 3D fighting game built around larger-than-life political caricatures, dramatic arenas, named special moves, and spectacular finishes.
 
+Inspired by [this Reddit post](https://www.reddit.com/r/aivideos/s/oTANiZJWjz).
+
 [**Play Battle for Independence in your browser**](https://limitedarcade.github.io/)
+
+![Trump and Carney trading blows on the frozen Lake America arena](web/game/public/storefront/fight.gif)
 
 No account or download is required. Bring a keyboard or gamepad, pick your fighter, and settle the debate the arcade way.
 
@@ -34,15 +38,15 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Pick your fighter
 
-> 📸 **Screenshot placeholder:** Add a wide character-selection screenshot here.
+![The fighter select screen: Trump, Carney, Officer Flock and Jake Lang](web/game/public/storefront/select.jpg)
 
 ### Battle on Lake America
 
-> 📸 **Screenshot placeholder:** Add an in-fight screenshot showing both fighters and the arena here.
+![Carney lands an uppercut on Trump on Lake America](web/game/public/storefront/fight.jpg)
 
 ### Finish it
 
-> 📸 **Screenshot placeholder:** Add a victory, special move, or cinematic finisher screenshot here.
+![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](web/game/public/storefront/finisher.jpg)
 
 ## Jump into a match
 

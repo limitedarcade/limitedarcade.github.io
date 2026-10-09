@@ -1,0 +1,51 @@
+{
+  "capturedOn": "2026-09-20",
+  "scope": "C01-C05",
+  "timingAcceptance": {
+    "delays": [0, 1, 2, 3],
+    "gapsMetres": [0.75, 0.85, 1.0],
+    "sides": [0, 1],
+    "kits": ["standard", "breaker", "strider", "officer"],
+    "result": "pass"
+  },
+  "nominalRouteMeasurements": [
+    { "route": "basic-one-two", "kit": "standard", "hitTicks": [7, 21], "damage": 129, "stocksSpent": 0 },
+    { "route": "basic-one-two", "kit": "breaker", "hitTicks": [8, 25], "damage": 159, "stocksSpent": 0 },
+    { "route": "basic-one-two", "kit": "strider", "hitTicks": [6, 19], "damage": 111, "stocksSpent": 0 },
+    { "route": "basic-one-two", "kit": "officer", "hitTicks": [7, 24], "damage": 126, "stocksSpent": 0 },
+    { "route": "basic-three-hit", "kit": "standard", "hitTicks": [7, 17, 34], "damage": 172, "stocksSpent": 0 },
+    { "route": "basic-three-hit", "kit": "breaker", "hitTicks": [8, 19, 39], "damage": 191, "stocksSpent": 0 },
+    { "route": "basic-three-hit", "kit": "strider", "hitTicks": [6, 15, 30], "damage": 150, "stocksSpent": 0 },
+    { "route": "basic-three-hit", "kit": "officer", "hitTicks": [7, 17, 36], "damage": 142, "stocksSpent": 0 },
+    { "route": "juggle-first", "kit": "standard", "hitTicks": [11, 56], "damage": 143, "stocksSpent": 0 },
+    { "route": "juggle-first", "kit": "breaker", "hitTicks": [13, 63], "damage": 169, "stocksSpent": 0 },
+    { "route": "juggle-first", "kit": "strider", "hitTicks": [11, 55], "damage": 137, "stocksSpent": 0 },
+    { "route": "juggle-first", "kit": "officer", "hitTicks": [13, 60], "damage": 130, "stocksSpent": 0 },
+    { "route": "juggle-three-hit", "kit": "standard", "hitTicks": [11, 56, 70], "damage": 201, "stocksSpent": 0 },
+    { "route": "juggle-three-hit", "kit": "breaker", "hitTicks": [13, 63, 80], "damage": 244, "stocksSpent": 0 },
+    { "route": "juggle-three-hit", "kit": "strider", "hitTicks": [11, 55, 68], "damage": 187, "stocksSpent": 0 },
+    { "route": "juggle-three-hit", "kit": "officer", "hitTicks": [13, 60, 77], "damage": 192, "stocksSpent": 0 },
+    { "route": "easy-carney-roundhouse", "kit": "strider", "hitTicks": [6, 16, 35], "damage": 157, "stocksSpent": 0 },
+    { "route": "easy-carney-axe", "kit": "strider", "hitTicks": [6, 15, 33], "damage": 144, "stocksSpent": 0 },
+    { "route": "easy-carney-spin", "kit": "strider", "hitTicks": [6, 16, 39], "damage": 193, "stocksSpent": 1 }
+  ],
+  "verification": {
+    "focusedCommand": "node --test --test-reporter=spec test/combo-*.test.js test/carney-flow.test.js test/juggle.test.js test/practice.test.js test/movement-practice.test.js test/simulation-clock.test.js",
+    "focusedResult": { "tests": 129, "passed": 129, "failed": 0 },
+    "productionBuild": "pass",
+    "fullSuite": { "tests": 397, "passed": 384, "failed": 4, "skipped": 9 },
+    "fullSuiteFailures": [
+      "test/beaver-tribute.test.js: match does not end during the beaver handoff",
+      "test/combat.test.js: CPU never used meteorKick",
+      "test/fighter-pipeline.test.js: cinematic clip count mismatch (4 vs 3)",
+      "test/finisher-director.test.js: ramped finisher progress mismatch (2 vs 5)"
+    ],
+    "fullSuiteFailureNote": "The meteorKick coverage failure was recorded in the plan baseline. The other three are outside C01-C05 and were observed in the already-dirty working tree; no causal classification was made."
+  },
+  "notValidated": [
+    "C06 effects and audio",
+    "C07 practice UI",
+    "C08 CPU route adoption and demo coverage",
+    "browser presentation and hardware gamepad feel"
+  ]
+}

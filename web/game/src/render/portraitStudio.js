@@ -60,10 +60,25 @@ export class PortraitStudio {
     if (!this.portraits.has(id)) this.capturePortrait(view);
     this.renderPreview();
   }
+  // Pre-rendered portraits (public/portraits/<id>.webp, written by
+  // tools/render-portraits.mjs) are a few KB each. Using them means the select
+  // screen downloads one fighter -- the one under the cursor -- instead of the
+  // whole roster. A fighter without a file falls back to a live capture.
+  async useStatic(base) {
+    await Promise.all(this.roster.map(({ id }) => new Promise(resolve => {
+      const url = `${base}portraits/${id}.webp`, image = new Image();
+      image.onload = () => { if (!this.portraits.has(id)) { this.portraits.set(id, url); this.onPortrait(id, url); } resolve(); };
+      image.onerror = () => resolve();
+      image.src = url;
+    })));
+  }
+  // Captures a portrait for every fighter that still lacks one. With the static
+  // portraits in place this loads nothing.
   async prewarm() {
     // Sequential work limits mobile peak memory during startup.
     for (const definition of this.roster) {
       if (this.disposed) return;
+      if (this.portraits.has(definition.id)) continue;
       const view = await this.load(definition.id);
       if (!view || this.disposed) return;
       this.pose(view, 0); this.capturePortrait(view);

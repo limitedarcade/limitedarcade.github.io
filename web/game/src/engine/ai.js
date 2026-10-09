@@ -14,6 +14,8 @@ import { moveOf, MATCH } from './frameData.js';
 import { CHORDS, DIRECTIONAL, directionalFor } from './moveList.js';
 import { combatKitFor } from '../fighters/combatKits.js';
 import { FATALITY_REGISTRY, fatalitiesFor } from './fatalities.js';
+import { routesForKit } from './comboRoutes.js';
+import { ComboPlayback } from './comboPlayback.js';
 
 export const DIFFICULTIES = Object.freeze({
   easy: Object.freeze({
@@ -171,7 +173,7 @@ function mulberry32(seed) {
 }
 
 export class CpuController {
-  constructor({ side, difficulty = 'normal', seed = 1337 } = {}) {
+  constructor({ side, difficulty = 'normal', seed = 1337, comboRoutes = false } = {}) {
     this.side = side;
     this.overrides = {};
     this.setDifficulty(difficulty);
@@ -189,6 +191,10 @@ export class CpuController {
     // instead of the same three answers to the same three situations.
     this.lastUsed = new Map();
     this.decisions = 0;
+    this.comboRoutes = comboRoutes;
+    this.comboRunner = null;
+    this.comboKinds = [];
+    this.comboStats = { attempts: 0, confirmations: 0, drops: 0, completed: new Set() };
   }
 
   setDifficulty(name) {
@@ -226,6 +232,11 @@ export class CpuController {
     const p = this.params;
     this.kit = combatKitFor(me.id, me.combatKit);
     const foeKit = combatKitFor(foe.id, foe.combatKit);
+
+    if (this.comboRunner) {
+      if (this.comboRunner.done) this.comboRunner = null;
+      else return this.comboRunner.poll(snap);
+    }
 
     // Whether the gauge is being saved for the round-ending finisher rather
     // than spent on specials. Recomputed every frame so both the reactive
@@ -331,6 +342,30 @@ export class CpuController {
   }
 
   roll() { return this.random(); }
+
+  preferComboKinds(kinds = []) { this.comboKinds = [...kinds]; }
+
+  beginCombo(route, kitId = this.kit?.id) {
+    if (!route || !kitId) return false;
+    this.comboRunner = new ComboPlayback({ route, actorSide: this.side, kitId });
+    this.comboStats.attempts += 1;
+    this.setIntent('wait', 0);
+    return true;
+  }
+
+  observe(events, snapshot) {
+    if (!this.comboRunner) return;
+    const route = this.comboRunner.route;
+    const previousState = this.comboRunner.state;
+    this.comboRunner.observe(events, snapshot);
+    if ((events || []).some(event => event.type === 'comboRouteComplete'
+      && event.side === this.side && event.routeId === route.id)) {
+      this.comboStats.confirmations += 1;
+      this.comboStats.completed.add(route.kind);
+      this.comboKinds = this.comboKinds.filter(kind => kind !== route.kind);
+    }
+    if (previousState !== 'aborted' && this.comboRunner.state === 'aborted') this.comboStats.drops += 1;
+  }
 
   // Two banked stocks are what opens the FINISH HIM window, and that window
   // only exists on the round that decides the match. So off match point the
@@ -440,10 +475,10 @@ export class CpuController {
   // is actually on screen, which is why the low, the overhead and the burst all
   // show up in a match instead of only ever the raw damage one.
   pickSpecial(me, guardStand, guardCrouch) {
-    if (me.stocks >= 2 && this.roll() < 0.45) return this.choose(['burstStrike'], me, 'hammerRush');
+    if (me.stocks >= 2) return this.choose(['burstStrike', 'hammerRush', 'meteorKick', 'groundBreaker'], me, 'burstStrike');
     if (guardCrouch) return this.choose(['meteorKick', 'heelDrop'], me, 'hammerRush');
     if (guardStand) return this.choose(['cyclone', 'crouchKick'], me, 'hammerRush');
-    return this.choose(['hammerRush', 'groundBreaker', 'burstStrike'], me, 'hammerRush');
+    return this.choose(['hammerRush', 'meteorKick', 'groundBreaker', 'burstStrike'], me, 'hammerRush');
   }
 
   // The free chords and crouch normals. Same idea as the specials, one tier
@@ -480,6 +515,20 @@ export class CpuController {
     const p = this.params;
     const r = this.roll();
     this.decisions += 1;
+
+    if (this.comboRoutes && distance <= 1.05 && !foe.airborne && me.state === 'idle') {
+      const available = routesForKit(this.kit.id, { demoOnly: true })
+        .filter(route => me.stocks >= route.setup.stocks);
+      const preferred = this.comboKinds.length ? available.filter(route => route.kind === this.comboKinds[0]) : available;
+      const chance = this.comboKinds.length ? 1 : (this.difficultyName === 'easy' ? 0.08 : this.difficultyName === 'hard' ? 0.3 : 0.18);
+      if (preferred.length && this.roll() < chance) {
+        const selected = this.comboKinds.length
+          ? [...preferred].sort((a, b) => a.steps.length - b.steps.length || a.id.localeCompare(b.id))[0]
+          : preferred[Math.floor(this.roll() * preferred.length)];
+        this.beginCombo(selected);
+        return;
+      }
+    }
 
     // Zoning. A kit that throws things has a reason to hold the gap rather than
     // close it, and the cooldown is what stops that becoming a wall of steel:

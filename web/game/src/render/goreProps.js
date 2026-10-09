@@ -1,5 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 import { ORGANS } from './goreAtlas.js';
+import { loadScenePack } from './scenePack.js';
 
 // Everything that leaves a body and stays on the floor.
 //
@@ -50,7 +51,8 @@ function organMaterial(kind) {
 
 // Where the baked prop library lives, relative to the site base. Built from the
 // source art by tools/build-gore-props.mjs; see goreAtlas.js PROP_SOURCES.
-const VISCERA_URL = 'gore/viscera.json';
+// Packed from gore/viscera.json by the asset pipeline (tools/asset-pipeline.json).
+const VISCERA_URL = 'gore/viscera.bin';
 
 export class GoreDebris {
   constructor(scene, { stage = null, assetBase = '' } = {}) {
@@ -74,15 +76,12 @@ export class GoreDebris {
 
   // Fetch the baked viscera. Resolves either way: a missing or broken library is
   // a downgrade to procedural blobs, never a failed match.
-  async load(loader = null) {
+  async load() {
     if (this.loaded) return this.library.size;
     this.loaded = true;
     try {
       const url = new URL(`${this.assetBase}${VISCERA_URL}`, location.href).href;
-      const response = await fetch(url);
-      if (!response.ok) throw Error(`viscera: ${response.status}`);
-      const parse = loader || new THREE.ObjectLoader();
-      const group = parse.parse(await response.json());
+      const group = await loadScenePack(url);
       for (const child of group.children) {
         if (!child.isMesh || !child.name) continue;
         this.library.set(child.name, child.geometry);

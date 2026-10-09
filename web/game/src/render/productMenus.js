@@ -37,12 +37,13 @@ export class ProductMenus {
     for (const [id, label, values] of [
       ['quality', 'Rendering', [['auto', 'Automatic'], ['cinematic', 'Cinematic'], ['performance', 'Performance']]],
       ['motion', 'Motion', [['system', 'Follow device'], ['full', 'Full impact'], ['reduced', 'Reduced motion']]],
+      ['captions', 'Announcer captions', [['auto', 'When muted'], ['on', 'Always'], ['off', 'Off']]],
     ]) {
       const field = make('label', 'options-field'); field.append(make('span', '', label)); const select = make('select');
       for (const [value, text] of values) { const opt = make('option', '', text); opt.value = value; select.append(opt); }
       select.onchange = () => options.set(id, select.value); field.append(select); display.append(field); this.fields[id] = select;
     }
-    for (const [id, label] of [['rumble', 'Gamepad rumble'], ['damageNumbers', 'Damage numbers'], ['gore', 'Gore and dismemberment']]) {
+    for (const [id, label] of [['rumble', 'Gamepad rumble'], ['damageNumbers', 'Damage numbers'], ['gore', 'Blood, gore and dismemberment']]) {
       const field = make('label', 'options-toggle'); const input = make('input'); input.type = 'checkbox'; input.onchange = () => options.set(id, input.checked);
       field.append(make('span', '', label), input); display.append(field); this.fields[id] = input;
     }

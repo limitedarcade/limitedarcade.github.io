@@ -1,5 +1,6 @@
 import { AUDIO_FILES } from './audioManifest.js';
 import { moveOf } from '../engine/frameData.js';
+import { impactProfile } from '../render/impact.js';
 
 // The move an event came from. Combat events carry their own definition, which
 // is the only way a kit-specific move -- one that is on no universal table --
@@ -25,12 +26,28 @@ export const VOICES = {
   gameOver: '28. Game Over', youDied: '18. You Died',
 };
 
+// One job per track. Each file downloads the first time its cue plays, so a
+// cue nobody reaches costs nothing.
+// The on-screen caption for an announcer call: the line as it is spoken.
+export function captionFor(cue) {
+  return VOICES[cue] ? VOICES[cue].replace(/^\d+\.\s*/, '') : '';
+}
+
 export const MUSIC_TRACKS = Object.freeze({
-  theme: Object.freeze({ file: 'Stage Cleared!.mp3', loop: true }),
-  battle: Object.freeze({ file: 'Stage Two_ Odd Odds.mp3', loop: true }),
-  final: Object.freeze({ file: 'Stage Two_ Odd Odds.mp3', loop: true }),
-  victory: Object.freeze({ file: 'Victory Fanfare.mp3', loop: false }),
+  theme: Object.freeze({ file: 'Stage Cleared!.mp3', loop: true }),        // menus
+  battle: Object.freeze({ file: 'Stage Two_ Odd Odds.mp3', loop: true }),  // rounds
+  final: Object.freeze({ file: 'Final Round Mayhem.mp3', loop: true }),    // the deciding round
+  finisher: Object.freeze({ file: 'KO Overdrive.mp3', loop: true }),       // FINISH HIM and the finisher itself
+  victory: Object.freeze({ file: 'Victory Fanfare.mp3', loop: false }),    // a round won
+  champion: Object.freeze({ file: 'Victory.mp3', loop: false }),           // the match won, in the arena
+  results: Object.freeze({ file: 'Winner Take All.mp3', loop: true }),     // the results screen
 });
+
+// The short fanfare for taking a round; the full victory theme once that round
+// also takes the match.
+export function victoryTrack(snapshot) {
+  return snapshot?.fighters?.some(f => f.roundsWon >= snapshot.roundsToWin) ? 'champion' : 'victory';
+}
 
 export class FightAudio {
   constructor() {
@@ -119,7 +136,17 @@ export class FightAudio {
     }
     source.start();
   }
-  voice(cue) { if (VOICES[cue]) void this.play(VOICES[cue], { voice: true, gain: 0.9, serial: ++this.voiceSerial }); }
+  voice(cue) {
+    if (!VOICES[cue]) return;
+    void this.play(VOICES[cue], { voice: true, gain: 0.9, serial: ++this.voiceSerial });
+    this.onVoice?.(cue);
+  }
+  // True when the announcer cannot actually be heard: muted, turned down to
+  // nothing, or a browser that never allowed audio to start.
+  inaudible() {
+    const { muted, master, voice } = this.settings;
+    return muted || master * voice <= 0.01 || !this.ctx || this.ctx.state !== 'running';
+  }
   effect(prefix, options) {
     const choices = Object.keys(AUDIO_FILES).filter(k => k.toLowerCase().startsWith(prefix.toLowerCase()));
     const fresh = choices.filter(k => k !== this.lastPick.get(prefix));
@@ -137,14 +164,20 @@ export class FightAudio {
       if (move.cost) this.effect(move.cost === 2 ? 'fire_punch_finisher' : 'fire_punch_', { ...opts, gain: 0.38 });
     }
     if (e.type === 'hit') {
-      const heavy = moveFrom(e).hit.damage >= 90;
-      this.effect(`${e.y > 1.15 ? 'face' : 'body'}_hit_${heavy ? 'large' : 'small'}`, { ...opts, gain: heavy ? 0.8 : 0.55 });
+      const profile = impactProfile(e);
+      this.effect(`${e.y > 1.15 ? 'face' : 'body'}_hit_${profile.heavy ? 'large' : 'small'}`, { ...opts, gain: profile.soundGain, rate: profile.soundRate });
       if (e.knockdown) this.effect('bone_breaking', { ...opts, gain: 0.27 });
-      if (e.combo >= 4 && this.ctx && this.ctx.currentTime - this.comboAt > 10) { this.comboAt = this.ctx.currentTime; this.voice('combo'); }
+      if (e.launched) this.effect('somersault', { ...opts, gain: 0.2, rate: 0.72 });
+      else if (e.juggle) this.effect('metal_punch', { ...opts, gain: 0.13, rate: Math.min(1.45, 1.04 + (e.juggleHits || 1) * 0.08) });
     }
-    if (e.type === 'block') this.effect(moveFrom(e).hit.damage >= 90 ? 'block_large' : 'block_small', { ...opts, gain: 0.55 });
+    if (e.type === 'block') {
+      const profile = impactProfile({ ...e, moveData: moveFrom(e) });
+      this.effect(profile.guardHeavy ? 'block_large' : 'block_small', { ...opts, gain: profile.soundGain, rate: profile.soundRate });
+    }
     if (e.type === 'jump') this.effect('somersault', { ...opts, gain: 0.14 });
     if (e.type === 'land') this.effect('body_hit_small', { ...opts, gain: 0.12, rate: 0.65 });
+    if (e.type === 'juggleLand') this.effect('body_hit_large', { ...opts, gain: 0.24, rate: 0.62 });
+    if (e.type === 'comboRouteComplete') this.effect('metal_punch_finisher', { ...opts, gain: 0.16, rate: 1.45 });
     if (e.type === 'finisher') {
       this.effect('face_hit_finisher', { ...opts, gain: 0.8 });
       this.effect('guts_and_gore', { ...opts, gain: 0.52 });

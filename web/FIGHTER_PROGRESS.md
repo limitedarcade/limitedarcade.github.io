@@ -1,5 +1,23 @@
 # Fighter progress — start here
 
+## Active polish pass — 2026-10-07
+
+**Implemented; locally verified:** closer combat framing that fits spacing,
+jumps and screen edges; bounded directional shake with a light/heavy/block/KO
+hierarchy; basic attack planting/drive across all four fighters; coordinated
+sound and recoil, including imported Flock bones; 96-frame rematch/repeat-round
+entrances. First encounters retain the full entrance. Balance, input mappings,
+save formats and authored finisher camera cuts retain their existing contracts.
+Files: `render/{camera,impact,strikePose,hitRecoil,fighterBones,lakeCameraDirector}.js`,
+`game/fightAudio.js`, `engine/{match,reelTimeline}.js`, `main.js`, focused tests
+and `tools/polish-{review,flow,gallery}.mjs`. Build and 60 focused checks pass;
+desktop, touch and reduced-motion production flows pass. Full named suites:
+438 passed, 3 failed, 4 skipped; the same three failures existed in the baseline.
+Evidence and exact commands: [validation](artifacts/polish-2026-10-07/VALIDATION.md).
+Next: user play/visual acceptance; physical touch, sound, controller and sustained
+performance checks remain separate. Existing unrelated changes are retained.
+No commit or publication was performed.
+
 Updated: 2026-09-10 (America/Chicago). Active milestone: **Carney movement and standout attacks**.
 Current handoff: local Motifect retargeting implemented for both fighters;
 focused tests and sampled browser poses verified. Six combat cuts are active;
@@ -36,6 +54,9 @@ Do not reset, clean, commit or regenerate unrelated work in this shared checkout
 
 ## Evidence — rerun when the relevant inputs change
 
+- `npm run render-portraits` after any change to a fighter's model, materials or
+  the portrait lighting: the select screen and HUD read `game/public/portraits/`.
+  New heavy assets go in `tools/asset-pipeline.json` (see `docs/ROADMAP.md`).
 - `node tools/audit-carney.mjs` prints a compact live asset/clip/timing audit.
   Add `--json` for complete mappings and source/asset SHA-256 fingerprints.
 - Baseline: `reference/carney-movement-baseline-2026-09-09.json`.

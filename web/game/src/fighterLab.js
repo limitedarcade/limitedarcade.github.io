@@ -1,5 +1,5 @@
 import * as T from './vendor/three.module.js';
-import {GLTFLoader} from './vendor/GLTFLoader.js';
+import {createGltfLoader} from './render/gltf.js';
 import {fighterAnimations} from './render/fighterAnimations.js';
 import {carneyFighter} from './fighters/carney.js';
 import {CONTACT_MARKERS} from './render/clipTiming.js';
@@ -22,7 +22,7 @@ $('facing').onchange=()=>{for(const m of models)m.root.rotation.y=Number($('faci
 $('wire').onclick=()=>{wire=!wire;for(const m of models)m.root.traverse(n=>{if(n.isMesh)for(const mat of Array.isArray(n.material)?n.material:[n.material])mat.wireframe=wire});$('wire').textContent=wire?'Hide wireframe':'Show wireframe'};
 async function loadModels(){try{
  for(const [i,name] of ['carney-rigged','carney-hero'].entries()){
-  const gltf=await new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}fighters/carney/${name}.glb`);
+  const gltf=await createGltfLoader().loadAsync(`${import.meta.env.BASE_URL}fighters/carney/${name}.glb`);
   gltf.scene.updateMatrixWorld(true);const b=new T.Box3().setFromObject(gltf.scene),s=b.getSize(new T.Vector3());
   gltf.scene.scale.setScalar(1.92/s.y);gltf.scene.updateMatrixWorld(true);const bb=new T.Box3().setFromObject(gltf.scene),center=bb.getCenter(new T.Vector3());
   gltf.scene.position.set(-center.x,-bb.min.y,-center.z);

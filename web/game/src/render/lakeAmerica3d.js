@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
 import { LakeAtmosphere } from './lakeAtmosphere.js';
 import { lakeFractures, lakeReflection, glacialIce } from './lakeSurface.js';
 import { iceReflection } from './lakeIceReflection.js';
@@ -236,7 +236,7 @@ export function buildLakeAmerica(stage) {
   glow.addColorStop(0,'rgba(255,227,169,.8)'); glow.addColorStop(.1,'rgba(255,193,104,.4)'); glow.addColorStop(.35,'rgba(255,163,67,.09)'); glow.addColorStop(1,'rgba(255,140,50,0)');
   ctx.fillStyle=glow; ctx.fillRect(0,0,128,128);
   const glowMap=new THREE.CanvasTexture(glowCanvas); glowMap.colorSpace=THREE.SRGBColorSpace;
-  const glowMaterial=new THREE.SpriteMaterial({map:glowMap,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:'#ffd197'});
+  const glowMaterial=new THREE.SpriteMaterial({map:glowMap,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:'#ffd197',opacity:.72});
   for(const [x,z] of [[-8.2,-9.3],[-3.8,-11.6],[3.6,-11.6],[7.1,-9.3]]) {
     const halo=new THREE.Sprite(glowMaterial); halo.position.set(x,2.8,z); halo.scale.set(1.7,1.7,1); lamps.add(halo);
     const lamp=new THREE.PointLight('#ffb65f',5,5,2); lamp.position.set(x,2.65,z); lamps.add(lamp);
@@ -265,7 +265,7 @@ export function buildLakeAmerica(stage) {
     impact(event, strength) { if (!stage.reducedMotion) weather.impact(event.x, strength); },
     resetRound() { weather.resetRound(); },
   };
-  const ready=new GLTFLoader().loadAsync(`${BASE}stages/lake-america-3d/lake-america.glb`).then(gltf=>{
+  const ready=createGltfLoader().loadAsync(`${BASE}stages/lake-america-3d/lake-america.glb`).then(gltf=>{
     if(stage.generation!==generation){
       gltf.scene.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());});
       return;

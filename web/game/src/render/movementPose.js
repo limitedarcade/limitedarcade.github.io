@@ -62,6 +62,11 @@ export class MovementPose {
     if (view.state === 'knockdown') proneWeight = smooth(((view.stateFrame || 0) / Math.max(1, view.stunFrames || PHYSICS.knockdownFrames) - 0.45) / 0.55);
     if (view.state === 'getUp') proneWeight = 1 - smooth(recoveryProgress(view) / (view.recovery === 'stand' ? 0.65 : 0.35));
     if (view.state === 'sprint') angle = 0.14;
+    // Ease the body into locomotion instead of snapping from the upright idle
+    // on the first walk frame. These are intentionally small: the feet and
+    // cadence still come entirely from the authored clips.
+    if (view.state === 'walkF') angle = 0.045 * smooth((view.stateFrame || 0) / 6);
+    if (view.state === 'walkB') angle = -0.035 * smooth((view.stateFrame || 0) / 6);
     if (view.state === 'backHop') {
       const progress = clamp((view.stateFrame || 0) * TICK / (2 * PHYSICS.backHopVelocity / PHYSICS.gravity));
       angle = -0.22 * Math.sin(progress * Math.PI);

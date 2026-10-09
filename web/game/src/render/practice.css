@@ -17,6 +17,9 @@
 .practice-tab:hover { color: #fff !important; background: #ffffff10 !important; }
 .practice-tab.is-active { color: #f2d79c !important; background: #ffffff12 !important; border-bottom-color: #e7bd68 !important; }
 .practice-list { max-height: min(310px, 38vh); min-height: 132px; overflow-y: auto; overscroll-behavior: contain; margin: 8px -4px 12px; padding: 0 4px; scrollbar-width: thin; scrollbar-color: #6a7892 transparent; }
+/* Watching is about the arena, not the browser chrome. Leave one small way
+   back to the move list and clear the rest of the panel from the fighters. */
+.practice-panel.is-previewing .practice-body { display: none; }
 .practice-sub { margin: 10px 0 4px; font: 800 9px/1 system-ui; letter-spacing: .18em; text-transform: uppercase; color: #7f90a9; }
 .practice-sub:first-child { margin-top: 2px; }
 /* .practice-row sets display, which outranks the UA [hidden] rule the tab switch relies on. */
@@ -50,6 +53,12 @@
 .practice-frames[hidden] { display: none; }
 .practice-stats { color: #9be1d0; font-variant-numeric: tabular-nums; }
 .practice-history { color: #b9c6da; font-size: 12px; }
+.practice-steps { margin: 8px 0; padding: 0; list-style: none; display: grid; gap: 4px; color: #9fb0c8; font-size: 12px; }
+.practice-steps li { border-left: 2px solid #ffffff20; padding-left: 7px; }
+.practice-steps li.is-pressed { color: #f0cd86; }
+.practice-steps li.is-confirmed { color: #9be1d0; border-left-color: #9be1d0; }
+.practice-steps li.is-confirmed::after { content: '  ✓'; }
+.practice-steps li.is-current { border-left-color: #80dbff; }
 .practice-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 12px 0 10px; }
 .practice-toggle { display: flex; align-items: center; gap: 7px; grid-column: 1 / -1; color: #b9c6da; }
 .practice-toggle input { accent-color: #e7bd68; }

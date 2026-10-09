@@ -167,6 +167,7 @@ export class FighterDamage {
   }
 
   onHit(event, power = event?.bloodScale || 1) {
+    if (this.showBlood === false) return; // the Gore option is off: no wound decals
     if (!event || event.type === 'block' || !Number.isFinite(event.x) || !Number.isFinite(event.y)) return;
     const amount = clamp(Number(power) || 1, 0.1, 4);
     point.set(event.x, event.y, event.z || 0.04);

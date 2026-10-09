@@ -145,7 +145,7 @@ export class Vfx {
   // The blood arc. Droplets are launched forward along the hit direction with a
   // wide cone, and each one stains the ice where it lands.
   spray(x, y, dir, power, multiplier = 1) {
-    if (power <= 0) return;
+    if (power <= 0 || this.showBlood === false) return; // the Gore option is off
     const count = this.scaled((12 + power * 23) * multiplier);
     if (!this.reducedMotion) this.flash('mist', {
       x: x + dir * 0.12, y, z: 0.08, from: 0.12, to: 0.35 + power * 0.18,
@@ -228,6 +228,35 @@ export class Vfx {
     this.models.quality = this.quality;
     this.models.reducedMotion = this.reducedMotion;
     this.authored.sync(snapshot);
+  }
+
+  // Combo accents are intentionally small additions to the ordinary contact
+  // effect. They consume the same bounded pools and never add hitstop.
+  onComboHit(event) {
+    if (event.launched) {
+      this.flash('ring', { x: event.x, y: event.y, from: 0.28, to: 1.35, life: 0.2,
+        color: new THREE.Color(0x80dbff), opacity: 0.72 });
+      if (!this.reducedMotion && this.quality > 0.55) this.flash('lines', {
+        x: event.x, y: event.y + 0.15, from: 0.65, to: 1.7, life: 0.16,
+        color: new THREE.Color(0xbdefff), opacity: 0.2, rotation: Math.PI / 2,
+      });
+      return 'launch';
+    }
+    if (event.juggle) {
+      this.flash('spark', { x: event.x, y: event.y, from: 0.18, to: 0.62, life: 0.13,
+        color: new THREE.Color(0xe8fbff), opacity: 0.72 });
+      return 'air';
+    }
+    return null;
+  }
+
+  onJuggleLand(event) {
+    this.flash('ring', { x: event.x, y: 0.04, from: 0.22, to: this.reducedMotion ? 0.85 : 1.45,
+      life: 0.22, color: new THREE.Color(0xcdd9ea), opacity: 0.38 });
+    if (!this.reducedMotion && this.quality > 0.7) this.flash('mist', {
+      x: event.x, y: 0.08, from: 0.12, to: 0.55, life: 0.2,
+      color: new THREE.Color(0xa8b7c9), opacity: 0.16,
+    });
   }
 
   onSummon(strike) { return this.authored.onSummon(strike); }

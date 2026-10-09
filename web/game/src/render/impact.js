@@ -1,16 +1,24 @@
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 export function impactProfile(event) {
-  const power = clamp(event.bloodScale ?? 1, 0.2, 4);
+  const power = clamp(event.bloodScale ?? 1, 0.12, 4);
   const ko = Boolean(event.ko || event.type === 'finisher');
   const block = event.type === 'block';
-  const heavy = ko || (!block && (power >= 1.2 || event.damage >= 90 || Boolean(event.counter)));
+  const guardHeavy = block && (event.moveData?.hit?.damage ?? event.damage ?? 0) >= 90;
+  const heavy = ko || (!block && (power >= 1.2 || (event.moveData?.hit?.damage ?? event.damage ?? 0) >= 90 || Boolean(event.counter)));
   // A laser cuts; it does not club. Grouping it with the blades gets it the
   // pale crescent and the cleaner spray rather than a blunt fracture burst.
   const slash = ['knife', 'shuriken', 'axe', 'laser'].includes(event.weapon) || /kick|knee|heel|sweep|cyclone/i.test(event.move || '');
-  return { power, ko, block, heavy, type: ko ? 'ko' : block ? 'block' : event.counter ? 'counter' : slash ? 'slash' : 'blunt',
-    pause: ko ? 12 : block ? 4 : clamp(Math.round(4 + power * 2 + (event.counter ? 2 : 0)), 4, 11),
+  const weak = !ko && !heavy && power < 0.35;
+  const shake = ko ? 0.44 : block ? (guardHeavy ? 0.035 : 0.014)
+    : weak ? 0.018 : heavy ? clamp(0.15 + power * 0.055 + (event.counter ? 0.045 : 0), 0.15, 0.34)
+      : clamp(0.035 + power * 0.025, 0.035, 0.09);
+  return { power, ko, block, heavy, guardHeavy, shake, type: ko ? 'ko' : block ? 'block' : event.counter ? 'counter' : slash ? 'slash' : 'blunt',
+    pause: ko ? 12 : block ? 4 : weak ? 2 : clamp(Math.round(4 + power * 2 + (event.counter ? 2 : 0)), 4, 11),
     dolly: heavy ? 0.4 : 0, slow: event.counter && !ko ? 0.18 : 0,
-    grade: heavy ? 3 : 0, recoil: block ? 0.25 : clamp(power * 0.55, 0.3, 1.3) };
+    grade: heavy ? 3 : 0, recoil: block ? (guardHeavy ? 0.22 : 0.13) : clamp(power * 0.55, 0.10, 1.3),
+    recoilDuration: block ? 0.13 : heavy ? 0.24 : 0.16,
+    soundGain: block ? (guardHeavy ? 0.62 : 0.44) : ko ? 0.9 : heavy ? 0.8 : weak ? 0.30 : 0.52,
+    soundRate: block ? (guardHeavy ? 0.88 : 1.12) : heavy ? 0.90 : weak ? 1.16 : 1.07 };
 }
 
 // Cosmetic holds use elapsed seconds; gameplay hitstop belongs exclusively to Match.

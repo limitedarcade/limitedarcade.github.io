@@ -57,7 +57,8 @@ export const MOVES = Object.freeze({
   cyclone: special('cyclone', 'Cyclone Sweep', 'crouchKick', 13, 7, 26, 160, [0.18, 1.65, 0.08, 0.65], { cost: 1, level: 'low', knockdown: true, groundHit: true, travel: 1.5 }),
   groundBreaker: special('groundBreaker', 'Ground Breaker', 'throw', 19, 5, 30, 195, [0.2, 1.45, 0.2, 1.7], { cost: 1, knockdown: true, chip: 18, bloodScale: 2 }),
   burstStrike: special('burstStrike', 'Burst Strike', 'finisher', 22, 7, 40, 290, [0.18, 1.75, 0.4, 1.95], { cost: 2, knockdown: true, chip: 24, bloodScale: 2.6, hitStop: 14 }),
-  uppercut: special('uppercut', 'Rising Uppercut', 'heavyPunch', 8, 6, 23, 110, [0.15, 1.14, 0.75, 2.6], { knockdown: true, launch: 7.4 }),
+  uppercut: special('uppercut', 'Rising Uppercut', 'heavyPunch', 8, 6, 23, 110, [0.15, 1.14, 0.75, 2.6],
+    { knockdown: true, launch: 7.4, push: [0.03, 0.08] }),
   lungePunch: special('lungePunch', 'Lunging Cross', 'heavyPunch', 13, 4, 24, 102, [0.22, 1.5, 1.1, 1.76], { travel: 2.8 }),
   retreatKick: special('retreatKick', 'Retreating Kick', 'lightKick', 8, 4, 17, 62, [0.24, 1.4, 0.6, 1.2], { travel: -1.8, push: [0.1, 0.42] }),
   lightPunch: Object.freeze({
@@ -65,7 +66,8 @@ export const MOVES = Object.freeze({
     startup: 4, active: 3, recovery: 7,
     cancelInto: Object.freeze(['heavyPunch', 'lightKick', 'heavyKick', 'grab']),
     cancelWindow: Object.freeze([4, 12]),
-    hit: hit({ damage: 42, hitStun: 15, blockStun: 9, box: [0.26, 1.02, 1.24, 1.62], hitStop: 4, meter: 14, bloodScale: 0.55 }),
+    hit: hit({ damage: 42, hitStun: 18, blockStun: 9, box: [0.26, 1.02, 1.24, 1.62],
+      push: [0.04, 0.08], hitStop: 4, meter: 14, bloodScale: 0.55 }),
   }),
   heavyPunch: Object.freeze({
     id: 'heavyPunch', name: 'Heavy Punch', clip: 'heavyPunch',
@@ -78,7 +80,8 @@ export const MOVES = Object.freeze({
     startup: 5, active: 3, recovery: 9,
     cancelInto: Object.freeze(['heavyKick', 'heavyPunch', 'throw']),
     cancelWindow: Object.freeze([5, 14]),
-    hit: hit({ damage: 46, hitStun: 15, blockStun: 9, box: [0.26, 1.10, 0.62, 1.06], hitStop: 4, meter: 14, bloodScale: 0.55 }),
+    hit: hit({ damage: 46, hitStun: 19, blockStun: 9, box: [0.26, 1.10, 0.62, 1.06],
+      push: [0.04, 0.08], hitStop: 4, meter: 14, bloodScale: 0.55 }),
   }),
   heavyKick: Object.freeze({
     id: 'heavyKick', name: 'Heavy Kick', clip: 'heavyKick',

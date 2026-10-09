@@ -93,11 +93,12 @@ export class Hud {
       const burstTrack = el('div', 'burst-track');
       const burstFill = el('div', 'burst-fill');
       burstTrack.append(burstFill);
-      burstRow.append(el('span', 'burst-label', 'BURST'), burstTrack);
+      const burstLabel = el('span', 'burst-label', 'BURST');
+      burstRow.append(burstLabel, burstTrack);
       body.append(name, track, burstRow);
       plate.append(portrait, body);
 
-      this.plates.push({ plate, chip, fill, name, burstFill });
+      this.plates.push({ plate, chip, fill, name, burstFill, burstLabel });
       top.append(side === 0 ? plate : centre);
       if (side === 1) top.append(plate);
     }
@@ -220,13 +221,22 @@ export class Hud {
       plate.chip.style.width = `${this.displayHealth[side] * 100}%`;
       plate.plate.classList.toggle('danger', pct <= DANGER);
       plate.burstFill.style.width = `${Math.min(1, view.meterPct * 1.4) * 100}%`;
+      const specialReady = view.stocks >= 1;
+      const burstReady = view.stocks >= MATCH.finisherStocks;
+      plate.plate.classList.toggle('special-ready', specialReady);
+      plate.plate.classList.toggle('burst-ready', burstReady);
+      plate.burstLabel.textContent = burstReady ? 'BURST READY' : specialReady ? 'SPECIAL READY' : 'BURST';
 
       const meter = this.meters[side];
       const withinStock = (view.meterPct * MATCH.meterMax) % 1;
       meter.stocks.textContent = String(view.stocks);
       meter.fill.style.width = `${(view.stocks >= MATCH.meterMax ? 1 : withinStock) * 100}%`;
       meter.meter.classList.toggle('maxed', view.stocks >= MATCH.meterMax);
-      meter.meter.classList.toggle('ready', view.stocks >= MATCH.finisherStocks);
+      meter.meter.classList.toggle('ready', specialReady);
+      meter.meter.classList.toggle('burst-ready', burstReady);
+      meter.max.textContent = view.stocks >= MATCH.meterMax ? 'MAX · BURST READY'
+        : burstReady ? 'BURST READY' : specialReady ? 'SPECIAL READY' : 'SPECIAL';
+      meter.meter.setAttribute('aria-label', `Player ${side + 1}: ${meter.max.textContent.toLowerCase()}, ${view.stocks} stock${view.stocks === 1 ? '' : 's'}`);
 
       const pipRow = this.pips[side];
       if (pipRow.childElementCount !== snapshot.roundsToWin) {
@@ -237,9 +247,10 @@ export class Hud {
       // The banner belongs to the attacker, so it is drawn on the far side
       // from the fighter taking the hits.
       const combo = this.combos[side === 0 ? 1 : 0];
-      if (view.comboCount >= 2) {
-        combo.count.textContent = `${view.comboCount} HITS`;
-        const tier = comboTier(view.comboCount);
+      const displayedCombo = view.comboDisplayCount ?? view.comboCount;
+      if (displayedCombo >= 2) {
+        combo.count.textContent = `${displayedCombo} HITS`;
+        const tier = comboTier(displayedCombo);
         if (tier && tier.hits > combo.shownTier) {
           combo.shownTier = tier.hits;
           combo.tier.textContent = tier.label;
@@ -345,6 +356,7 @@ export class Hud {
   // Blood on the lens. Drawn in screen space at the projected hit position so a
   // face-height connect splatters high and a sweep splatters low.
   splatterScreen(nx, ny, power) {
+    if (this.showBlood === false) return; // the Gore option is off
     const ctx = this.bloodCtx;
     const w = this.blood.width;
     const h = this.blood.height;

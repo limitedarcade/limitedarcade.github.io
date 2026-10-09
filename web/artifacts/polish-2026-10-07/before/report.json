@@ -1,0 +1,1473 @@
+{
+  "label": "before",
+  "samples": [
+    {
+      "file": "trump-carney-close.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        0,
+        2.24,
+        7.161395475983852
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-wide.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 8
+      },
+      "camera": [
+        0,
+        2.24,
+        10.9903282025192
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -4,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 4,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-jump.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 2,
+        "jump": true
+      },
+      "camera": [
+        0,
+        2.743001822069953,
+        7.407110687248764
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -1,
+          "y": 1.8,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 1,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-edge.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.6,
+        "edge": 4.2
+      },
+      "camera": [
+        2.9941460446109374,
+        2.2409815167423384,
+        7.160482191646439
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 3.4000000000000004,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 5,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-lightPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightPunch"
+      },
+      "camera": [
+        0.0032568430038571673,
+        2.2400009888615684,
+        7.010163622838212
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightPunch"
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-lightPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightPunch",
+        "mirror": true
+      },
+      "camera": [
+        0.0000026212822368799933,
+        2.2400000007958885,
+        7.010000131692451
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightPunch"
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-heavyPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyPunch"
+      },
+      "camera": [
+        2.8508548036025922e-9,
+        2.2400000000008657,
+        7.010000000143226
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-heavyPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyPunch",
+        "mirror": true
+      },
+      "camera": [
+        3.096350498308206e-12,
+        2.240000000000001,
+        7.010000000000156
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-lightKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightKick"
+      },
+      "camera": [
+        3.1223297513240818e-15,
+        2.2400000000000007,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightKick"
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-lightKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightKick",
+        "mirror": true
+      },
+      "camera": [
+        3.1456945782517806e-18,
+        2.2400000000000007,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightKick"
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-heavyKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyKick"
+      },
+      "camera": [
+        3.421195311554806e-21,
+        2.2400000000000007,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyKick"
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-trump-heavyKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyKick",
+        "mirror": true
+      },
+      "camera": [
+        3.71413300955737e-24,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyKick"
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-lightPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightPunch"
+      },
+      "camera": [
+        4.352718334035282e-27,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightPunch"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-lightPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightPunch",
+        "mirror": true
+      },
+      "camera": [
+        4.387264154120761e-30,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightPunch"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-heavyPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyPunch"
+      },
+      "camera": [
+        4.424074536398111e-33,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-heavyPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyPunch",
+        "mirror": true
+      },
+      "camera": [
+        4.807207677939459e-36,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-lightKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightKick"
+      },
+      "camera": [
+        5.631194970900565e-39,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightKick"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-lightKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightKick",
+        "mirror": true
+      },
+      "camera": [
+        6.596419152783863e-42,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightKick"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-heavyKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyKick"
+      },
+      "camera": [
+        7.720137912556494e-45,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyKick"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-carney-heavyKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyKick",
+        "mirror": true
+      },
+      "camera": [
+        9.047491230603563e-48,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyKick"
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-phone.png",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        3.516118538072743e-50,
+        2.24,
+        7.159340856956039
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-portrait.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        1.266969564226013e-52,
+        2.24,
+        9.053151319387759
+      ],
+      "fov": 46,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "trump-carney-portrait-wide-jump.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": {
+        "gap": 6,
+        "jump": true
+      },
+      "camera": [
+        5.730101005728846e-55,
+        2.7417205680480166,
+        19.453768609821985
+      ],
+      "fov": 46,
+      "fighters": [
+        {
+          "id": "trump",
+          "x": -3,
+          "y": 1.8,
+          "move": null
+        },
+        {
+          "id": "carney",
+          "x": 3,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-close.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        6.90529450622785e-58,
+        2.2406517268719908,
+        7.177310431555416
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-wide.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 8
+      },
+      "camera": [
+        1.3669864194238526e-60,
+        2.2400012901720303,
+        10.992432524462176
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -4,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 4,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-jump.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 2,
+        "jump": true
+      },
+      "camera": [
+        2.5113335379120066e-63,
+        2.743074088194974,
+        7.406599770234124
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -1,
+          "y": 1.8,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 1,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-edge.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.6,
+        "edge": 4.2
+      },
+      "camera": [
+        2.9944910856689146,
+        2.240923797351352,
+        7.1604528323360945
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 3.4000000000000004,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 5,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-lightPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightPunch"
+      },
+      "camera": [
+        0.0032538196228569954,
+        2.240001003799933,
+        7.010163482329438
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightPunch"
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-lightPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightPunch",
+        "mirror": true
+      },
+      "camera": [
+        0.0000028245098745385133,
+        2.2400000008713596,
+        7.010000141912428
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightPunch"
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-heavyPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyPunch"
+      },
+      "camera": [
+        3.3101388356128492e-9,
+        2.2400000000010207,
+        7.01000000016631
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-heavyPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyPunch",
+        "mirror": true
+      },
+      "camera": [
+        3.596803058964498e-12,
+        2.240000000000002,
+        7.010000000000181
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-lightKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightKick"
+      },
+      "camera": [
+        3.906534605204846e-15,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightKick"
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-lightKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "lightKick",
+        "mirror": true
+      },
+      "camera": [
+        3.937539239578858e-18,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightKick"
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-heavyKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyKick"
+      },
+      "camera": [
+        4.2804632884113364e-21,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyKick"
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-officer_flock-heavyKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 0,
+        "move": "heavyKick",
+        "mirror": true
+      },
+      "camera": [
+        4.651159427192139e-24,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyKick"
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-lightPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightPunch"
+      },
+      "camera": [
+        5.445947786350032e-27,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightPunch"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-lightPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightPunch",
+        "mirror": true
+      },
+      "camera": [
+        5.48917014028713e-30,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightPunch"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-heavyPunch.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyPunch"
+      },
+      "camera": [
+        6.43294449789083e-33,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-heavyPunch-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyPunch",
+        "mirror": true
+      },
+      "camera": [
+        6.99004954089145e-36,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyPunch"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-lightKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightKick"
+      },
+      "camera": [
+        6.535461227309221e-39,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": "lightKick"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-lightKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "lightKick",
+        "mirror": true
+      },
+      "camera": [
+        6.572525790352928e-42,
+        2.240000000000001,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": "lightKick"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-heavyKick.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyKick"
+      },
+      "camera": [
+        7.716442799262956e-45,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.675,
+          "y": 0,
+          "move": "heavyKick"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-lang-heavyKick-mirror.png",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "state": {
+        "gap": 1.35,
+        "side": 1,
+        "move": "heavyKick",
+        "mirror": true
+      },
+      "camera": [
+        7.777685182570593e-48,
+        2.24,
+        7.01
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": 0.675,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": -0.675,
+          "y": 0,
+          "move": "heavyKick"
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-phone.png",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        3.0253565294679545e-50,
+        2.24,
+        7.159353197771563
+      ],
+      "fov": 33,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-portrait.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": {
+        "gap": 1.6
+      },
+      "camera": [
+        1.1762708428676174e-52,
+        2.24,
+        9.052033662173578
+      ],
+      "fov": 46,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -0.8,
+          "y": 0,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 0.8,
+          "y": 0,
+          "move": null
+        }
+      ]
+    },
+    {
+      "file": "officer_flock-lang-portrait-wide-jump.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": {
+        "gap": 6,
+        "jump": true
+      },
+      "camera": [
+        4.573388565293561e-55,
+        2.742040427635451,
+        19.460394921642514
+      ],
+      "fov": 46,
+      "fighters": [
+        {
+          "id": "officer_flock",
+          "x": -3,
+          "y": 1.8,
+          "move": null
+        },
+        {
+          "id": "lang",
+          "x": 3,
+          "y": 0,
+          "move": null
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

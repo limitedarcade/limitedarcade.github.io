@@ -15,6 +15,7 @@ import { StageHazards } from './stageHazards.js';
 import { BEAM, beamPhase, contactAt, muzzleAt, segmentHitsBox, createStrike } from './overwatch.js';
 import { OVERWATCH_BEAM } from '../fighters/officerMoves.js';
 import { COLD_CUT_ICE_ARMS } from '../render/coldCutIce.js';
+import { ComboTracker } from './comboTracker.js';
 
 // Phases are mutually exclusive and drive both input gating and the HUD.
 export const PHASE = Object.freeze({
@@ -34,7 +35,7 @@ const GROUND_DAMAGE_SCALE = 0.45;
 export function lethalHealth(fighter) { return Math.max(0, fighter.health - (fighter.healthFloor || 0)); }
 
 export class Match {
-  constructor({ left, right, roundsToWin = MATCH.roundsToWin, stageId = 'lake-america', hazards = false } = {}) {
+  constructor({ left, right, roundsToWin = MATCH.roundsToWin, stageId = 'lake-america', hazards = false, quickIntro = false, quickRounds = false } = {}) {
     this.fighters = [
       new Fighter({ id: left?.id || 'p1', side: 0, label: left?.label || 'P1', combatKit: left?.combatKit }),
       new Fighter({ id: right?.id || 'p2', side: 1, label: right?.label || 'P2', combatKit: right?.combatKit }),
@@ -42,6 +43,7 @@ export class Match {
     this.stageId = stageId;
     this.hazards = new StageHazards({ stageId, enabled: hazards });
     this.finishCommands = new FinisherCommandBuffer();
+    this.comboTracker = new ComboTracker();
     // A single-round match is the same rules with a shorter series, so the
     // count lives here rather than as a second code path.
     this.roundsToWin = Math.max(1, roundsToWin);
@@ -49,6 +51,8 @@ export class Match {
     this.events = [];
     this.round = 0;
     this.winner = null;
+    this.quickIntro = Boolean(quickIntro);
+    this.quickRounds = Boolean(quickRounds);
     this.startRound();
   }
 
@@ -62,6 +66,7 @@ export class Match {
     this.axeUsed = false;
     this.ringUsed = false;
     this.round += 1;
+    this.shortIntro = this.quickIntro || (this.quickRounds && this.round > 1);
     this.phase = PHASE.INTRO;
     this.phaseFrame = 0;
     this.timer = MATCH.timerTicks;
@@ -78,6 +83,7 @@ export class Match {
     this.hazards.reset();
     this.finishCommands.reset();
     this.pendingFinisher = false;
+    this.comboTracker.reset();
     this.fighters[0].resetRound(-PHYSICS.startSeparation / 2);
     this.fighters[1].resetRound(PHYSICS.startSeparation / 2);
     this.events.push({ type: 'roundStart', round: this.round });
@@ -116,12 +122,21 @@ export class Match {
         opponentX: other.x,
         events: this.events,
       });
-      if (fighter.state === 'attack' && (previousState !== 'attack' || previousMove !== fighter.move || fighter.moveFrame < previousFrame))
-        this.events.push({ type: 'attack', side: fighter.side, move: fighter.move, x: fighter.x,
-          moveData: fighter.moveOf() });
+      if (fighter.state === 'attack' && (previousState !== 'attack' || previousMove !== fighter.move || fighter.moveFrame < previousFrame)) {
+        const attack = { type: 'attack', side: fighter.side, move: fighter.move, x: fighter.x,
+          moveData: fighter.moveOf(), attackId: fighter.attackInstance?.id || null,
+          inputKeys: [...(fighter.attackInstance?.inputKeys || [])] };
+        this.events.push(attack);
+        this.comboTracker.registerAttack(attack);
+      }
       if (fighter.state === 'landing' && previousState !== 'landing') this.events.push({ type: 'land', side: fighter.side, x: fighter.x });
+      if (previousState === 'juggle' && fighter.state === 'knockdown' && !fighter.airborne)
+        this.comboTracker.juggleLand(fighter, this.events);
     }
 
+    // End a sequence before contact resolution on the first frame the victim
+    // can act. A hit resolving later on this same tick starts a new combo.
+    this.comboTracker.beforeContacts(this.fighters, this.events);
     this.faceOff();
     this.separate();
     if (this.phase === PHASE.FIGHT) { this.stepWeapons(); this.stepStrike(); }
@@ -132,6 +147,7 @@ export class Match {
     this.hazards.step(this);
     this.decayCombos();
     this.advancePhase();
+    this.comboTracker.tickDisplay(this.fighters);
     return this.events;
   }
 
@@ -248,9 +264,11 @@ export class Match {
       this.events.push({
         type: 'block', move: move.id, moveData: move,
         weapon: move.projectile?.kind || move.weapon, attacker: attacker.side, defender: defender.side,
+        attackId: attacker.attackInstance?.id || null,
         x: point.x, y: point.y, damage: chip, level: hit.level, facing: dir,
         bloodScale: hit.bloodScale, ko: defender.health <= 0,
       });
+      this.comboTracker.blocked(attacker, defender, this.events);
       return;
     }
 
@@ -264,10 +282,6 @@ export class Match {
     const raw = hit.damage * scale * positionScale * (counter ? COUNTER_MULTIPLIER : 1);
     const damage = Math.min(lethalHealth(defender), Math.round(raw));
     defender.health -= damage;
-    defender.comboCount += 1;
-    defender.comboIdle = 0;
-    defender.comboDamage += damage;
-    defender.comboPeak = Math.max(defender.comboPeak, defender.comboCount);
 
     if (move.id === 'grab' && move.grabHold > 0) {
       attacker.state = 'grabbing';
@@ -303,7 +317,7 @@ export class Match {
     defender.addMeter(hit.meter * 0.7);
     this.hitStop = Math.max(this.hitStop, hit.hitStop + (counter ? 3 : 0));
 
-    this.events.push({
+    const hitEvent = {
       type: move.id === 'finisher' ? 'finisher' : 'hit',
       move: move.id, moveData: move, attacker: attacker.side, defender: defender.side,
       weapon: move.projectile?.kind || move.weapon || null,
@@ -312,9 +326,14 @@ export class Match {
       ko: defender.health <= 0,
       knockdown: hit.knockdown, launched: !grounded && !airborne && hit.launch > 0,
       juggle: !grounded && (airborne || hit.launch > 0), grounded,
-      juggleHits: defender.juggleHits, combo: defender.comboCount, facing: dir,
-      comboDamage: defender.comboDamage, moveName: move.name, attackerId: attacker.id,
-    });
+      juggleHits: defender.juggleHits, facing: dir,
+      moveName: move.name, attackerId: attacker.id,
+      attackId: attacker.attackInstance?.id || null,
+      inputKeys: [...(attacker.attackInstance?.inputKeys || [])],
+    };
+    this.events.push(hitEvent);
+    const combo = this.comboTracker.recordHit(attacker, defender, hitEvent, this.events);
+    Object.assign(hitEvent, { comboId: combo.id, combo: combo.count, comboDamage: combo.damage });
 
     if (defender.health <= 0 && move.id === 'uppercut' && move.brutality !== false && defender.comboCount >= 3
       && attacker.roundsWon + 1 >= this.roundsToWin && this.phase === PHASE.FIGHT)
@@ -325,31 +344,28 @@ export class Match {
     }
   }
 
-  // Airborne hits remain one combo until landing. Choosing to lie on the floor
-  // must not keep its count or damage scaling alive indefinitely.
+  // True continuity has no cosmetic grace period. The tracker already checks
+  // actionable gaps before contacts; this closes grounded knockdowns on impact.
   decayCombos() {
     for (const f of this.fighters) {
       if (!f.comboCount) continue;
-      if (f.isDowned() || f.state === 'landing' || f.state === 'getUp') {
-        this.endCombo(f);
-      } else if (f.isActionable() || f.state === 'idle') {
-        f.comboIdle = (f.comboIdle || 0) + 1;
-        if (f.comboIdle > 6) this.endCombo(f);
-      } else f.comboIdle = 0;
+      if (f.isDowned() || f.state === 'landing' || f.state === 'getUp') this.endCombo(f);
     }
   }
 
   endCombo(fighter) {
-    if (fighter.comboCount >= 2) this.events.push({ type: 'comboEnd', attacker: 1 - fighter.side,
-      defender: fighter.side, combo: fighter.comboCount, damage: fighter.comboDamage });
-    fighter.comboCount = 0; fighter.comboIdle = 0; fighter.comboDamage = 0;
+    this.comboTracker.end(fighter, this.events);
   }
 
   advancePhase() {
     const [a, b] = this.fighters;
 
     if (this.phase === PHASE.INTRO) {
-      if (this.phaseFrame >= MATCH.introFrames) this.setPhase(PHASE.FIGHT);
+      if (this.phaseFrame >= (this.shortIntro ? REEL.quickFightEnd : MATCH.introFrames)) {
+        this.setPhase(PHASE.FIGHT);
+        // Intro length cannot leak into the playable animation/state clock.
+        for (const fighter of this.fighters) fighter.stateFrame = 0;
+      }
       return;
     }
 
@@ -431,6 +447,7 @@ export class Match {
   }
 
   endRound(winnerSide, reason) {
+    for (const fighter of this.fighters) this.comboTracker.end(fighter, this.events, 'round-end');
     this.roundWinner = winnerSide;
     this.roundReason = reason;
     if (winnerSide !== null) this.fighters[winnerSide].roundsWon += 1;
@@ -626,6 +643,9 @@ export class Match {
       moveData: f.move ? f.moveOf() : null,
       x: f.x, y: f.y, facing: f.facing, crouching: f.crouching, airborne: f.airborne,
       comboCount: f.comboCount, comboDamage: f.comboDamage, comboPeak: f.comboPeak,
+      comboId: this.comboTracker.activeByDefender.get(f.side)?.id || null,
+      comboDisplayCount: f.comboCount || f.comboDisplayCount,
+      comboDisplayDamage: f.comboCount ? f.comboDamage : f.comboDisplayDamage,
       juggleHits: f.juggleHits, juggleGravity: f.juggleGravity,
       recovery: f.recovery, recoveryReady: f.recoveryReady, stunFrames: f.stunFrames,
       rangedCooldown: f.cooldowns.ranged || 0,
@@ -634,7 +654,7 @@ export class Match {
       cooldowns: { ...f.cooldowns },
     });
     return {
-      phase: this.phase, phaseFrame: this.phaseFrame, round: this.round, hitStop: this.hitStop,
+      phase: this.phase, phaseFrame: this.phaseFrame, round: this.round, hitStop: this.hitStop, quickIntro: this.shortIntro,
       timer: this.timer, winner: this.winner, roundWinner: this.roundWinner,
       roundReason: this.roundReason, flawless: this.flawless, fatality: this.fatality, roundsToWin: this.roundsToWin,
       brutality: this.brutality, friendship: this.friendship, finisher: this.finisher, stageId: this.stageId,

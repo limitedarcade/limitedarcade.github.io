@@ -165,3 +165,37 @@ When authoring a kit:
 - **Easy chains carry `ends`**, the id of the move the chain finishes on. A chain
   entry has no move id of its own, so `ends` is what the panel's copy and the
   demonstration test use to tell whether the lesson actually landed.
+
+## Asset budget
+
+Every heavy runtime file goes through the build-time pipeline, and the build
+fails its size check when a file or the first fight grows past its cap. Masters
+in `web/game/public` are never overwritten; tests and tools keep reading them.
+
+- **Add the asset to `web/tools/asset-pipeline.json`.** `glb` entries run
+  `tools/optimize-glb.mjs` (meshopt geometry, WebP textures, same path);
+  `scenePack` entries turn a Three.js `model.json` into a BFS1 `.bin`
+  (`tools/pack-scene.mjs`, lossless geometry); `image` entries re-encode to WebP;
+  `audio` entries re-encode music to 96 kbps MP3 with tags stripped (needs
+  `ffmpeg` on PATH; without it the master ships unchanged). Sound effects stay
+  WAV on purpose: MP3 adds encoder silence to the front of every hit sound.
+  List the replaced master under `devOnly` so it stays out of `dist/`.
+- **Dev serves the optimised bytes too** (Vite middleware, cached in
+  `web/.asset-cache/`). A meshopt or WebP problem shows up locally, not after a
+  publish. The first request for a changed master takes a few seconds.
+- **Load glTF through `createGltfLoader()`** (`render/gltf.js`), never `new
+  GLTFLoader()`: only it can decode the compressed files. Load scene packs with
+  `loadScenePack()` (`render/scenePack.js`); `made.html` shares the same reader.
+- **Quantize defaults to `safe`**: normals, UVs, colours and weights, never
+  positions, so code reading bounds or vertices sees authored numbers. Use
+  `"quantize": "all"` only for assets nothing inspects (weapons, props).
+- **Load per match, not at boot.** Weapons come from the fighters' move data
+  (`weaponsFor()` in `render/weapons.js`); the drone loads only for a kit with an
+  `overwatch` move; gore loads with the first match.
+- **Portraits are images.** After changing a fighter's look, run
+  `npm run render-portraits` (writes `public/portraits/<id>.webp`). A fighter
+  without one still works, but the select screen then loads its model to draw it.
+- **Check it:** `npm run build && npm run check-budget`. Caps live in
+  `web/tools/budget.json` (6 MB per file, 10 MB to the menu, 35 MB to the first
+  fight). Measured 2026-09-22: 0.55 MB to the menu, 25.5 MB to the first fight.
+  Raise a cap only on purpose, in the change that needs it.

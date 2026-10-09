@@ -1,0 +1,96 @@
+{
+  "mode": "preview",
+  "phone": false,
+  "steps": [
+    {
+      "name": "title",
+      "ok": true,
+      "ms": 10242
+    },
+    {
+      "name": "select",
+      "ok": true,
+      "ms": 12979
+    },
+    {
+      "name": "fight",
+      "ok": true,
+      "ms": 50023
+    },
+    {
+      "name": "ko",
+      "ok": true,
+      "ms": 7975
+    },
+    {
+      "name": "results",
+      "ok": true,
+      "ms": 73686
+    }
+  ],
+  "bytes": {
+    "title": 576013,
+    "firstFight": 27737648
+  },
+  "errors": [],
+  "fighters": [
+    "trump",
+    "carney"
+  ],
+  "finalPhase": "matchEnd",
+  "ok": true,
+  "summary": {
+    "titleMB": 0.55,
+    "firstFightMB": 26.45
+  },
+  "largest": [
+    {
+      "path": "/stages/lake-america-3d/lake-america.glb",
+      "MB": 4.49
+    },
+    {
+      "path": "/fighters/trump/fighter.bin",
+      "MB": 4.23
+    },
+    {
+      "path": "/fighters/carney/carney-hero.glb",
+      "MB": 3.82
+    },
+    {
+      "path": "/music/Stage%20Two_%20Odd%20Odds.mp3",
+      "MB": 2.67
+    },
+    {
+      "path": "/music/Victory.mp3",
+      "MB": 2.18
+    },
+    {
+      "path": "/music/Winner%20Take%20All.mp3",
+      "MB": 2.18
+    },
+    {
+      "path": "/music/Stage%20Cleared!.mp3",
+      "MB": 1.01
+    },
+    {
+      "path": "/gore/viscera.bin",
+      "MB": 0.9
+    },
+    {
+      "path": "/props/beaver/beaver.glb",
+      "MB": 0.56
+    },
+    {
+      "path": "/vfx/burst.glb",
+      "MB": 0.55
+    },
+    {
+      "path": "/fighters/carney/motion.bin",
+      "MB": 0.44
+    },
+    {
+      "path": "/fighters/trump/combat.bin",
+      "MB": 0.41
+    }
+  ]
+}

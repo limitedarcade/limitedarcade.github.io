@@ -43,7 +43,7 @@ export class CommandResolver {
     }
     const pressed = ATTACK_BUTTONS.filter(b => edges[b]);
     if (pressed.length) {
-      if (!this.pending) this.pending = { buttons: new Set(), age: 0 };
+      if (!this.pending) this.pending = { buttons: new Set(), age: 0, intent: cloneInput(now) };
       for (const b of ATTACK_BUTTONS) if (now[b]) this.pending.buttons.add(b);
       for (const b of pressed) this.pending.buttons.add(b);
     }
@@ -51,8 +51,10 @@ export class CommandResolver {
     // three/four-button chords when fingers land on adjacent polling frames.
     if (this.pending && ++this.pending.age > this.macroWindow) {
       const buttons = [...this.pending.buttons];
+      const intent = this.pending.intent;
       this.pending = null;
-      return { attack: buttons.length === 1 ? buttons[0] : null, macro: chordMove(buttons), edges };
+      return { attack: buttons.length === 1 ? buttons[0] : null, macro: chordMove(buttons),
+        buttons, intent, edges };
     }
     return { attack: null, macro: null, edges };
   }

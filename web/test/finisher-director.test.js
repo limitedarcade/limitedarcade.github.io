@@ -9,9 +9,9 @@ import { fatalityOf } from '../game/src/engine/fatalities.js';
 import * as THREE from '../game/src/vendor/three.module.js';
 import { CinematicGrip } from '../game/src/render/cinematicGrip.js';
 
-function replay(hz) {
+function replay(hz, script) {
   const clock = new SimulationClock(), match = new Match({left:{id:'carney'},right:{id:'officer_flock'}});
-  match.startFinisher(fatalityOf('carney-cold-cut'),0);
+  match.startFinisher({...fatalityOf('carney-cold-cut'),script},0);
   const contacts=[]; let ticks=0;
   for(let i=0;i<hz*18;i++) clock.advance(1/hz,()=>{
     ticks++;
@@ -19,10 +19,13 @@ function replay(hz) {
   },()=>match.phase===PHASE.FINISHER?finisherTimeScale(match.finisher,match.phaseFrame):1);
   return {ticks,contacts,phase:match.phase,frame:match.phaseFrame};
 }
-test('ramped finisher has identical event order and progress at 30, 60 and 144 Hz',()=>{
-  const expected=replay(60);
-  assert.equal(expected.contacts.length,5);
-  assert.deepEqual(replay(30),expected); assert.deepEqual(replay(144),expected);
+for(const [script,contacts] of [
+  ['cold-cut',[[121,'slash'],[218,'final']]],
+  ['cold-cut-flock',[[100,'slash'],[110,'slash'],[200,'slapshot'],[246,'slapshot'],[391,'final']]],
+]) test(`${script} has identical event order and progress at 30, 60 and 144 Hz`,()=>{
+  const expected=replay(60,script);
+  assert.deepEqual(expected.contacts,contacts);
+  assert.deepEqual(replay(30,script),expected); assert.deepEqual(replay(144,script),expected);
 });
 test('both pursuit shots track the actual arm trajectory and mirror around the staged origin',()=>{
   for(const [region,start,end] of [['leftArm',203,234],['rightArm',249,290]]) {

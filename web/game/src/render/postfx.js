@@ -46,8 +46,8 @@ export const GRADES = {
   lakeAmerica: {
     lift: [0.001, 0.003, 0.006],
     gain: [1.025, 1.01, 1.025],
-    saturation: .96,
-    contrast: 1.045,
+    saturation: .93,
+    contrast: 1.015,
   },
 };
 

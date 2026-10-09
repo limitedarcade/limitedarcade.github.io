@@ -30,6 +30,11 @@ export const RIM = {
   // Downward-ish and behind, matching a backlight above and off to the side.
   height: 0.35,
   flashDecay: 7.5,
+  // Camera-side wardrobe fill. It follows the fighter material rather than
+  // lighting the whole arena, so dark suits keep their folds while the skyline
+  // and practical lamps remain background elements.
+  fillStrength: 0.16,
+  fillNeutral: 0.022,
 };
 
 // Side identity, straight from the colour bible: P1 red, P2 blue.
@@ -47,6 +52,9 @@ export class FighterRim {
       uRimDir: { value: new THREE.Vector3(0, RIM.height, -1).normalize() },
       uRimFlash: { value: 0 },
       uRimFlashColor: { value: new THREE.Color(0xffffff) },
+      uFighterFillColor: { value: new THREE.Color(0xd8e7ff) },
+      uFighterFillStrength: { value: RIM.fillStrength },
+      uFighterFillNeutral: { value: RIM.fillNeutral },
     };
     this.setFacing(side ? -1 : 1);
   }
@@ -74,6 +82,8 @@ export class FighterRim {
     this.uniforms.uRimStrength.value = RIM.strength;
     this.uniforms.uRimPower.value = RIM.power;
     this.uniforms.uRimRake.value.set(RIM.rakeMin, RIM.rakeMax);
+    this.uniforms.uFighterFillStrength.value = RIM.fillStrength;
+    this.uniforms.uFighterFillNeutral.value = RIM.fillNeutral;
   }
 
   // Shares this fighter's uniform objects into the material's compiled shader,
@@ -93,6 +103,8 @@ export class FighterRim {
           // Both view space: normal, from normal_fragment_maps above, and
           // vViewPosition, which the physical shader always declares.
           vec3 rimN = normalize( normal );
+          float frontFill = 0.55 + 0.45 * clamp( dot( rimN, normalize( -vViewPosition ) ), 0.0, 1.0 );
+          totalEmissiveRadiance += ( diffuseColor.rgb * uFighterFillStrength + uFighterFillColor * uFighterFillNeutral ) * frontFill;
           float rimF = pow( 1.0 - clamp( dot( rimN, normalize( vViewPosition ) ), 0.0, 1.0 ), uRimPower );
           vec3 rimD = normalize( ( viewMatrix * vec4( uRimDir, 0.0 ) ).xyz );
           float rake = smoothstep( uRimRake.x, uRimRake.y, dot( rimN, rimD ) );
@@ -109,6 +121,9 @@ export class FighterRim {
         uniform vec3 uRimDir;
         uniform float uRimFlash;
         uniform vec3 uRimFlashColor;
+        uniform vec3 uFighterFillColor;
+        uniform float uFighterFillStrength;
+        uniform float uFighterFillNeutral;
       ` + shader.fragmentShader;
     };
     // three's program cache does not know about onBeforeCompile edits, so

@@ -1,12 +1,29 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { FightAudio, MUSIC_TRACKS } from '../game/src/game/fightAudio.js';
+import { existsSync } from 'node:fs';
+import { FightAudio, MUSIC_TRACKS, victoryTrack, captionFor, VOICES } from '../game/src/game/fightAudio.js';
+import { OptionsStore } from '../game/src/game/options.js';
 
 test('music cues use the supplied menu, fight, and victory tracks', () => {
   assert.deepEqual(MUSIC_TRACKS.theme, { file: 'Stage Cleared!.mp3', loop: true });
   assert.deepEqual(MUSIC_TRACKS.battle, { file: 'Stage Two_ Odd Odds.mp3', loop: true });
-  assert.deepEqual(MUSIC_TRACKS.final, { file: 'Stage Two_ Odd Odds.mp3', loop: true });
+  assert.deepEqual(MUSIC_TRACKS.final, { file: 'Final Round Mayhem.mp3', loop: true });
+  assert.deepEqual(MUSIC_TRACKS.finisher, { file: 'KO Overdrive.mp3', loop: true });
+  assert.deepEqual(MUSIC_TRACKS.champion, { file: 'Victory.mp3', loop: false });
+  assert.deepEqual(MUSIC_TRACKS.results, { file: 'Winner Take All.mp3', loop: true });
   assert.deepEqual(MUSIC_TRACKS.victory, { file: 'Victory Fanfare.mp3', loop: false });
+});
+
+test('every supplied track has a cue, and every cue has a file', () => {
+  for (const { file } of Object.values(MUSIC_TRACKS)) assert.ok(existsSync(new URL(`../game/public/music/${file}`, import.meta.url)), file);
+  assert.equal(new Set(Object.values(MUSIC_TRACKS).map(t => t.file)).size, Object.keys(MUSIC_TRACKS).length, 'no track does two jobs');
+});
+
+test('a round win gets the fanfare; the match-winning round gets the victory theme', () => {
+  const fighters = roundsWon => roundsWon.map(n => ({ roundsWon: n }));
+  assert.equal(victoryTrack({ roundsToWin: 2, fighters: fighters([1, 0]) }), 'victory');
+  assert.equal(victoryTrack({ roundsToWin: 2, fighters: fighters([1, 2]) }), 'champion');
+  assert.equal(victoryTrack({ roundsToWin: 1, fighters: fighters([1, 0]) }), 'champion');
 });
 
 test('menu exhibition keeps the theme playing and restores combat music on entry', () => {
@@ -82,4 +99,21 @@ test('unlock requests music before awaiting context resume and retries denied pl
   element.paused = true;
   await audio.unlock();
   assert.deepEqual(order, ['play', 'resume', 'play', 'resume']);
+});
+
+test('announcer captions read the call as spoken and follow the captions option', () => {
+  assert.equal(captionFor('fight'), 'Fight');
+  assert.equal(captionFor('fearIsWeakness'), 'Fear is Weakness');
+  assert.equal(captionFor('nope'), '');
+  for (const cue of Object.keys(VOICES)) assert.ok(captionFor(cue) && !/^\d/.test(captionFor(cue)), cue);
+  const options = new OptionsStore(null);
+  assert.equal(options.settings.captions, 'auto');
+  assert.equal(options.set('captions', 'on'), true);
+  assert.equal(options.set('captions', 'sometimes'), false);
+  const audio = new FightAudio(), heard = [];
+  audio.onVoice = cue => heard.push(cue);
+  audio.play = async () => {};
+  audio.voice('fight'); audio.voice('not-a-cue');
+  assert.deepEqual(heard, ['fight']);
+  assert.equal(audio.inaudible(), true, 'no audio context yet means nobody heard it');
 });

@@ -594,6 +594,7 @@ export class Stage {
   // small and irregular on purpose: a round of fighting should read as spatter
   // building up, not as one puddle being repainted wider.
   splatBlood(x, z, radius, amount, random = Math.random) {
+    if (this.showBlood === false) return; // the Gore option is off
     const ctx = this.decalCtx;
     if (!ctx) return;
     const [px, pz] = this.decalPixel(x, z);

@@ -2,6 +2,7 @@ import { CHORDS, directionalFor } from '../engine/moveList.js';
 import { MATCH } from '../engine/frameData.js';
 import { PHASE } from '../engine/match.js';
 import { fatalitiesFor, BRUTALITY } from '../engine/fatalities.js';
+import { routesForKit } from '../engine/comboRoutes.js';
 
 export const MOVEMENT_LESSONS = Object.freeze([
   { id: 'lesson-sprint', name: '04 · Close the gap', group: 'Fundamentals', sub: 'Movement', keys: ['forward', 'forward'],
@@ -51,29 +52,39 @@ export function practiceMoves(fighter, stage) {
   // `ends` names the move the chain finishes on. A chain entry has no move id
   // of its own, so it is the only way a caller -- the panel's copy, the
   // demonstration test -- can tell which attack proves the lesson landed.
-  const easy = fighter.kit.easyChains ? [
-    { id: 'easy-carney-roundhouse', name: '08 · Three taps, high kick', comboButtons: ['lp', 'lp', 'lp'], ends: 'heavyKick', description: 'Release between three light-punch taps. Land the first punch to flow through a shoulder check into Final Draft. Holding the button does not repeat it; blocks and misses stop the chain.' },
-    { id: 'easy-carney-axe', name: '09 · Change the ending', comboButtons: ['lp', 'lk', 'lk'], ends: 'heelDrop', description: 'Tap light punch, light kick, light kick. Land the opener to finish with Ice Pick, an overhead axe kick. Choose your ending; mixing every button can produce a different chord.' },
-    { id: 'easy-carney-spin', name: '10 · Spend on spectacle', comboButtons: ['lp', 'lp', 'hk'], ends: 'spinKick', description: 'Tap light punch twice, then heavy kick. Polar Reversal costs one meter stock and ends the chain with a spinning heel. Practice supplies meter; a real round makes you earn it. Forward + HK also performs it.' },
-  ].map(entry => ({ ...entry, keys: entry.comboButtons, endsName: fighter.moves[entry.ends]?.name, group: 'Fundamentals', sub: 'Easy chains' })) : [];
+  const combos = routesForKit(fighter.kit.id).map(route => ({ ...route, route,
+    group: 'Combos', sub: route.kind === 'juggle' ? 'Launch & follow up' : route.kind === 'assisted' ? 'Carney chains' : 'Ground',
+    keys: route.steps.flatMap(step => step.keys),
+    steps: route.steps.map(step => step.keys),
+    moveNames: route.steps.map(step => fighter.moves[step.expectedMove]?.name || step.expectedMove),
+    comboButtons: route.kind === 'assisted' ? route.steps.map(step => step.keys.at(-1)) : undefined,
+    // Legacy demonstration smoke tests look for one real attack via `ends`;
+    // route completion itself is verified by ComboPracticeSession.
+    ends: route.steps[0].expectedMove,
+    cost: route.setup.stocks,
+  }));
   const moves = Object.values(fighter.moves).filter(m => m.id !== 'finisher')
     .map(m => ({ ...m, keys: inputs.get(m.id) || [], ...shelveMove(m) }))
     // Cost first, so the two-stock burst always closes the Supers tab even when
     // a kit adds a metered move the universal order has never heard of.
     .sort((a, b) => (a.cost || 0) - (b.cost || 0) ||
       (ORDER.indexOf(a.id) + 1 || ORDER.length + 1) - (ORDER.indexOf(b.id) + 1 || ORDER.length + 1));
-  return [...easy, ...moves,
+  return [...combos, ...moves,
     ...(stage === 'lake-america' ? [{ id: 'stageAxe', name: 'Arena axe', keys: ['down', 'lp', 'hp'], group: 'Basics', sub: 'Arena', description: 'Crouch and press both punches beside the axe at the far-left edge. Reset places you there. The stage holds one axe, and it can be thrown only once per round.' }] : []),
     ...fatalitiesFor(fighter.id, stage).map(f => ({ ...f, keys: f.command, group: 'Finishers', sub: 'Fatality' })),
     ...(fighter.moves.uppercut?.brutality !== false
       ? [{ ...BRUTALITY, keys: ['down', 'hp'], group: 'Finishers', sub: 'Brutality' }] : [])];
 }
 
-export function preparePractice(match, entry) {
+export function preparePractice(match, entry, { playerSide = 0, routeCost = false, swapped = false } = {}) {
   match.startRound(); match.round = 1; match.phase = PHASE.FIGHT; match.phaseFrame = 0;
   match.events.length = 0;
   const distance = entry?.range && entry.kind !== 'brutality' ? Math.max(0.85, (entry.range.min + Math.min(entry.range.max, 3)) / 2) : entry?.projectile || entry?.overwatch ? 3 : 0.85;
   match.fighters.forEach((f, i) => { f.resetRound((i ? 1 : -1) * distance / 2); f.state = 'idle'; f.roundsWon = 0; f.addMeter(9999); });
+  if (swapped) { match.left.x = distance / 2; match.right.x = -distance / 2; }
+  if (entry?.group === 'Combos' && routeCost) {
+    match.fighters[playerSide].meter = (entry.setup.stocks || 0) * MATCH.meterUnitsPerStock;
+  }
   if (entry?.id === 'stageAxe') { match.left.x = -5; match.right.x = -2; }
   if (entry?.id === 'lesson-sprint') { match.left.x = -3.2; match.right.x = 2.2; }
   if (entry?.id === 'lesson-recovery') match.left.enterHitStun(0, true);
@@ -97,6 +108,27 @@ export function demonstrationInput(entry, frame, facing = 1, match = null) {
   if (entry?.id === 'lesson-block') return { block: true };
   if (entry?.id === 'lesson-recovery') return frame >= 90 && frame < 115 ? { [direction('back')]: true } : {};
   if (frame < 20) return {};
+  if (entry?.route) {
+    const route = entry.route;
+    if (route.kind === 'juggle') {
+      if (frame < 29) return Object.fromEntries(route.steps[0].keys.map(k => [direction(k), true]));
+      const hits = match?.right?.juggleHits || 0;
+      const step = route.steps[Math.min(hits, route.steps.length - 1)];
+      if (hits > 0 && hits < route.steps.length && match?.left?.isActionable() && match.right.state === 'juggle')
+        return Object.fromEntries(step.keys.map(k => [direction(k), true]));
+      // Legacy callers do not pass the match. Keep their deterministic preview
+      // viable; the live Watch path uses ComboPlayback and observed recovery.
+      if (!match) {
+        const index = frame >= 72 ? 2 : frame >= 58 ? 1 : -1;
+        const preview = route.steps[index];
+        if (preview && (frame - (index === 1 ? 58 : 72)) < 3)
+          return Object.fromEntries(preview.keys.map(k => [direction(k), true]));
+      }
+      return {};
+    }
+    const tick = frame - 20, step = route.steps[Math.floor(tick / 12)];
+    return step && tick % 12 < 3 ? Object.fromEntries(step.keys.map(k => [direction(k), true])) : {};
+  }
   if (entry?.comboButtons) {
     const tick = frame - 20, button = entry.comboButtons[Math.floor(tick / 12)];
     return button && tick % 12 < 3 ? { [button]: true } : {};
@@ -125,11 +157,11 @@ export function practiceDummyInput(match, entry, behavior = 'idle', frame = 0) {
   return behavior === 'block' ? { block: true } : behavior === 'crouch' ? { block: true, down: true } : {};
 }
 
-export function sustainPractice(match, entry) {
+export function sustainPractice(match, entry, { routeCost = false } = {}) {
   match.timer = MATCH.timerTicks;
   if (match.phase === PHASE.FINISHER_WINDOW) match.phaseFrame = Math.min(match.phaseFrame, 120);
   for (const f of match.fighters) {
-    f.addMeter(9999);
+    if (!(routeCost && entry?.group === 'Combos')) f.addMeter(9999);
     if (match.phase === PHASE.FIGHT && entry?.kind !== 'brutality') f.health = f.maxHealth;
   }
   if (entry?.kind === 'brutality' && match.phase === PHASE.FIGHT && match.right.health > 0) {

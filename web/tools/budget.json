@@ -1,0 +1,8 @@
+{
+  "_readme": "Download caps enforced by `npm run check-budget` (tools/check-budget.mjs). Sizes are MB (1 MB = 1048576 bytes), measured uncompressed, so real transfers with gzip are smaller. Raise a cap only on purpose, in the same change that needs it, and say why in the commit.",
+  "perAssetMB": 6,
+  "perAssetExceptions": {},
+  "distMB": 80,
+  "titleMB": 10,
+  "firstFightMB": 35
+}

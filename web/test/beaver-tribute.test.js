@@ -80,12 +80,16 @@ test('Trump’s complete authored head detaches, including face vertices weighte
   damage.resetRound(); gore.resetRound(); damage.dispose(); built.dispose();
 });
 
-test('match does not end during the beaver handoff', () => {
+for (const script of ['cold-cut', 'cold-cut-flock']) test(`${script} match holds through the beaver handoff and hero pose`, () => {
   const match = new Match({ left: { id: 'carney' }, right: { id: 'trump' } });
-  match.startFinisher(fatalityOf('carney-cold-cut'), 0);
-  for (let i = 0; i < 391 + TRIBUTE.release; i++) match.step([{},{}]);
+  // Exercise both authored timelines without enabling the parked ice-arm variant.
+  match.startFinisher({ ...fatalityOf('carney-cold-cut'), script }, 0);
+  const timeline = FINISHER_SCRIPTS[script];
+  for (let i = 0; i < timeline.impactFrame + TRIBUTE.release; i++) match.step([{},{}]);
   assert.equal(match.phase, 'finisher');
-  while (match.phase === 'finisher') match.step([{},{}]);
+  while (match.phaseFrame < timeline.duration - 1) match.step([{},{}]);
+  assert.equal(match.phase, 'finisher');
+  match.step([{},{}]);
   assert.equal(match.phase, 'matchEnd');
 });
 

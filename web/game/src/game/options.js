@@ -9,7 +9,7 @@ export const DEFAULT_BINDINGS = Object.freeze([
   Object.freeze({ left: 'KeyA', right: 'KeyD', up: 'KeyW', down: 'KeyS', lp: 'KeyU', hp: 'KeyI', lk: 'KeyJ', hk: 'KeyK', block: 'Space' }),
   Object.freeze({ left: 'ArrowLeft', right: 'ArrowRight', up: 'ArrowUp', down: 'ArrowDown', lp: 'Numpad4', hp: 'Numpad5', lk: 'Numpad1', hk: 'Numpad2', block: 'Numpad0' }),
 ]);
-export const DEFAULT_OPTIONS = Object.freeze({ quality: 'auto', motion: 'system', rumble: true, damageNumbers: true, gore: true });
+export const DEFAULT_OPTIONS = Object.freeze({ quality: 'auto', motion: 'system', rumble: true, damageNumbers: true, gore: true, captions: 'auto' });
 const clone = value => JSON.parse(JSON.stringify(value));
 const validCode = code => typeof code === 'string' && /^(Key[A-Z]|Digit[0-9]|Numpad[0-9]|Arrow(Left|Right|Up|Down)|Space|Bracket(Left|Right)|Semicolon|Quote|Comma|Period|Slash|Backslash|Minus|Equal)$/.test(code);
 const storeForBrowser = () => { try { return globalThis.localStorage; } catch { return null; } };
@@ -44,6 +44,7 @@ export class OptionsStore {
   validSetting(key, value) {
     if (key === 'quality') return ['auto', 'cinematic', 'performance'].includes(value);
     if (key === 'motion') return ['system', 'reduced', 'full'].includes(value);
+    if (key === 'captions') return ['auto', 'on', 'off'].includes(value);
     return ['rumble', 'damageNumbers', 'gore'].includes(key) && typeof value === 'boolean';
   }
   save() {

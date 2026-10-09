@@ -17,7 +17,7 @@ test('impact vocabulary, intensity bounds and counter/KO priority', () => {
   }
   for (const power of [0, 0.55, 1.35, 2.6, 99]) {
     const p = impactProfile({ bloodScale: power });
-    assert.ok(p.pause >= 4 && p.pause <= 12); assert.equal(p.slow, 0);
+    assert.ok(p.pause >= 2 && p.pause <= 12); assert.equal(p.slow, 0);
     assert.equal(p.grade, p.heavy ? 3 : 0); assert.equal(p.dolly, p.heavy ? 0.4 : 0);
   }
 });

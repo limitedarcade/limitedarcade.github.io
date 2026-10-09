@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
 
 const READY_GOLD = new THREE.Color('#ffc16a');
 
@@ -38,27 +38,54 @@ function projectileModel(source, originals) {
   return { group, materials: appearance.materials };
 }
 
+export const WEAPON_KINDS = Object.freeze(['shuriken', 'knife', 'hockey']);
+
+// The weapon models a fighter can put on screen, read straight from the move
+// data: a thrown `projectile.kind` or a summoned `weapon`. A match only fetches
+// these -- the shuriken master alone is larger than a whole fighter.
+export function weaponsFor(definition) {
+  const kinds = new Set();
+  for (const move of Object.values(definition?.combat?.moves || {})) {
+    if (move?.projectile?.kind) kinds.add(move.projectile.kind);
+    if (move?.weapon) kinds.add(move.weapon);
+  }
+  return [...kinds].filter(kind => WEAPON_KINDS.includes(kind));
+}
+
 // All transforms come from simulation frames, including hitstop and pause.
 export class WeaponView {
-  constructor(scene, stage, { loader = new GLTFLoader() } = {}) {
+  // `kinds` preloads models up front (the review pages want all of them); the
+  // game passes none and calls load() with what the current match needs.
+  constructor(scene, stage, { loader = createGltfLoader(), kinds = WEAPON_KINDS } = {}) {
     this.scene = scene; this.stage = stage; this.models = {}; this.live = new Map();
     this.liveMaterials = new Map(); this.axeStyle = null; this.ringStyle = null; this.time = 0;
-    for (const kind of ['shuriken', 'knife', 'hockey']) {
-      loader.load(`${import.meta.env?.BASE_URL || '/'}weapons/${kind}.glb`, gltf => {
-        const model = new THREE.Group();
-        model.add(gltf.scene);
-        if (kind === 'shuriken') model.rotation.x = Math.PI / 2;
-        if (kind === 'knife') model.rotation.y = -Math.PI / 2;
-        if (kind === 'hockey') model.rotation.z = Math.PI;
-        model.updateMatrixWorld(true);
-        const bounds = new THREE.Box3().setFromObject(model), size = bounds.getSize(new THREE.Vector3());
-        const centre = bounds.getCenter(new THREE.Vector3());
-        model.position.sub(centre);
-        const group = new THREE.Group(); group.add(model);
-        group.scale.setScalar((kind === 'hockey' ? 1.65 : kind === 'knife' ? 0.42 : 0.32) / Math.max(size.x, size.y, size.z));
-        this.models[kind] = group;
-      }, undefined, error => console.warn(`Weapon ${kind} unavailable`, error));
-    }
+    this.loader = loader; this.loading = new Map();
+    for (const kind of kinds) void this.load([kind]);
+  }
+  // Resolves once every requested model is ready or has failed. A missing
+  // weapon is logged and skipped rather than failing the match: the throw still
+  // happens in the sim, it just has nothing to draw.
+  load(kinds = []) {
+    return Promise.all(kinds.map(kind => {
+      if (!this.loading.has(kind)) this.loading.set(kind, new Promise(resolve => {
+        this.loader.load(`${import.meta.env?.BASE_URL || '/'}weapons/${kind}.glb`, gltf => {
+          const model = new THREE.Group();
+          model.add(gltf.scene);
+          if (kind === 'shuriken') model.rotation.x = Math.PI / 2;
+          if (kind === 'knife') model.rotation.y = -Math.PI / 2;
+          if (kind === 'hockey') model.rotation.z = Math.PI;
+          model.updateMatrixWorld(true);
+          const bounds = new THREE.Box3().setFromObject(model), size = bounds.getSize(new THREE.Vector3());
+          const centre = bounds.getCenter(new THREE.Vector3());
+          model.position.sub(centre);
+          const group = new THREE.Group(); group.add(model);
+          group.scale.setScalar((kind === 'hockey' ? 1.65 : kind === 'knife' ? 0.42 : 0.32) / Math.max(size.x, size.y, size.z));
+          this.models[kind] = group;
+          resolve(group);
+        }, undefined, error => { console.warn(`Weapon ${kind} unavailable`, error); this.loading.delete(kind); resolve(null); });
+      }));
+      return this.loading.get(kind);
+    }));
   }
   update(snapshot, dt = 0) {
     // Stage rebuilds and rounds can reuse projectile IDs. Never carry a clone

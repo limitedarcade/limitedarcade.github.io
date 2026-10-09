@@ -28,6 +28,7 @@ export class Fighter {
     this.moves = this.kit.moves;
     this.physics = this.kit.physics;
     this.maxHealth = this.kit.maxHealth;
+    this.attackSerial = 0;
     this.commands = new CommandResolver();
     this.directionTaps = new DirectionTapBuffer(PHYSICS.doubleTapFrames);
     this.input = emptyInput();
@@ -57,6 +58,7 @@ export class Fighter {
     this.moveFrame = 0;
     this.moveHasHit = false;
     this.moveLanded = false;
+    this.attackInstance = null;
     this.bufferedAction = null;
     this.stoppedCommand = null;
     this.crouching = false;
@@ -66,6 +68,9 @@ export class Fighter {
     this.comboDamage = 0;
     this.comboPeak = 0;
     this.comboIdle = 0;
+    this.comboDisplayCount = 0;
+    this.comboDisplayDamage = 0;
+    this.comboDisplayFrames = 0;
     this.blockedLast = false;
     this.pushX = 0;
     this.grabHeld = 0;
@@ -133,7 +138,7 @@ export class Fighter {
     return moveForAttack(attack, { crouching: this.crouching, airborne: false });
   }
 
-  startMove(id) {
+  startMove(id, command = null) {
     const definition = this.moveOf(id);
     const group = definition.cooldownGroup || id;
     if (this.cooldowns[group] > 0) return false;
@@ -147,6 +152,10 @@ export class Fighter {
     this.moveFrame = 0;
     this.moveHasHit = false;
     this.moveLanded = false;
+    this.attackInstance = {
+      id: `${this.side}:${++this.attackSerial}`,
+      inputKeys: command?.keys ? [...command.keys] : [],
+    };
     this.bufferedAction = null;
     this.state = 'attack';
     this.stateFrame = 0;
@@ -227,15 +236,19 @@ export class Fighter {
     const events = ctx.events;
     this.input = cloneInput(ctx.input);
     const fresh = this.commands.step(ctx.input);
-    const { attack, macro } = (fresh.attack || fresh.macro) ? fresh : this.stoppedCommand || fresh;
+    const command = (fresh.attack || fresh.macro) ? fresh : this.stoppedCommand || fresh;
+    const { attack, macro } = command;
+    const intent = command.intent || this.input;
+    const commandKeys = [...['left', 'right', 'up', 'down', 'block'].filter(key => intent[key]),
+      ...(command.buttons || [])];
     this.stoppedCommand = null;
     if (this.bufferedAction && --this.bufferedAction.frames <= 0) this.bufferedAction = null;
     // One pending command, six simulation frames. Store the intended move now:
     // releasing a direction before recovery must not change the queued attack.
     if (ctx.allowInput && this.state === 'attack' && (attack || (macro && macro !== 'finisher'))) {
       this.bufferedAction = { attack, macro, frames: 6,
-        move: macro || this.buttonMove(attack, this.input),
-        neutral: !this.input.left && !this.input.right && !this.input.down && !this.input.up && !this.input.block };
+        move: macro || this.buttonMove(attack, intent), keys: commandKeys,
+        neutral: !intent.left && !intent.right && !intent.down && !intent.up && !intent.block };
     }
     const burst = this.directionTaps.step(this.input, this.facing,
       ctx.allowInput && !this.airborne && this.isActionable() && !this.commands.pending
@@ -266,8 +279,8 @@ export class Fighter {
         if (this.moveLanded && move.cancelInto.length) {
           const [from, to] = move.cancelWindow;
           if (this.moveFrame >= from && this.moveFrame <= to) {
-            const next = this.pickCancel(move, attack, macro);
-            if (next && this.startMove(next)) break;
+            const picked = this.pickCancel(move, attack, macro, commandKeys, intent);
+            if (picked && this.startMove(picked.move, picked.command)) break;
           }
         }
         if (this.moveFrame >= total) {
@@ -276,7 +289,7 @@ export class Fighter {
           this.stateFrame = 0;
           const queued = this.bufferedAction;
           this.bufferedAction = null;
-          if (queued && !this.airborneNow) this.startMove(queued.move);
+          if (queued && !this.airborneNow) this.startMove(queued.move, queued);
         }
         break;
       }
@@ -286,7 +299,7 @@ export class Fighter {
         // Both kicks during the hold converts the grab into the throw. That
         // conversion is the whole point of having two separate grapple buttons.
         if (macro === 'throw') {
-          this.startMove('throw');
+          this.startMove('throw', { keys: commandKeys });
           this.grabHeld = 0;
           events.push({ type: 'grabConvert', side: this.side });
           break;
@@ -342,36 +355,36 @@ export class Fighter {
         break;
 
       case 'jump':
-        if (attack || macro === 'grab') this.startMove('jumpAttack');
+        if (attack || macro === 'grab') this.startMove('jumpAttack', { keys: commandKeys });
         break;
 
       default:
-        this.handleGround(ctx, attack, macro, burst);
+        this.handleGround(ctx, attack, macro, burst, commandKeys, intent);
         break;
     }
 
     this.applyPhysics();
   }
 
-  pickCancel(move, attack, macro) {
+  pickCancel(move, attack, macro, commandKeys, intent) {
     const queued = this.bufferedAction;
     if (queued) {
       const assisted = queued.neutral && this.kit.easyChains?.[move.id]?.[queued.attack];
       const next = assisted || queued.move;
-      return move.cancelInto.includes(next) ? next : null;
+      return move.cancelInto.includes(next) ? { move: next, command: queued } : null;
     }
-    if (macro === 'grab' && move.cancelInto.includes('grab')) return 'grab';
-    if (macro === 'throw' && move.cancelInto.includes('throw')) return 'throw';
+    if (macro === 'grab' && move.cancelInto.includes('grab')) return { move: 'grab', command: { keys: commandKeys } };
+    if (macro === 'throw' && move.cancelInto.includes('throw')) return { move: 'throw', command: { keys: commandKeys } };
     if (!attack) return null;
-    const next = this.buttonMove(attack, this.input);
-    return move.cancelInto.includes(next) ? next : null;
+    const next = this.buttonMove(attack, intent);
+    return move.cancelInto.includes(next) ? { move: next, command: { keys: commandKeys } } : null;
   }
 
-  handleGround(ctx, attack, macro, burst) {
+  handleGround(ctx, attack, macro, burst, commandKeys, intent) {
     const input = this.input;
 
     if (macro === 'finisher') {
-      if (ctx.allowFinisher) { this.startMove('finisher'); return; }
+      if (ctx.allowFinisher) { this.startMove('finisher', { keys: commandKeys }); return; }
       // Outside the window the command is inert rather than eating the input --
       // a mistimed finisher should not also cost you your guard.
     }
@@ -379,10 +392,10 @@ export class Fighter {
     this.crouching = Boolean(input.down) && !this.airborne;
 
     if (macro && macro !== 'finisher' && this.moves[macro]) {
-      if (this.startMove(macro)) return;
+      if (this.startMove(macro, { keys: commandKeys })) return;
       ctx.events.push({ type: 'meterRequired', side: this.side, stocks: this.moves[macro].cost });
     }
-    if (attack) { this.startMove(this.buttonMove(attack, input)); return; }
+    if (attack) { this.startMove(this.buttonMove(attack, intent), { keys: commandKeys }); return; }
 
     if (input.up && !this.crouching) {
       const forward = Number(input.right) - Number(input.left);

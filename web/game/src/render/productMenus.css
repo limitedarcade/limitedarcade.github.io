@@ -1,7 +1,7 @@
 /* Product surfaces share the color bible with the arena. The roster stays
    intentionally expandable; future slots do not pretend to be unlockable. */
 .legacy-setup { display: none !important; }
-#screen-setup { padding: 0; overflow: auto; background: linear-gradient(100deg, #080c18eb, #080c18c7 58%, #080c18ef), url('/art/arena-night.png') center / cover; }
+#screen-setup { padding: 0; overflow: auto; background: linear-gradient(100deg, #080c18eb, #080c18c7 58%, #080c18ef), url('/art/arena-night.webp') center / cover; }
 .selection-shell { width: min(1440px, 100%); margin: auto; min-height: 100%; display: flex; flex-direction: column; text-align: left; padding: clamp(18px, 3.2vw, 42px); padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(22px, env(safe-area-inset-bottom)); gap: 20px; }
 .selection-shell [hidden] { display: none !important; }
 .selection-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
@@ -181,22 +181,24 @@
 .move-fighter-select button[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
 .move-frame-data { display: block; color: var(--muted, #b1bed0); font-size: 11px; letter-spacing: .02em; margin-top: 9px; line-height: 1.5; }
 .pause-product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: min(460px, 86vw); }
-#screen-pause { background: linear-gradient(110deg, #080c18ed, #080c1880), url('/art/arena-night.png') center / cover; backdrop-filter: blur(10px); }
+#screen-pause { background: linear-gradient(110deg, #080c18ed, #080c1880), url('/art/arena-night.webp') center / cover; backdrop-filter: blur(10px); }
 #screen-pause .screen-inner { background: #080c18bd; border: 1px solid #b1bed02b; border-top: 3px solid var(--gold); padding: clamp(28px, 5vw, 58px); box-shadow: 0 35px 100px #0009; }
 #screen-pause .screen-heading { font-size: clamp(38px, 5vw, 66px); margin-bottom: 24px; }
 #screen-pause .sound-settings { display: none; }
 .title-product-actions { display: flex; justify-content: center; gap: 24px; margin-top: 18px; }
 .selection-shell :focus-visible, .product-dialog :focus-visible { outline: 2px solid var(--cyan, #80dbff); outline-offset: 4px; }
 @media (max-width: 850px) {
-  .selection-shell { gap: 14px; }
-  .selection-fighters { grid-template-columns: minmax(210px, .8fr) minmax(280px, 1fr); gap: 18px; min-height: 380px; }
-  .selection-preview { min-height: 400px; }
+  .selection-shell { gap: 12px; padding-bottom: calc(82px + max(12px, env(safe-area-inset-bottom))); }
+  .selection-fighters { grid-template-columns: minmax(205px, .75fr) minmax(300px, 1fr); gap: 16px; min-height: 330px; }
+  .selection-preview { min-height: 340px; }
   .preview-banner { font-size: 9px; padding: 7px 16px; }
-  .roster-grid { gap: 6px; }
+  .roster-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .roster-future { display: none; }
   .roster-card-label { left: 7px; bottom: 7px; gap: 4px; }
   .selection-seat { padding: 10px; }
   .selection-summary { display: none; }
-  .selection-footer { grid-template-columns: 1fr 1fr; }
+  .selection-footer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; grid-template-columns: minmax(0, 1fr) minmax(210px, auto); gap: 12px; margin: 0; padding: 8px clamp(14px, 3vw, 30px); padding-bottom: max(10px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, #080c18f0, #080c18 40%); border-top-color: #ffc63d55; box-shadow: 0 -12px 28px #080c18dd; }
+  .selection-summary { display: none; }
   .selection-stages { grid-template-columns: 1fr 1fr; gap: 16px; min-height: 380px; }
   .stage-hero-copy { padding: 20px; }
   .stage-card { min-height: 156px; }
@@ -222,7 +224,7 @@
   .selection-preview-seal { font-size: 110px; top: 15%; }
   .preview-banner { font-size: 8px; padding: 6px 12px; top: 10px; letter-spacing: .16em; }
   .preview-corner { width: 22px; height: 22px; }
-  .roster-grid { grid-template-columns: repeat(6, 1fr); }
+  .roster-grid { grid-template-columns: repeat(4, 1fr); }
   .roster-card { aspect-ratio: .72; }
   .roster-card-label { bottom: 5px; left: 2px; right: 2px; justify-content: center; }
   .roster-card-label strong { font: 700 11px 'Segoe UI', sans-serif; }
@@ -233,7 +235,7 @@
   .selection-seats { margin-top: 0; gap: 9px; }
   .seat-name { font-size: 17px; margin-bottom: 8px; }
   .seat-difficulty { padding: 7px !important; }
-  .selection-footer { position: sticky; z-index: 12; bottom: calc(-1 * max(12px, env(safe-area-inset-bottom))); grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 10px; margin: 0 -10px; padding: 10px; padding-bottom: max(12px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, #080c18ee, #080c18 45%); box-shadow: 0 -12px 28px #080c18cc; }
+  .selection-footer { position: fixed; bottom: 0; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 10px; margin: 0; padding: 8px 10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
   .selection-shell .selection-proceed { min-width: 0; font-size: 14px; padding: 15px 18px; }
   .selection-rounds select { font-size: 12px; }
   .selection-stages { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
@@ -282,13 +284,13 @@
   .selection-note, .preview-tags { display: none; }
   .preview-banner { display: none; }
   .roster-panel { gap: 9px; }
-  .roster-grid { grid-template-columns: repeat(6, 1fr); }
+  .roster-grid { grid-template-columns: repeat(4, 1fr); }
   .roster-card-label strong { font: 700 9px 'Segoe UI', sans-serif; }
   .roster-card-index, .roster-future small { display: none; }
   .roster-card-label { left: 3px; right: 3px; justify-content: center; }
   .selection-seat { padding: 10px; }
   .selection-seat .archive-eyebrow { float: right; }
-  .selection-footer { position: sticky; z-index: 12; bottom: -14px; margin: 0 -24px -14px; padding: 8px 24px 14px; background: linear-gradient(180deg, #080c18ee, #080c18 45%); box-shadow: 0 -10px 24px #080c18c7; }
+  .selection-footer { position: fixed; bottom: 0; margin: 0; padding: 7px 24px max(8px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, #080c18f0, #080c18 45%); box-shadow: 0 -10px 24px #080c18c7; }
   .selection-rounds { flex-direction: row; align-items: center; }
   .selection-shell .selection-proceed { padding: 12px 22px; }
   .selection-stages { min-height: 290px; }

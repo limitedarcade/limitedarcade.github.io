@@ -1,5 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
-import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { createGltfLoader } from './gltf.js';
 import { VFX_PRESETS } from './vfxPresets.js';
 
 const clamp = THREE.MathUtils.clamp;
@@ -97,7 +97,7 @@ function disposeTemplate(gltf) {
 
 export class ModelVfx {
   constructor(scene, { assetBase = import.meta.env?.BASE_URL || '/', quality = 1,
-    reducedMotion = false, loader = new GLTFLoader(), presets = VFX_PRESETS, maxActive = 12, maxPerAsset = 4 } = {}) {
+    reducedMotion = false, loader = createGltfLoader(), presets = VFX_PRESETS, maxActive = 12, maxPerAsset = 4 } = {}) {
     this.scene = scene; this.assetBase = assetBase; this.quality = quality; this.reducedMotion = reducedMotion;
     this.loader = loader; this.presets = presets; this.maxActive = maxActive; this.maxPerAsset = maxPerAsset;
     this.templates = new Map(); this.pending = new Map(); this.errors = new Map();

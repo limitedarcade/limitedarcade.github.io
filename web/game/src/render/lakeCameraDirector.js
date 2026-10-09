@@ -11,7 +11,7 @@ export function returnOrbit(frame, start, reverse, end) {
 }
 
 export function lakeEntranceCamera(snapshot, { reducedMotion = false, portrait = false, aspect = portrait ? 9 / 16 : 16 / 9 } = {}) {
-  if (snapshot.stageId !== 'lake-america' || snapshot.phase !== 'intro' || reducedMotion) return null;
+  if (snapshot.stageId !== 'lake-america' || snapshot.phase !== 'intro' || snapshot.quickIntro || reducedMotion) return null;
   const frame = snapshot.phaseFrame;
   if (frame >= REEL.roundEnd) return null;
   const orbit = returnOrbit(frame, 0, 155, REEL.roundEnd);

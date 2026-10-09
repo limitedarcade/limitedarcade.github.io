@@ -1,0 +1,98 @@
+{
+  "phone": false,
+  "reduced": true,
+  "steps": [
+    {
+      "name": "title and selection",
+      "ms": 9175
+    },
+    {
+      "name": "full first entrance and fresh round",
+      "ms": 7099
+    },
+    {
+      "name": "keyboard punch lands through real input",
+      "ms": 188
+    },
+    {
+      "name": "guard absorbs a real opposing heavy punch",
+      "ms": 922
+    },
+    {
+      "name": "real KO reaches results",
+      "ms": 15489
+    },
+    {
+      "name": "rematch uses short entrance and restores a fresh playable match",
+      "ms": 1913
+    }
+  ],
+  "errors": [],
+  "shakeAfterContact": 0,
+  "contactEvents": [
+    {
+      "type": "attack",
+      "move": "lightPunch"
+    },
+    {
+      "type": "hit",
+      "move": "lightPunch",
+      "attacker": 0,
+      "defender": 1,
+      "damage": 47
+    },
+    {
+      "type": "attack",
+      "move": "heavyPunch"
+    },
+    {
+      "type": "block",
+      "move": "heavyPunch",
+      "attacker": 1,
+      "defender": 0,
+      "damage": 8
+    },
+    {
+      "type": "attack",
+      "move": "lightPunch"
+    },
+    {
+      "type": "hit",
+      "move": "lightPunch",
+      "attacker": 0,
+      "defender": 1,
+      "damage": 1
+    },
+    {
+      "type": "ko"
+    },
+    {
+      "type": "roundEnd"
+    },
+    {
+      "type": "matchEnd"
+    }
+  ],
+  "rematch": {
+    "fighters": [
+      "trump",
+      "carney"
+    ],
+    "stage": "lake-america",
+    "timer": 99,
+    "health": [
+      1,
+      1
+    ],
+    "rounds": [
+      0,
+      0
+    ],
+    "camera": [
+      -0.00016932184122713483,
+      1.6440670581972738,
+      5.355487004714949
+    ]
+  },
+  "ok": true
+}

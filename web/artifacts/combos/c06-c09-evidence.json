@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-20",
+  "status": "pass_with_unrelated_full_suite_failures",
+  "tasks": {
+    "C06": {
+      "status": "PASS",
+      "evidence": [
+        "Distinct pooled launch, airborne-contact, and juggle-landing cues",
+        "Reduced-motion and performance-mode decoration limits",
+        "FightAudio combo accents with Announcer as the sole combo-voice owner"
+      ]
+    },
+    "C07": {
+      "status": "PASS",
+      "evidence": [
+        "Catalog-driven Combos tab with Ground, Launch & follow up, and Carney chains",
+        "Watch uses ComboPlayback; Try requires ordered raw presses and authoritative route completion",
+        "Route-cost meter, side swap, dummy behavior, speed controls, step progress, measured damage, and failure feedback"
+      ]
+    },
+    "C08": {
+      "status": "PASS",
+      "evidence": [
+        "CPU route intent consumes only public snapshots/events and produces button flags",
+        "Fixed six-match exhibition cycle covers ground and juggle routes for Trump, Carney, and Officer Flock",
+        "Cold Cut/result-flow attract regressions pass",
+        "Both prior CPU coverage failures pass; meteorKick and burstStrike remain represented"
+      ]
+    },
+    "C09": {
+      "status": "PASS",
+      "evidence": [
+        "Focused acceptance: 202 passed, 0 failed",
+        "Production Vite build passed: 129 modules transformed",
+        "Browser: Practice opened from the menu; desktop Combos tab rendered without fighter/HUD clipping",
+        "Browser: One-Two Watch completed at 111 damage with both steps checked",
+        "Browser: First Juggle showed a visible launch cue and completed at 137 damage with launch/air steps checked",
+        "Browser: full-screen Demo opened and exited to the main menu without activating another choice"
+      ],
+      "not_tested": [
+        "Physical gamepad input and audio listening were unavailable in the automated browser environment",
+        "A narrow viewport override was unavailable in the selected in-app browser"
+      ]
+    }
+  },
+  "commands": {
+    "focused": {
+      "command": "node --test test/combo-*.test.js test/carney-flow.test.js test/juggle.test.js test/practice.test.js test/movement-practice.test.js test/attract.test.js test/combat.test.js test/announcer.test.js test/menu-audio.test.js test/simulation-clock.test.js test/impact.test.js test/model-vfx.test.js",
+      "result": { "tests": 202, "passed": 202, "failed": 0, "skipped": 0 }
+    },
+    "full": {
+      "command": "npm test",
+      "result": { "tests": 408, "passed": 396, "failed": 3, "skipped": 9 },
+      "unrelated_failures": [
+        "test/beaver-tribute.test.js: match does not end during the beaver handoff",
+        "test/fighter-pipeline.test.js: cinematic clip count expected 3, observed 4",
+        "test/finisher-director.test.js: ramped finisher progress expected 5, observed 2"
+      ],
+      "delta_from_c01_c05_baseline": "The two meteorKick CPU coverage failures are resolved; the three remaining failures were already outside this combo implementation."
+    },
+    "build": {
+      "command": "npm run build",
+      "result": "PASS",
+      "modules_transformed": 129,
+      "note": "Existing Rollup chunk-size warning only."
+    }
+  }
+}

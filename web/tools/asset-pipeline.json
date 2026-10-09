@@ -1,0 +1,44 @@
+{
+  "_readme": "Build-time asset optimisation. Masters under game/public stay untouched (tests read them); `vite build` writes the optimised copy to dist at `output`, and the dev server serves that same copy, so dev and production load identical bytes. Add every new heavy asset here. Paths are relative to game/public. See docs/web-fighter-and-stage-workflow.md, 'Asset budget'.",
+  "glb": [
+    { "path": "weapons/shuriken.glb", "options": { "textureSize": 512, "simplify": 0.1, "quantize": "all" } },
+    { "path": "weapons/knife.glb", "options": { "textureSize": 512, "quantize": "all" } },
+    { "path": "weapons/hockey.glb", "options": { "textureSize": 512, "quantize": "all" } },
+    { "path": "stages/lake-america-3d/lake-america.glb", "options": {} },
+    { "path": "fighters/carney/carney-hero.glb", "options": {} },
+    { "path": "fighters/carney/carney-rigged.glb", "options": {} },
+    { "path": "fighters/trump/trump-rigged.glb", "options": {} },
+    { "path": "fx/surveillance_drone.glb", "options": { "textureSize": 1024 } },
+    { "path": "fx/laser_beam.glb", "options": {} },
+    { "path": "props/beaver/beaver.glb", "options": {} },
+    { "path": "props/beaver/signpost.glb", "options": {} },
+    { "path": "vfx/burst.glb", "options": {} },
+    { "path": "vfx/shield.glb", "options": {} },
+    { "path": "vfx/fireball.glb", "options": {} },
+    { "path": "vfx/laser.glb", "options": {} },
+    { "path": "vfx/appearance.glb", "options": {} }
+  ],
+  "scenePack": [
+    { "source": "fighters/officer_flock/model.json", "output": "fighters/officer_flock/model.bin" },
+    { "source": "gore/viscera.json", "output": "gore/viscera.bin" }
+  ],
+  "audio": [
+    { "path": "music/Stage Cleared!.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/Stage Two_ Odd Odds.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/Final Round Mayhem.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/KO Overdrive.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/Victory Fanfare.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/Victory.mp3", "options": { "bitrate": "96k" } },
+    { "path": "music/Winner Take All.mp3", "options": { "bitrate": "96k" } }
+  ],
+  "image": [
+    { "source": "art/arena-night.png", "output": "art/arena-night.webp", "options": { "quality": 80 } }
+  ],
+  "devOnly": [
+    "fighters/officer_flock/model.json",
+    "fighters/officer_flock/model.report.json",
+    "gore/viscera.json",
+    "art/arena-night.png",
+    "stages/lake_america.jpg"
+  ]
+}

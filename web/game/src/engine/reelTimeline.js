@@ -1,6 +1,7 @@
 // Fixed phase frames are the edit points; rendering and sound share this reel.
 export const REEL = Object.freeze({ versusEnd: 110, introEnd: 210, roundEnd: 335,
-  fightEnd: 410, slowEnd: 32, freezeEnd: 52, koEnd: 100, roundEndFrames: 240, resultFrames: 210 });
+  fightEnd: 410, quickRoundEnd: 42, quickFightEnd: 96,
+  slowEnd: 32, freezeEnd: 52, koEnd: 100, roundEndFrames: 240, resultFrames: 210 });
 
 // The round that decides the match: both fighters are one win short. A best-of
 // one has no decider -- every round is simply the round.
@@ -22,6 +23,13 @@ export function endCard(snapshot) {
 export function reelAt(s) {
   const f = s.phaseFrame;
   if (s.phase === 'intro') {
+    if (s.quickIntro) {
+      const round = f < REEL.quickRoundEnd;
+      return { stage: round ? 'round' : 'fight',
+        t: (round ? f : f - REEL.quickRoundEnd) / 60,
+        text: round ? (decidingRound(s) ? 'FINAL ROUND' : `ROUND ${s.round}`) : 'FIGHT!',
+        voice: round ? (decidingRound(s) ? 'deathRound' : `round${Math.min(s.round, 3)}`) : 'fight', locked: true };
+    }
     if (f < REEL.versusEnd) return { stage: 'versus', t: f / 60, text: 'VS', voice: 'versus', locked: true };
     if (f < REEL.introEnd) return { stage: 'walkout', t: (f - REEL.versusEnd) / 60, locked: true };
     if (f < REEL.roundEnd) {

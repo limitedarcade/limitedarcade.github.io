@@ -55,12 +55,12 @@ const officerBase = extendMoves({
   // Flock hold a space without winning an exchange inside it.
   lightPunch: { name: 'Move Along', startup: 4, recovery: 9,
     cancelInto: ['heavyPunch', 'lightKick', 'heavyKick', 'grab'],
-    hit: { damage: 33, hitStun: 15, box: [0.26, 1.18, 1.22, 1.60], push: [0.08, 0.26] } },
+    hit: { damage: 33, hitStun: 18, box: [0.26, 1.18, 1.22, 1.60], push: [0.05, 0.12] } },
   heavyPunch: { name: 'Nightstick', startup: 12, recovery: 22,
     hit: { damage: 104, chip: 9, box: [0.28, 1.52, 1.06, 1.78], push: [0.14, 0.48], bloodScale: 1.5 } },
   lightKick: { name: 'Shin Tap', startup: 5, recovery: 10,
     cancelInto: ['heavyKick', 'heavyPunch', 'throw'],
-    hit: { damage: 38, hitStun: 16, box: [0.26, 1.16, 0.62, 1.06] } },
+    hit: { damage: 38, hitStun: 19, box: [0.26, 1.16, 0.62, 1.06] } },
   // The spacing tool. It is the worst heavy in the game on damage and the best
   // on push: a confirmed hit puts the opponent back at throwing distance, which
   // is the only place this kit is winning.

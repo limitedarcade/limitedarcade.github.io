@@ -1,5 +1,5 @@
 import * as T from './vendor/three.module.js';
-import { GLTFLoader } from './vendor/GLTFLoader.js';
+import { createGltfLoader } from './render/gltf.js';
 import { fighterAnimations } from './render/fighterAnimations.js';
 import { carneyFighter } from './fighters/carney.js';
 import { trumpFighter } from './fighters/trump.js';
@@ -67,7 +67,7 @@ async function loadModels() {
     const id=$('fighter').value, definition=id==='carney'?carneyFighter:trumpFighter;
     for(let i=0;i<2;i++) {
       const asset=id==='carney'&&!(i===0&&$('compare').value==='texture')?'carney-hero':`${id}-rigged`;
-      const gltf=await new GLTFLoader().loadAsync(`${import.meta.env.BASE_URL}fighters/${id}/${asset}.glb`), model=gltf.scene;
+      const gltf=await createGltfLoader().loadAsync(`${import.meta.env.BASE_URL}fighters/${id}/${asset}.glb`), model=gltf.scene;
       model.updateMatrixWorld(true); const height=new T.Box3().setFromObject(model).getSize(new T.Vector3()).y;
       model.scale.multiplyScalar(1.92/height); model.updateMatrixWorld(true);
       const b=new T.Box3().setFromObject(model), center=b.getCenter(new T.Vector3());model.position.add(new T.Vector3(-center.x,-b.min.y,-center.z));

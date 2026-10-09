@@ -49,3 +49,15 @@ desktop.ini
 # Reference video captures. The stills in web/reference are tracked; the
 # footage they were pulled from is too large to carry in git.
 /web/reference/*.mp4
+/web/.asset-cache/
+
+# Local assistant coordination and memory stores, separate from the game.
+/web/hive/
+/web/palace/
+/web/roster.json
+/web/roster-backups/
+/web/hallways.json
+
+# Local source snapshots used only for before/after review.
+/web/artifacts/polish-2026-10-07/baseline-source/
+/web/artifacts/polish-2026-10-07/baseline-git-status.txt

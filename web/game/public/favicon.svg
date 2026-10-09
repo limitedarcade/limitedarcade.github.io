@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#070b16"/>
+  <path d="M8 50 L50 8 L58 16 L16 58 Z" fill="#d81f2a"/>
+  <text x="33" y="47" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-size="44" font-style="italic" font-weight="900" fill="#ffc63d" stroke="#070b16" stroke-width="3" paint-order="stroke">B</text>
+</svg>

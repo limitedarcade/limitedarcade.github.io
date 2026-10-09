@@ -10,16 +10,28 @@
     "dev": "vite game --host 127.0.0.1 --port 5176 --strictPort",
     "build": "vite build game --base=./ --outDir ../dist --emptyOutDir",
     "preview": "vite preview --host 127.0.0.1 --port 4176 --strictPort",
-    "test": "node --test",
+    "test": "node --test test/*.test.js",
     "export-combat": "node fighter-tool/runner/export-combat.mjs",
     "export-specials": "node fighter-tool/runner/export-specials.mjs",
     "fighter-tool": "npm --prefix fighter-tool start",
-    "pack-runtime": "node tools/pack-runtime.mjs"
+    "pack-runtime": "node tools/pack-runtime.mjs",
+    "optimize-assets": "node tools/asset-pipeline.mjs",
+    "render-portraits": "node tools/render-portraits.mjs",
+    "smoke": "node tools/smoke-test.mjs",
+    "check-budget": "node tools/check-budget.mjs",
+    "release": "node tools/release.mjs",
+    "capture-storefront": "node tools/capture-storefront.mjs"
   },
   "dependencies": {
     "three": "0.170.0"
   },
   "devDependencies": {
+    "@gltf-transform/core": "^4.5.0",
+    "@gltf-transform/extensions": "^4.5.0",
+    "@gltf-transform/functions": "^4.5.0",
+    "meshoptimizer": "^1.2.0",
+    "playwright-core": "^1.63.0",
+    "sharp": "^0.35.4",
     "vite": "5.4.21"
   }
 }

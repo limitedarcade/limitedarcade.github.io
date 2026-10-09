@@ -10,7 +10,7 @@ import * as THREE from './vendor/three.module.js';
 import { ConfidenceProps } from './render/confidenceProps.js';
 import { BeaverTribute, tributeCamera } from './render/beaverTribute.js';
 import { tributeImpact, TRIBUTE } from './engine/beaverTribute.js';
-import { WeaponView } from './render/weapons.js';
+import { WeaponView, weaponsFor } from './render/weapons.js';
 import { DroneStrike } from './render/droneStrike.js';
 import { getFighter, listFighters, DEFAULT_FIGHTER_ID, hasFighter } from './fighters/catalog.js';
 import { Match, PHASE } from './engine/match.js';
@@ -32,7 +32,7 @@ import { FighterView } from './render/fighterView.js';
 import { PlayerInput, TouchControls, KEYBOARD_P1, KEYBOARD_P2 } from './input/sources.js';
 import { MenuNavigator } from './input/menuNav.js';
 import { registerFightTools } from './game/registerWebMcp.js';
-import { FightAudio } from './game/fightAudio.js';
+import { FightAudio, victoryTrack, captionFor } from './game/fightAudio.js';
 import { Announcer } from './game/announcer.js';
 import { RoundReel, WIN_QUOTES } from './render/roundReel.js';
 import { GameMenus } from './render/gameMenus.js';
@@ -54,8 +54,12 @@ import './style.css';
 import { practiceMoves, preparePractice, demonstrationInput, sustainPractice, practiceDummyInput } from './game/practice.js';
 import { PracticePanel } from './render/practicePanel.js';
 import { AttractDirector, AttractIdle, demoPair } from './game/attract.js';
+import { ComboPracticeSession } from './game/comboPractice.js';
+import { comboRoute } from './engine/comboRoutes.js';
 import './render/attract.css';
 import { installTitleMenu } from './render/titleMenu.js';
+import { installFileLoaderProgress, loadProgress, formatProgress } from './render/loadProgress.js';
+installFileLoaderProgress();
 const preferences = new OptionsStore();
 const reviewMode = import.meta.env.DEV ? new URLSearchParams(location.search).get('review') : null;
 if (reviewMode === 'stage') location.replace(`${import.meta.env.BASE_URL}lake-america.html`);
@@ -68,6 +72,19 @@ const bufferedHits = [{}, {}];
 installPalette();
 const audio = new FightAudio();
 const announcer = new Announcer({ audio });
+// Announcer captions, for players who can't hear the calls. 'auto' shows them
+// only while the announcer is inaudible (muted, volume at zero, or audio never
+// allowed to start); the title's background exhibition stays silent either way.
+const caption = document.createElement('p');
+caption.className = 'announcer-caption'; caption.setAttribute('aria-hidden', 'true');
+document.querySelector('#app').append(caption);
+let captionTimer = 0;
+audio.onVoice = cue => {
+  const mode = preferences.settings.captions;
+  if (mode === 'off' || (mode === 'auto' && !audio.inaudible()) || demoMode === 'vignette') return;
+  caption.textContent = captionFor(cue); caption.classList.add('show');
+  clearTimeout(captionTimer); captionTimer = setTimeout(() => caption.classList.remove('show'), 1800);
+};
 const ambience = new StageAmbience(audio);
 
 let reducedMotion = preferences.reducedMotion(matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -83,6 +100,8 @@ const dom = {
   touchRoot: document.querySelector('#touch-root'),
   loader: document.querySelector('#loader'),
   loaderCopy: document.querySelector('#loader-copy'),
+  loaderFill: document.querySelector('#loader-fill'),
+  loaderBytes: document.querySelector('#loader-bytes'),
   pauseButton: document.querySelector('#pause-button'),
   screens: {
     title: document.querySelector('#screen-title'),
@@ -132,12 +151,12 @@ const confidenceProps = new ConfidenceProps(scene);
 const beaverTribute = new BeaverTribute(scene);
 const lakeOutcome = new LakeOutcomeDirector(scene, stage);
 const gore = new GoreDebris(scene, { stage, assetBase: import.meta.env.BASE_URL });
-// Fire and forget: the debris pool falls back to generated props until it lands.
-gore.load();
-const weapons = new WeaponView(scene, stage);
+// The viscera library is fetched when the first match starts, not at boot (see
+// launchMatch); the debris pool falls back to generated props until it lands.
+const weapons = new WeaponView(scene, stage, { kinds: [] });
 // Overwatch's drone. One rig for the whole session -- the strike is exclusive,
 // and the assets are far too large to load per summon.
-const droneStrike = new DroneStrike(scene, { stage, vfx, quality, reducedMotion });
+const droneStrike = new DroneStrike(scene, { stage, vfx, quality, reducedMotion, autoload: false });
 // The scene now renders through a composer rather than straight to the canvas.
 // `renderer.toneMapping` above still applies exactly once, in the composer's
 // terminal OutputPass -- three skips tone mapping when the destination is a
@@ -169,8 +188,8 @@ const touch = coarsePointer ? new TouchControls(dom.touchRoot, players[0]) : nul
 touch?.setVisible(false);
 
 const cpus = [
-  new CpuController({ side: 0, difficulty: 'normal', seed: 4021 }),
-  new CpuController({ side: 1, difficulty: 'normal', seed: 8117 }),
+  new CpuController({ side: 0, difficulty: 'normal', seed: 4021, comboRoutes: true }),
+  new CpuController({ side: 1, difficulty: 'normal', seed: 8117, comboRoutes: true }),
 ];
 
 // ---- session state --------------------------------------------------------
@@ -191,6 +210,7 @@ let demoMode = null, demoLoading = false, demoFailed = false, demoEpoch = 0, loa
 const attract = new AttractDirector(), attractIdle = new AttractIdle();
 let debugSpeed = 1, debugBoxes = false, debugWireframe = false, debugWasPaused = false;
 let practiceActive = false, practiceEntry = null, practiceDemo = false, practiceFrame = 0, practiceDummy = 'idle', practiceSeen = new Set();
+let comboPractice = null, practiceRouteCost = false, practiceSwapped = false;
 let practiceSaved = null;
 let practicePreviousInput = '', practiceHistory = [];
 // The pairing the tutorial copy and the Lake America lesson placements assume:
@@ -212,18 +232,27 @@ const practicePanel = new PracticePanel({ roster, stages: STAGES, preferences, d
   onAction: (action, entry) => {
     if (!practiceActive || !match) return;
     practiceEntry = entry; practiceDemo = action === 'watch'; practiceFrame = 0; practiceSeen = new Set();
+    comboPractice = entry?.route ? new ComboPracticeSession({ route: entry.route, actorSide: 0,
+      kitId: match.left.kit.id, mode: practiceDemo ? 'watch' : 'try' }) : null;
     practicePreviousInput = ''; practiceHistory = []; practicePanel.stats.textContent = ''; practicePanel.history.textContent = '';
-    preparePractice(match, entry); reel.reset(); impact.reset(); simulationClock.reset(); lastPhase = null;
+    preparePractice(match, entry, { playerSide: 0, routeCost: practiceRouteCost, swapped: practiceSwapped }); reel.reset(); impact.reset(); simulationClock.reset(); lastPhase = null;
     vfx.clear(); gore.resetRound(); stage.resetRound(); hud.clearSay(); audio.setMusic('battle');
     for (const side of [0, 1]) { views[side]?.resetDamage(); bufferedHits[side] = {}; players[side].clearHeld(); }
+    practicePanel.progress(comboPractice);
     practicePanel.status.textContent = practiceDemo ? 'Demonstration playing. Select Try it to take control.' : entry?.kind === 'brutality' ? 'Two combo hits are set up. Land the uppercut to complete Overkill.' : 'Your turn. Follow the inputs above; reset whenever you like.';
     if (paused) setPaused(false);
   },
-  onSettings: (key, value) => { if (key === 'dummy') practiceDummy = value; if (key === 'speed') debugSpeed = value; if (key === 'boxes') debugBoxes = value; },
+  onSettings: (key, value) => {
+    if (key === 'dummy') practiceDummy = value;
+    if (key === 'speed') debugSpeed = value;
+    if (key === 'boxes') debugBoxes = value;
+    if (key === 'resources') practiceRouteCost = value === 'cost';
+    if (key === 'side') { practiceSwapped = !practiceSwapped; if (practiceEntry) practicePanel.onAction('reset', practiceEntry); }
+  },
 });
 function leavePractice() {
   document.body.classList.remove('practice-active');
-  practiceActive = false; practicePanel.root.hidden = true; practiceEntry = null; practiceDemo = false;
+  practiceActive = false; practicePanel.root.hidden = true; practiceEntry = null; practiceDemo = false; comboPractice = null;
   debugSpeed = 1; debugBoxes = false;
   if (practiceSaved) { Object.assign(config, practiceSaved); practiceSaved = null; }
 }
@@ -282,7 +311,7 @@ function showScreen(name) {
     selection?.show();
     if (studio && !studio.prewarmed) {
       studio.prewarmed = true;
-      void studio.prewarm().catch(error => { studio.prewarmed = false; selection?.previewError(error); });
+      void staticPortraits.then(() => studio.prewarm()).catch(error => { studio.prewarmed = false; selection?.previewError(error); });
     }
   }
   document.body.classList.toggle('in-match', name === null && demoMode !== 'vignette');
@@ -376,23 +405,38 @@ async function ensureViews(setup = config) {
     views[side].setDebris(gore);
     loads.push(views[side].load(setup.modelFormat[side]));
   }
-  if (loads.length) {
-    dom.loader.classList.remove('hidden');
-    dom.loaderCopy.textContent = 'Loading fighters…';
-    await Promise.all(loads);
-    dom.loader.classList.add('hidden');
-  }
+  if (loads.length) await Promise.all(loads);
 }
 
-function startMatch({ demo = false, setup = config } = {}) {
+// The loading screen: bytes downloaded out of the bytes requested so far. It
+// appears only if loading takes long enough to notice, so a rematch with
+// everything cached never flashes it.
+function showLoading(label) {
+  loadProgress.reset();
+  const started = performance.now();
+  // The byte count sits outside the live region so a screen reader announces
+  // the label once rather than every tick.
+  dom.loaderCopy.textContent = `${label}…`;
+  const tick = () => {
+    const progress = loadProgress.snapshot();
+    dom.loaderBytes.textContent = formatProgress(progress);
+    dom.loaderFill.style.width = progress.total ? `${Math.round(100 * progress.loaded / progress.total)}%` : '0%';
+    if (performance.now() - started > 200) dom.loader.classList.remove('hidden');
+  };
+  tick();
+  const timer = setInterval(tick, 100);
+  return () => { clearInterval(timer); dom.loader.classList.add('hidden'); dom.loaderBytes.textContent = ''; };
+}
+
+function startMatch({ demo = false, setup = config, quickIntro = false } = {}) {
   if (!demo) leaveDemo();
   const token = ++loadEpoch;
-  const task = pendingLoad.catch(() => {}).then(() => launchMatch(setup, demo, token));
+  const task = pendingLoad.catch(() => {}).then(() => launchMatch(setup, demo, token, quickIntro));
   pendingLoad = task;
   return task;
 }
 
-async function launchMatch(setup, demo, token) {
+async function launchMatch(setup, demo, token, quickIntro = false) {
   if (token !== loadEpoch) return false;
   beaverTribute.reset();
   vfx.clear();
@@ -403,13 +447,22 @@ async function launchMatch(setup, demo, token) {
   weapons.clear();
   stage.setStage(setup.stage); ambience.setStage(stage.definition);
   postfx.setGrade(({ 'lake-america': 'lakeAmerica', capitol: 'capitol', 'palm-resort': 'palms', 'executive-lawn': 'lawn' })[setup.stage]);
+  // Everything below downloads only for the fighters in this match. Gore stays
+  // fire-and-forget: a dismemberment before it lands uses generated props.
+  const definitionsNeeded = setup.fighters.map(getFighter);
+  void gore.load();
+  if (definitionsNeeded.some(f => Object.values(f.combat?.moves || {}).some(move => move?.overwatch))) droneStrike.load();
+  // The title's background exhibition loads silently behind the menu.
+  const doneLoading = demo && demoMode !== 'full' ? () => {} : showLoading('Loading arena and fighters');
   try {
-    await Promise.all([stage.ready, ensureViews(setup), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : studio?.prewarm(), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
+    await Promise.all([stage.ready, ensureViews(setup), weapons.load([...new Set(definitionsNeeded.flatMap(weaponsFor))]), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : staticPortraits.then(() => studio?.prewarm()), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
   } catch (error) {
+    doneLoading();
     dom.loaderCopy.textContent = `Unable to load arena or fighters: ${error.message}. Try Fight again.`;
-    dom.loader.classList.add('hidden'); selection?.previewError(error);
+    selection?.previewError(error);
     loadingMatch = false; return false;
   }
+  doneLoading();
   loadingMatch = false;
   if (token !== loadEpoch || (demo && !demoMode)) {
     for (const view of views) if (view) view.root.visible = false;
@@ -421,16 +474,19 @@ async function launchMatch(setup, demo, token) {
     left: { id: definitions[0].id, label: definitions[0].label },
     right: { id: definitions[1].id, label: definitions[1].label },
     roundsToWin: setup.roundsToWin, stageId: setup.stage, hazards: practiceActive ? false : setup.hazards,
+    quickIntro: quickIntro && !demo && !practiceActive,
+    quickRounds: !demo && !practiceActive,
   });
   hud?.root.remove();
   const humanSides = demo ? [] : [0, 1].filter(side => setup.control[side] === 'human');
   hud = new Hud(dom.hudRoot, { fighters: definitions.map(f => ({ ...f, portrait: studio?.portraits.get(f.id) })), humanSides });
+  applyBlood();
   if (!demo) playerProfile.begin({ humanSides, stage: setup.stage });
   if (lakePlayReview) playerProfile.abandon();
   announcer.reset(humanSides);
   for (let side = 0; side < 2; side += 1) cpus[side].setDifficulty(config.difficulty[side]);
   stage.resetRound();
-  vfx.clear(); impact.reset(); fightCamera.impact = null;
+  vfx.clear(); impact.reset(); fightCamera.resetImpact();
   for (const side of [0, 1]) { bufferedHits[side] = {}; if (views[side]?.recoil) views[side].recoil.age = 1; views[side]?.resetDamage(); if (views[side]) views[side].root.visible = true; }
   simulationClock.reset();
   lastPhase = null;
@@ -480,6 +536,7 @@ function pollSide(side) {
   if (practiceActive) {
     if (side === 0) {
       if (!practiceDemo) return players[0].poll();
+      if (comboPractice) return comboPractice.poll(match.snapshot());
       return demonstrationInput(practiceEntry, practiceFrame, match.left.facing, match);
     }
     return practiceDummyInput(match, practiceEntry, practiceDemo ? 'idle' : practiceDummy, practiceFrame);
@@ -496,12 +553,18 @@ function simStep() {
     bufferedHits[side] = {};
     return input;
   });
-  if (practiceActive) sustainPractice(match, practiceEntry);
+  if (practiceActive) sustainPractice(match, practiceEntry, { routeCost: practiceRouteCost });
+  if (practiceActive && comboPractice && !practiceDemo) comboPractice.input(inputs[0]);
   if (demoMode) attract.beforeStep(match);
   const events = match.step(inputs);
-  if (demoMode) attract.afterStep(match);
+  const snapshotAfterStep = match.snapshot();
+  if (demoMode) attract.afterStep(match, events, snapshotAfterStep);
+  else if (!practiceActive) for (const cpu of cpus) cpu.observe?.(events, snapshotAfterStep);
+  comboPractice?.observe(events, snapshotAfterStep);
   if (practiceActive) {
     practiceFrame++;
+    practicePanel.progress(comboPractice);
+    if (comboPractice?.feedback) practicePanel.status.textContent = comboPractice.feedback;
     const pressed = Object.keys(inputs[0]).filter(k => inputs[0][k] && k !== 'start').join(' + ');
     if (pressed && pressed !== practicePreviousInput) {
       practiceHistory.push(pressed.toUpperCase()); practiceHistory = practiceHistory.slice(-4);
@@ -521,7 +584,7 @@ function simStep() {
     }
     for (const event of events) {
       if (['hit', 'block'].includes(event.type) && event.attacker === 0) practicePanel.stats.textContent = `${event.type === 'block' ? 'Blocked' : 'Hit'} · ${event.damage} damage · ${event.combo || 0} hits · ${event.comboDamage || event.damage} total`;
-      if (!practiceDemo && practiceEntry?.group !== 'Fundamentals' && event.type === 'attack' && event.side === 0) practicePanel.status.textContent = event.move === practiceEntry?.id ? 'Move performed! Experiment with its reach, or choose another.' : `You performed ${match.left.moves[event.move]?.name || event.move}. Check the selected move’s inputs and try again.`;
+      if (!comboPractice && !practiceDemo && practiceEntry?.group !== 'Fundamentals' && event.type === 'attack' && event.side === 0) practicePanel.status.textContent = event.move === practiceEntry?.id ? 'Move performed! Experiment with its reach, or choose another.' : `You performed ${match.left.moves[event.move]?.name || event.move}. Check the selected move’s inputs and try again.`;
       if (event.type === 'finisherStart') practicePanel.status.textContent = practiceDemo ? 'The real in-game cinematic. Watch again or select Try it.' : 'Finisher complete. Enjoy your handiwork.';
     }
     if (match.phase === PHASE.MATCH_END && match.phaseFrame > 150) practicePanel.onAction('reset', practiceEntry);
@@ -538,16 +601,10 @@ function worldToScreen(x, y) {
   return [(projected.x + 1) / 2, (1 - projected.y) / 2];
 }
 
-// Camera shake per contact. The impact refactor moved dolly and freeze onto
-// `impactProfile` but left shake behind, so only the announcer slams were
-// moving the camera -- and because the arena's impact light is driven from
-// shake, a heavy punch also stopped lighting the scene. Both are restored here
-// from the same profile, so one table tunes the whole response to a hit.
+// Camera, sound, recoil and sparks share one contact vocabulary.
 function shakeFor(profile) {
   if (reducedMotion) return 0;
-  if (profile.ko) return 0.8;
-  if (profile.block) return 0.035;
-  return Math.min(0.5, 0.06 + profile.power * 0.11 + (profile.type === 'counter' ? 0.05 : 0));
+  return profile.shake;
 }
 
 function handleEvent(event) {
@@ -634,7 +691,7 @@ function handleEvent(event) {
     profile = impactProfile(event);
     impact.hit(profile);
     fightCamera.hit(event, profile);
-    fightCamera.addShake(shakeFor(profile));
+    fightCamera.addShake(shakeFor(profile), event.facing);
     stage.impact(event, profile);
     // Zoom blur and aberration centre on the contact point, so the screen
     // distorts away from where the blow landed rather than from frame centre.
@@ -668,6 +725,7 @@ function handleEvent(event) {
   switch (event.type) {
     case 'hit': {
       vfx.onHit(event, profile);
+      vfx.onComboHit(event);
       if (event.damage > 0 && preferences.settings.damageNumbers) {
         const [dx, dy] = worldToScreen(event.x, event.y);
         hud.damageNumber(dx, dy, event.damage, event.counter ? 'counter' : profile.heavy ? 'heavy' : '');
@@ -679,6 +737,14 @@ function handleEvent(event) {
         hud.splatterScreen(nx, ny, Math.min(1.4, event.bloodScale * 0.5));
       }
       if (event.counter) { hud.say('COUNTER', 'counter'); announceTimer = 0.7; }
+      break;
+    }
+    case 'juggleLand':
+      vfx.onJuggleLand(event);
+      break;
+    case 'comboRouteComplete': {
+      const route = comboRoute(event.routeId);
+      if (demoMode === 'full' && route) { hud.say(route.name.toUpperCase(), 'combo'); announceTimer = 1; }
       break;
     }
     case 'block':
@@ -723,19 +789,20 @@ function handleEvent(event) {
     case 'roundStart':
       hud.resetRound();
       stage.resetRound();
-      vfx.clear(); impact.reset(); fightCamera.impact = null; gore.resetRound(); droneStrike.clear();
+      vfx.clear(); impact.reset(); fightCamera.resetImpact(); gore.resetRound(); droneStrike.clear();
   for (const side of [0, 1]) { bufferedHits[side] = {}; if (views[side]?.recoil) views[side].recoil.age = 1; views[side]?.resetDamage(); if (views[side]) views[side].root.visible = true; }
       hud.clearSay(); reel.reset(); audio.setMusic(decidingRound(match.snapshot()) ? 'final' : 'battle');
       announceTimer = 0;
       break;
     case 'finisherWindow':
       hud.clearSay(); announceTimer = 0;
+      if (demoMode !== 'vignette') audio.setMusic('finisher');
       // Only the round winner can finish, so only show the button to a human
       // holding the pad on that side.
       touch?.setFinisherAvailable(event.winner === (config.control[0] === 'human' ? 0 : 1));
       break;
     case 'matchEnd':
-      audio.setMusic('victory');
+      if (demoMode !== 'vignette') audio.setMusic('champion');
       touch?.setFinisherAvailable(false);
       break;
     default:
@@ -797,9 +864,12 @@ function frame() {
     }
     hazardMarker.update(snapshot.phase === PHASE.FIGHT ? snapshot.hazard : null, paused ? 0 : realDt, reducedMotion);
     const edit = demoMode || activeScreen === null || activeScreen === 'pause' ? reel.update(snapshot) : reelAt(snapshot);
-    if (activeScreen === null && edit.stage === 'roundVictory' && snapshot.roundWinner !== null) audio.setMusic('victory');
+    // FINISH HIM and the finisher keep their own track until the match ends.
+    const finishing = snapshot.phase === PHASE.FINISHER_WINDOW || snapshot.phase === PHASE.FINISHER;
+    if (activeScreen === null && edit.stage === 'roundVictory' && snapshot.roundWinner !== null && !finishing) audio.setMusic(victoryTrack(snapshot));
     if (!practiceActive && !demoMode && snapshot.phase === PHASE.MATCH_END && snapshot.phaseFrame >= resultDuration(snapshot, REEL.resultFrames) && running) endMatch();
-    if (snapshot.phase === PHASE.MATCH_END && (activeScreen === null || activeScreen === 'result')) audio.setMusic('victory');
+    if (snapshot.phase === PHASE.MATCH_END && activeScreen === null) audio.setMusic('champion');
+    if (activeScreen === 'result') audio.setMusic('results');
     announcer.update(snapshot);
     if (lastPhase === PHASE.FINISHER_WINDOW && snapshot.phase === PHASE.MATCH_END && !snapshot.fatality)
       announcer.finisherExpired(snapshot);
@@ -1018,7 +1088,7 @@ function wireUi() {
       touch?.setVisible(false);
     });
   }
-  document.querySelector('#rematch-button').addEventListener('click', () => { void startMatch(); });
+  document.querySelector('#rematch-button').addEventListener('click', () => { void startMatch({ quickIntro: true }); });
   document.querySelector('#setup-button').addEventListener('click', () => { audio.setMusic('theme'); showScreen('setup'); });
   document.querySelector('#moves-button').addEventListener('click', () => menus.showMoves());
   document.querySelector('#resume-button').addEventListener('click', () => setPaused(false));
@@ -1128,6 +1198,7 @@ selection = new SelectionScreen({ container: dom.screens.setup, config, roster, 
   onFight: startMatch, onChange: refreshSetup, onPreview: (id, side) => studio.select(id, side).catch(error => selection.previewError(error)),
   onOptions: () => menus.showOptions(), onProfile: () => menus.showProfile(), onBack: () => showScreen('title') });
 selection.setPreviewCanvas(studio.canvas);
+const staticPortraits = import.meta.env.DEV && reviewMode === 'portraits' ? Promise.resolve() : studio.useStatic(import.meta.env.BASE_URL);
 [...document.querySelectorAll('.screen, .game-dialog')].forEach(installScrollCue);
 const menuNav = new MenuNavigator({
   isActive: () => !running || paused || activeScreen !== null || Boolean(document.querySelector('dialog[open]')),
@@ -1167,9 +1238,15 @@ window.__FIGHT__ = {
   config,
   scene,
   camera,
+  fightCamera,
   renderer,
   demo: () => ({ mode: demoMode, label: attract.label, seconds: attractIdle.seconds }),
 };
+// tools/render-portraits.mjs drives this: live-render every portrait with the
+// real studio and hand back the images to write to public/portraits.
+if (import.meta.env.DEV && reviewMode === 'portraits') {
+  window.__FIGHT__.renderPortraits = async () => { await studio.prewarm(); return Object.fromEntries(studio.portraits); };
+}
 
 
 
@@ -1192,7 +1269,20 @@ function applyOptions() {
   const goreOn = preferences.settings.gore !== false && !reducedMotion;
   for (const view of views) if (view?.gore) view.gore.enabled = goreOn;
   if (!goreOn) gore.resetRound();
+  applyBlood();
   resize();
+}
+
+// Blood follows the Gore option alone (reduced motion already drops the
+// screen splatter on its own). With Gore off there is no spray, no stain on the
+// ice, no blood on the lens and no wound on a fighter -- not just no severing.
+// Re-applied whenever the HUD or the fighter views are rebuilt.
+function applyBlood() {
+  const on = preferences.settings.gore !== false;
+  // `showBlood`, not `blood`: Hud.blood is its lens-splatter canvas.
+  vfx.showBlood = on; stage.showBlood = on;
+  if (hud) hud.showBlood = on;
+  for (const view of views) if (view?.damage) view.damage.showBlood = on;
 }
 
 function stagedOrigin(finisher) { return Math.max(-1.4, Math.min(1.4, finisher.originX)); }

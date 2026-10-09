@@ -46,7 +46,9 @@ test('a cinematic head cut removes the real Trump head and resets without damagi
 test('cinematic clip edits sample finite poses, and the last camera pose holds after the result',()=>{
   const source=new THREE.AnimationClip('heavyPunch',0.74,[new THREE.QuaternionKeyframeTrack('head.quaternion',[0,.26,.74],[0,0,0,1,0,.1,0,.994987,0,0,0,1])]);
   const clips=buildConfidenceClips({heavyPunch:source,victory:source});
-  assert.equal(clips.length,3);
+  assert.deepEqual(clips.map(clip=>clip.name),[
+    'confidenceWindup','confidenceSlash','confidenceRaise','confidenceSlapshot',
+  ]);
   assert.ok(clips.every(c=>c.tracks.every(t=>Array.from(t.values).every(Number.isFinite))));
   const finish={script:'cold-cut'},duration=FINISHER_SCRIPTS['cold-cut'].duration;
   const end=finisherCinematicAt(finish,duration),held=finisherCinematicAt(finish,10000);

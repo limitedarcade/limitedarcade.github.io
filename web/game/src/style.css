@@ -98,7 +98,7 @@ html, body {
 .plate-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: calc(var(--u) * 0.16); }
 
 .plate-name {
-  font-size: calc(var(--u) * 1.28);
+  font-size: clamp(13px, calc(var(--u) * 1.28), 19px);
   font-weight: 900;
   letter-spacing: 0.03em;
   line-height: 1;
@@ -138,7 +138,8 @@ html, body {
 .burst-row { display: flex; align-items: center; gap: calc(var(--u) * 0.3); }
 .plate-right .burst-row { flex-direction: row-reverse; }
 .burst-label {
-  font-size: calc(var(--u) * 0.56);
+  min-width: 4.5em;
+  font-size: clamp(9px, calc(var(--u) * 0.62), 12px);
   font-weight: 800;
   letter-spacing: 0.14em;
   color: rgba(226, 236, 255, 0.85);
@@ -156,6 +157,9 @@ html, body {
 .plate-right .burst-track { transform: skewX(calc(var(--skew) * -1)); }
 .burst-fill { height: 100%; background: linear-gradient(90deg, #2f6bff, #7ec8ff); }
 .plate-right .burst-fill { float: right; }
+.plate.special-ready .burst-label { color: #ffe27a; }
+.plate.burst-ready .burst-label { color: #fff3bd; text-shadow: 0 0 8px #ffc63d, 0 1px #000; }
+.plate.burst-ready .burst-track { border-color: var(--gold); box-shadow: 0 0 8px #ffc63d88, inset 0 0 0 1px #fff5; }
 
 .hud-centre { display: flex; align-items: center; gap: calc(var(--u) * 0.45); padding-top: calc(var(--u) * 0.2); }
 
@@ -200,7 +204,7 @@ html, body {
 
 .meter { display: flex; align-items: center; gap: calc(var(--u) * 0.35); width: min(38%, calc(var(--u) * 20)); }
 .meter-stocks {
-  font-size: calc(var(--u) * 1.9);
+  font-size: clamp(18px, calc(var(--u) * 1.9), 29px);
   font-weight: 900;
   line-height: 0.9;
   color: var(--gold);
@@ -208,11 +212,14 @@ html, body {
   paint-order: stroke fill;
 }
 .meter-max {
-  font-size: calc(var(--u) * 0.62);
+  min-width: 6.8em;
+  font-size: clamp(9px, calc(var(--u) * 0.62), 12px);
   font-weight: 900;
   letter-spacing: 0.1em;
   color: rgba(226, 236, 255, 0.7);
   text-shadow: 0 1px 0 #000;
+  white-space: nowrap;
+  text-align: center;
 }
 .meter-track {
   flex: 1;
@@ -231,6 +238,8 @@ html, body {
 }
 .meter-right .meter-fill { float: right; background: linear-gradient(270deg, #7c2f00, var(--gold-deep) 55%, #ffe27a); }
 .meter.ready .meter-stocks { animation: danger 0.7s steps(2, end) infinite; }
+.meter.ready .meter-max { color: #fff3bd; background: #8d5a102e; border: 1px solid #ffc63d99; border-radius: 999px; padding: 3px 7px; box-shadow: 0 0 11px #ffc63d55; }
+.meter.burst-ready .meter-max { background: #ffc63d; color: #241100; text-shadow: none; box-shadow: 0 0 14px #ffc63daa; }
 .meter.maxed .meter-fill { background: linear-gradient(90deg, #ff4a2a, #ffe27a); }
 
 .combo {
@@ -707,8 +716,9 @@ kbd {
 
 .pause-button {
   position: absolute;
-  top: max(0.5rem, env(safe-area-inset-top));
-  right: max(0.5rem, env(safe-area-inset-right));
+  /* Under Player 2's portrait (.hud-top padding + .portrait size), not on it. */
+  top: calc(max(0.5rem, env(safe-area-inset-top)) + var(--u) * 4.9);
+  right: calc(var(--u) * 0.7);
   z-index: 6;
   width: calc(var(--u) * 2.4);
   height: calc(var(--u) * 2.4);
@@ -745,10 +755,58 @@ kbd {
   animation: spin 0.9s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.loader-bytes { font-size: 0.8em; opacity: 0.75; min-height: 1.2em; }
+.loader-bar {
+  width: min(22rem, 70vw);
+  height: 4px;
+  background: rgba(255, 198, 61, 0.18);
+  overflow: hidden;
+}
+#loader-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--gold);
+  transition: width 0.1s linear;
+}
+
+/* ---------- announcer captions ---------- */
+
+.announcer-caption {
+  position: absolute;
+  left: 50%;
+  /* Clears the versus name plates and the fight HUD's lower band. */
+  bottom: 19%;
+  z-index: 8;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.3em 0.9em;
+  background: rgba(4, 7, 16, 0.78);
+  border-left: 3px solid var(--gold);
+  color: #fff;
+  font-size: calc(var(--u) * 0.95);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.announcer-caption::before { content: 'Announcer: '; color: var(--gold); }
+.announcer-caption.show { opacity: 1; }
 
 /* ---------- touch ---------- */
 
 .touch-controls {
+  /* One button size for every offset below. The clamp's 44px floor (the
+     minimum touch target) wins on phones, so positions derived from --u alone
+     let Block and Chords slide over the face buttons there. */
+  --touch-btn: clamp(44px, calc(var(--u) * 3.6), 54px);
+  --touch-gap: calc(var(--u) * 0.42);
+  --touch-bottom: calc(max(0.9rem, env(safe-area-inset-bottom)) + var(--u) * 1.6);
+  --touch-right: max(0.7rem, env(safe-area-inset-right));
+  --touch-cluster-width: calc(3 * var(--touch-btn) + 2 * var(--touch-gap));
+  --touch-cluster-height: calc(2 * var(--touch-btn) + var(--touch-gap));
   position: absolute;
   inset: 0;
   z-index: 5;
@@ -782,16 +840,16 @@ kbd {
 
 .touch-cluster {
   position: absolute;
-  right: max(0.7rem, env(safe-area-inset-right));
-  bottom: calc(max(0.9rem, env(safe-area-inset-bottom)) + var(--u) * 1.6);
+  right: var(--touch-right);
+  bottom: var(--touch-bottom);
   display: grid;
-  grid-template-columns: repeat(3, clamp(44px, calc(var(--u) * 3.6), 54px));
-  gap: calc(var(--u) * 0.42);
+  grid-template-columns: repeat(3, var(--touch-btn));
+  gap: var(--touch-gap);
   pointer-events: auto;
 }
 
 .touch-button {
-  height: clamp(44px, calc(var(--u) * 3.6), 54px);
+  height: var(--touch-btn);
   font: inherit;
   font-size: calc(var(--u) * 0.72);
   font-weight: 900;
@@ -821,8 +879,8 @@ kbd {
 
 .touch-block {
   position: absolute;
-  right: calc(max(0.7rem, env(safe-area-inset-right)) + var(--u) * 12.2);
-  bottom: calc(max(0.9rem, env(safe-area-inset-bottom)) + var(--u) * 1.6);
+  right: calc(var(--touch-right) + var(--touch-cluster-width) + var(--u) * 0.8);
+  bottom: var(--touch-bottom);
   width: clamp(52px, calc(var(--u) * 4.6), 69px);
   height: clamp(52px, calc(var(--u) * 4.6), 69px);
   background: rgba(47, 107, 255, 0.85);
@@ -930,8 +988,8 @@ button, select { min-height: 44px; }
 #screen-result[data-kind='flawless'] .result-title { color: var(--gold-light); text-shadow: 0 0 50px #ffc63d60; }
 .result-name { margin: 0; font-size: clamp(22px, 4vw, 38px); letter-spacing: 0.1em; }
 #result-quote { margin: 0 0 10px; font-size: clamp(16px, 2vw, 22px); color: var(--muted); }
-.touch-combos { position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: calc(var(--u) * 10.1); padding: 8px 16px; pointer-events: auto; font-size: 13px; color: var(--paper); background: var(--panel); }
-.touch-chord-tray { position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: calc(var(--u) * 13.7); display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: min(420px, 74vw); max-height: 48dvh; overflow-y: auto; background: #080c18ed; border: 1px solid var(--gold); padding: 10px; pointer-events: auto; touch-action: pan-y; }
+.touch-combos { position: absolute; right: var(--touch-right); bottom: calc(var(--touch-bottom) + var(--touch-cluster-height) + 8px); height: auto; min-height: 36px; padding: 6px 16px; border-radius: 999px; pointer-events: auto; font-size: 13px; color: var(--paper); background: var(--panel); }
+.touch-chord-tray { position: absolute; right: var(--touch-right); bottom: calc(var(--touch-bottom) + var(--touch-cluster-height) + 52px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; width: min(420px, 74vw); max-height: 48dvh; overflow-y: auto; background: #080c18ed; border: 1px solid var(--gold); padding: 10px; pointer-events: auto; touch-action: pan-y; }
 .touch-chord-tray.hidden { display: none; }
 .touch-chord-tray .touch-button { font-size: 12px; padding: 8px; color: var(--paper); background: var(--panel); min-height: 44px; }
 .touch-chord-tray .touch-special { border-color: var(--gold); }
