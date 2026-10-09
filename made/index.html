@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070b16" />
     <title>How Battle for Independence was made</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <style>
       @font-face {
         font-family: "Fatal Fighter";
@@ -35,6 +36,10 @@
         --blue: #2f6bff;
         --cyan: #80dbff;
         --border: rgba(238, 243, 255, 0.12);
+        /* Display faces are for headings only. Anything under ~1rem uses this
+           stack instead -- the brush faces turn to mush at label sizes. */
+        --ui: "Bahnschrift", "Segoe UI Variable Display", "Segoe UI Semibold",
+          "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
         color-scheme: dark;
       }
 
@@ -111,7 +116,7 @@
       }
       h3 {
         font-family: "Single Fighter", "Impact", sans-serif;
-        font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+        font-size: clamp(1.3rem, 1.7vw, 1.55rem);
         margin: 2rem 0 0.5rem;
         text-transform: uppercase;
         letter-spacing: 0.06em;
@@ -150,9 +155,10 @@
 
       .kicker {
         display: inline-block;
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.9rem;
-        letter-spacing: 0.16em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--muted);
         border: 1px solid var(--border);
@@ -171,9 +177,10 @@
         margin: 1.5rem 0 0;
       }
       .made-nav a {
-        font-family: "Single Fighter", sans-serif;
+        font-family: var(--ui);
+        font-weight: 600;
         font-size: 0.82rem;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--gold);
         text-decoration: none;
@@ -205,9 +212,10 @@
       }
       .faq summary {
         cursor: pointer;
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.92rem;
-        letter-spacing: 0.08em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--cyan);
         list-style: none;
@@ -235,9 +243,10 @@
       .faq details p + p { margin-top: 0; }
       .faq .tag {
         display: inline-block;
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.7rem;
-        letter-spacing: 0.1em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--gold);
         border: 1px solid rgba(255, 198, 61, 0.3);
@@ -254,7 +263,7 @@
         margin: 1.4rem 0;
         font-size: 1rem;
       }
-      .callout b { color: var(--gold); font-family: "Single Fighter", sans-serif; }
+      .callout b { color: var(--gold); font-family: var(--ui); font-weight: 700; letter-spacing: 0.02em; }
       .callout p { margin: 0.4rem 0 0; color: var(--paper); }
 
       .pipeline {
@@ -278,9 +287,10 @@
         display: block;
       }
       .step .name {
-        font-family: "Single Fighter", sans-serif;
+        font-family: var(--ui);
+        font-weight: 600;
         font-size: 0.85rem;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--cyan);
         margin-top: 0.4rem;
@@ -389,10 +399,11 @@
       }
       .detail-list li b {
         color: var(--cyan);
-        font-family: "Single Fighter", sans-serif;
+        font-family: var(--ui);
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        font-size: 0.82rem;
+        letter-spacing: 0.05em;
+        font-size: 0.84rem;
       }
 
       .viewer {
@@ -431,9 +442,10 @@
         background: rgba(8, 12, 24, 0.7);
         border: 1px solid var(--border);
         padding: 0.35rem 0.7rem;
-        font-family: "Single Fighter", sans-serif;
+        font-family: var(--ui);
+        font-weight: 600;
         font-size: 0.78rem;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--paper);
         backdrop-filter: blur(6px);
@@ -476,9 +488,10 @@
       .swap-btn.active { background: var(--red); color: var(--paper); border-color: var(--red); }
       .viewer-controls label {
         display: block;
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.72rem;
-        letter-spacing: 0.1em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.74rem;
+        letter-spacing: 0.07em;
         text-transform: uppercase;
         color: var(--muted);
         margin: 0.6rem 0 0.25rem;
@@ -498,9 +511,10 @@
         margin-top: 0.4rem;
       }
       .pill {
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.74rem;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         background: transparent;
         border: 1px solid var(--border);
@@ -629,9 +643,10 @@
       .region.gone { opacity: 0.4; border-left-color: var(--muted); }
       .region.unrigged { opacity: 0.5; }
       .region .rstate {
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.68rem;
-        letter-spacing: 0.1em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.72rem;
+        letter-spacing: 0.07em;
         text-transform: uppercase;
         color: var(--muted);
         margin-top: auto;
@@ -640,9 +655,10 @@
       .region.eligible .rstate { color: var(--red); }
 
       button.danger {
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.74rem;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         background: transparent;
         border: 1px solid rgba(216, 31, 42, 0.5);
@@ -707,9 +723,10 @@
         border-bottom: 1px dashed var(--border);
       }
       .organ-table th {
-        font-family: "Single Fighter", sans-serif;
-        font-size: 0.72rem;
-        letter-spacing: 0.09em;
+        font-family: var(--ui);
+        font-weight: 700;
+        font-size: 0.74rem;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--cyan);
       }
@@ -724,453 +741,551 @@
       @media (max-width: 640px) {
         .detail-list li { grid-template-columns: 1fr; gap: 0.2rem; }
       }
+
+      /* ---------- READING RHYTHM ---------- */
+      .prose > p,
+      .prose .lede,
+      .prose > .callout,
+      .prose > .detail-list,
+      .spoiler > p,
+      .spoiler > .callout,
+      .spoiler > .detail-list {
+        max-width: 74ch;
+      }
+      h2, h3 { scroll-margin-top: 1.2rem; }
+      h2 .secnum {
+        color: var(--muted);
+        font-size: 0.58em;
+        letter-spacing: 0.1em;
+        margin-right: 0.6rem;
+        vertical-align: 0.12em;
+      }
+      p.small { font-size: 0.88rem; }
+      .prose a { color: var(--gold); }
+
+      /* ---------- TABLE OF CONTENTS ---------- */
+      .toc {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.1rem 1.4rem;
+        margin: 2rem 0 0;
+        padding: 1rem 1.2rem 1.1rem;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--cyan);
+        border-radius: 4px;
+      }
+      .toc .toc-label {
+        grid-column: 1 / -1;
+        font-family: var(--ui);
+        font-weight: 600;
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+      }
+      .toc a {
+        display: block;
+        padding: 0.3rem 0;
+        color: var(--paper);
+        text-decoration: none;
+        font-size: 0.93rem;
+        border-bottom: 1px solid transparent;
+      }
+      .toc a:hover { color: var(--gold); border-bottom-color: rgba(255, 198, 61, 0.4); }
+      .toc a i {
+        font-style: normal;
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-right: 0.55rem;
+      }
+      .toc a:hover i { color: var(--gold); }
+
+      /* ---------- HOW-TO CALLOUT ---------- */
+      .callout.howto {
+        background: linear-gradient(135deg, rgba(128, 219, 255, 0.09), rgba(47, 107, 255, 0.05));
+        border-color: rgba(128, 219, 255, 0.28);
+        border-left-color: var(--cyan);
+      }
+      .callout.howto b { color: var(--cyan); }
+
+      /* ---------- SIDE-BY-SIDE LISTS ---------- */
+      .twocol {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 0.4rem 2.2rem;
+        margin: 1.6rem 0;
+      }
+      .twocol h4.colhead {
+        font-family: var(--ui);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.84rem;
+        letter-spacing: 0.09em;
+        color: var(--gold);
+        margin: 0 0 0.2rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .twocol .detail-list { margin: 0; }
+      .twocol .detail-list li { grid-template-columns: 5.5rem 1fr; gap: 0.8rem; }
+
+      .stats.wide { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+      .stats.wide span { grid-column: auto; }
+
+      /* ---------- SKELETON TREE ---------- */
+      pre.tree {
+        background: var(--panel);
+        padding: 0.9rem 1rem;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        overflow: auto;
+        font-family: "Cascadia Code", Consolas, monospace;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        color: var(--paper);
+      }
+
+      /* ---------- COLLAPSIBLE SECTION ---------- */
+      details.spoiler {
+        margin: 1.4rem 0 0;
+        padding: 0 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: rgba(17, 26, 42, 0.45);
+      }
+      details.spoiler > summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 0.95rem 0;
+        font-family: var(--ui);
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      details.spoiler > summary::-webkit-details-marker { display: none; }
+      details.spoiler > summary::before { content: "▸"; margin-right: 0.6rem; }
+      details.spoiler[open] > summary::before { content: "▾"; }
+      details.spoiler > summary:hover { color: var(--gold-light); }
+      details.spoiler[open] {
+        padding-bottom: 1.4rem;
+        border-color: rgba(255, 198, 61, 0.3);
+      }
+      details.spoiler[open] > summary { border-bottom: 1px solid var(--border); }
+      details.spoiler > h3:first-of-type { margin-top: 1.6rem; }
+
+      /* ---------- MOBILE: STACK THE VIEWER ABOVE THE TEXT ---------- */
+      @media (max-width: 1024px) {
+        .viewer-rail {
+          position: static;
+          height: auto;
+          order: -1;
+        }
+        .viewer { min-height: 46vh; }
+        /* Keep the whole panel inside one screen with the canvas, so the
+           article starts after a single swipe instead of 32 pose pills. */
+        .viewer-controls {
+          max-height: 44vh;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+        }
+        .prose { padding-top: 2rem; padding-bottom: 4rem; }
+      }
+      @media (max-width: 640px) {
+        .twocol .detail-list li { grid-template-columns: 1fr; gap: 0.2rem; }
+        .toc { padding: 0.9rem 1rem; }
+      }
+
+      footer p { margin: 0.25rem 0; color: inherit; font-size: inherit; }
     </style>
   </head>
   <body>
     <div class="made-root">
       <div class="layout">
         <main class="prose">
-          <span class="kicker">Fictional parody prototype · Made page</span>
+          <span class="kicker">Fictional parody prototype · Behind the scenes</span>
           <h1 class="title">How this game<br/>was made</h1>
           <p class="lede">
-            <strong>Battle for Independence</strong> is a 3D fighting game built entirely
-            with <span class="accent-gold">Three.js</span>, WebGL, and
-            a procedurally generated fighter pipeline. This page walks through how it was
-            built — and lets you take the fighters apart.
+            <strong>Battle for Independence</strong> is a 3D fighting game that runs in a
+            browser tab. It leans on <span class="accent-gold">one</span> graphics library,
+            ships no model files, and builds its fighters through an automated pipeline.
+            This page explains how — and lets you take those fighters apart.
           </p>
           <p class="made-nav">
             <a href="./">Play the game</a>
             <a href="fighter-lab.html">Fighter lab</a>
           </p>
 
-          <!-- ======= PLAIN ENGLISH ======= -->
-          <h2>No coding background? Start here</h2>
+          <div class="callout howto">
+            <b>The viewer is live.</b>
+            <p>
+              Drag the model to rotate it. Swap fighters, change the lighting, scrub through
+              a pose, or pull the body apart with the <em>Explode</em> slider. Nothing you do
+              there affects the game.
+            </p>
+          </div>
+
+          <nav class="toc" aria-label="Contents">
+            <span class="toc-label">On this page</span>
+            <a href="#start"><i>01</i> Start here — plain English</a>
+            <a href="#game"><i>02</i> How the game is built</a>
+            <a href="#fighters"><i>03</i> How a fighter is made</a>
+            <a href="#roster"><i>04</i> The roster</a>
+            <a href="#damage"><i>05</i> The damage system</a>
+            <a href="#numbers"><i>06</i> Numbers &amp; next steps</a>
+          </nav>
+
+          <!-- ============================ 01 ============================ -->
+          <h2 id="start"><span class="secnum">01</span> Start here</h2>
           <p>
-            If terms like <em>rig</em>, <em>GLB</em>, or <em>animation clip</em> don't mean anything to you,
-            open this section first. The short version of everything is below; the
-            technical deep-dive is in the sections after.
+            If <em>rig</em>, <em>clip</em> or <em>GLB</em> don't mean anything to you, read
+            this section first. Everything after it assumes these words.
           </p>
 
           <div class="callout">
-            <b>The 30-second version.</b>
+            <b>The whole thing in 30 seconds.</b>
             <p>
-              A 3D model is just a hollow shell made of triangles. To make a fighter move,
-              we glue an invisible skeleton inside the shell, then teach each bone how to
-              bend. Each move the fighter can do — a punch, a crouch, a knockdown — is a
-              short recording of how every bone should rotate. The game stitches those
-              recordings together when you press buttons.
+              A 3D model is a hollow shell made of triangles. To make it move, you glue an
+              invisible skeleton inside the shell and teach each bone how to bend. Every move
+              a fighter can do — a punch, a crouch, a knockdown — is a short recording of how
+              those bones should rotate. The game stitches the recordings together as you
+              press buttons.
             </p>
           </div>
 
           <div class="faq">
             <details>
-              <summary><span class="tag">model</span>What even is a 3D model?</summary>
+              <summary><span class="tag">model</span>What is a 3D model?</summary>
               <p>
-                A 3D model is a hollow shape built out of tiny triangles. The figure you're
-                looking at in the viewer on the right is roughly <b>150,000 triangles</b>
-                stitched together so they look like a person. The triangles carry three
-                things: where their corners sit in space (<em>position</em>), which way they
-                face (<em>normals</em>), and their colour (<em>paint</em>).
+                A hollow shape built from tiny triangles — about <b>150,000</b> of them for
+                the figure in the viewer. Each triangle carries where its corners sit
+                (<em>position</em>), which way it faces (<em>normals</em>) and its colour.
               </p>
               <p>
-                Picture a beach-ball made of coloured paper plates glued edge to edge.
-                Now shrink each plate to about 3 mm and stack 150,000 of them. That's
-                roughly a 3D model.
-              </p>
-            </details>
-
-            <details>
-              <summary><span class="tag">mesh</span>Why does it look "blocky" up close?</summary>
-              <p>
-                Because it really is. There are no smooth surfaces underneath — just
-                triangles. When you're far away, your eye fills in the gaps. When you zoom
-                in (or pull the fighter apart with the explode slider), the flat plates
-                become visible. The number of triangles is a trade-off: more triangles =
-                smoother curves but slower to render.
+                Picture a beach ball made of coloured paper plates glued edge to edge, then
+                shrink each plate to 3 mm. That's why models look faceted up close: there are
+                no smooth surfaces underneath, only flat plates. More triangles means smoother
+                curves but slower drawing.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">rig</span>What does "rigging" mean?</summary>
+              <summary><span class="tag">rig</span>What is rigging?</summary>
               <p>
-                Rigging is putting a digital skeleton inside the model. The skeleton is a
-                tree of bones — <em>hips</em> at the bottom, <em>spine</em> on top, then
-                <em>chest</em>, <em>neck</em>, <em>head</em>, and from the chest, two
-                arms branching into shoulder, upper arm, forearm, hand, and from the hips,
-                two legs into upper leg, knee, foot, toe.
+                Putting a digital skeleton inside the model. The bones form a tree — hips,
+                spine, chest, neck, head, with arms branching off the chest and legs off the
+                hips.
               </p>
               <p>
-                Each bone is invisibly glued to a chunk of the surrounding triangles, so
-                when the bone rotates, the triangles move with it. The rig for both
-                fighters in this game has <b>25 bones</b>.
+                Each bone is invisibly glued to a chunk of nearby triangles, so rotating the
+                bone drags the surface with it. Every fighter here uses the same
+                <b>25-bone</b> rig.
               </p>
             </details>
 
             <details>
               <summary><span class="tag">clip</span>What is an animation clip?</summary>
               <p>
-                An animation clip is a short, time-stamped recording of how every bone in
-                the skeleton should rotate. A "jab" clip might say: at frame 0 the right
-                arm is at the hip; at frame 4 the right arm is fully extended; at frame 12
-                the arm is back at the hip.
+                A short, time-stamped recording of how every bone should rotate. A jab might
+                say: frame 0, arm at the hip; frame 4, arm fully extended; frame 12, back at
+                the hip.
               </p>
               <p>
-                The game plays these recordings on demand. Press a punch button, the jab
-                clip plays. Press block, the guard clip loops. Clips can be blended —
-                that's how a fighter can be part-way through a punch and start a kick at
-                the same time.
+                Press punch and the jab clip plays. Press block and the guard clip loops.
+                Clips can be blended, which is how a fighter can be halfway through a punch
+                and start a kick.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">shader</span>What's a "shader"?</summary>
+              <summary><span class="tag">shader</span>What is a shader?</summary>
               <p>
-                A shader is a tiny program that runs once per triangle, on the graphics
-                card, to decide what colour to draw. The "key light" you can see hitting
-                the fighter's shoulder? That's a shader working out where the light hits
-                and how bright it should be.
-              </p>
-              <p>
-                This game uses fairly simple shaders (the standard "physical" material that
-                ships with Three.js). The fancy stuff — reflections, glow, soft shadows —
-                is all the shader's job.
+                A tiny program that runs on the graphics card, once per triangle, to decide
+                what colour to draw. The highlight on a fighter's shoulder is a shader working
+                out where the light lands and how bright it should be.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">GLB</span>Why is a .glb file so big?</summary>
+              <summary><span class="tag">frames</span>What is frame data?</summary>
               <p>
-                A <code>.glb</code> is a binary package that holds everything one model
-                needs: positions, normals, colours, the rig, all the clips, and (for
-                non-cartoon models) texture images. The two fighters in this game are
-                roughly 9 MB each.
+                A frame is one still image. A typical screen shows 60 per second. Frame data
+                is the list of which frame each move <em>hits, blocks or ends</em> on.
               </p>
               <p>
-                This page uses the rigged <code>.glb</code> as the source it shows in the
-                viewer. The actual game runtime ships a much smaller encoded form
-                (~6 MB per fighter) that decodes at load time — same look, smaller file.
+                The jab here lasts 0.62 s — 37 frames. It hits on frame 4, recovers on 12, and
+                is safe to interrupt by 16. Two players on different monitors see the same
+                fight; only the smoothness differs.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">fps</span>What is "frame data"?</summary>
+              <summary><span class="tag">GLB</span>What is a .glb file?</summary>
               <p>
-                A frame is one still image the game draws. A typical display shows 60 of
-                them per second. "Frame data" is the list of <em>which frame each move
-                hits, blocks, or ends on</em>.
+                A binary package holding everything one model needs: positions, normals,
+                colours, the rig, every clip, and any texture images. The rigged masters here
+                are roughly <b>9 MB</b> each.
               </p>
               <p>
-                The jab in this game is 0.62 seconds long. At 60 frames per second that's
-                37 frames. Frame data says: hits on frame 4, recovers on frame 12, is fully
-                safe to interrupt again by frame 16. Two players on different refresh-rate
-                monitors see the same fight, just with smoother or choppier pictures —
-                the timing is identical.
+                Nothing is published at master size. At build time every heavy model is
+                compressed (meshopt geometry, WebP textures) — these two land near <b>2 MB</b> —
+                and the game itself ships an even smaller encoded form that decodes at load
+                time. Same look, smaller download.
+              </p>
+            </details>
+            <details>
+              <summary><span class="tag">SIZE</span>How much does a match download?</summary>
+              <p>
+                About <b>0.6 MB</b> to reach the menu and about <b>25 MB</b> for the first fight,
+                down from well over 100 MB. A match fetches only what is on screen: its arena,
+                its two fighters and the weapons they can actually throw. Portraits are
+                pre-rendered images, so the select screen no longer loads every fighter to draw
+                a face. A build fails its size check if any file or the first fight grows past
+                its cap.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">Ai</span>How does the CPU opponent "think"?</summary>
+              <summary><span class="tag">pipeline</span>What are a pipeline and a gate?</summary>
               <p>
-                It's not thinking. It's a short decision tree: <em>how far is the other
-                fighter?</em> → if close, try a jab; <em>are they attacking?</em> → if yes,
-                block; <em>am I low on health?</em> → if yes, play safe. The CPU reads the
-                exact same frame data the human reads, so it plays by the same rules.
+                A <b>pipeline</b> is a fixed sequence of automated steps. This one turns
+                reference drawings of a character into a rigged, animated, ready-to-punch
+                fighter in eight steps. Run it again on a new character and you get the same
+                quality without repeating anyone's trial and error.
               </p>
               <p>
-                Difficulty just widens how often the CPU picks the best option versus a
-                random one. On the lowest setting it picks randomly about half the time.
-              </p>
-            </details>
-
-            <details>
-              <summary><span class="tag">pipeline</span>What's a "pipeline"?</summary>
-              <p>
-                A pipeline is a sequence of automated steps that turns one thing into
-                another. The character pipeline in this game turns a photograph of a
-                character into a rigged, animated, ready-to-punch fighter — in eight
-                fixed steps, with a number-based check between each step so a bad result
-                fails loudly instead of silently.
-              </p>
-              <p>
-                The whole point of a pipeline is that you can run it again on a new
-                character and get the same quality, without anyone having to redo the
-                same trial-and-error by hand.
+                A <b>gate</b> is a measured pass/fail check between steps — for example,
+                <em>silhouette overlap must be at least 98.5 %</em>. Miss it and the run stops.
+                A number with a threshold, never "looks fine".
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">gate</span>What's a "gate"?</summary>
+              <summary><span class="tag">CPU</span>How does the computer opponent think?</summary>
               <p>
-                A gate is a number-based pass/fail check. <em>Silhouette overlap must be
-                at least 98.5 %.</em> If the new fighter's silhouette doesn't match the
-                reference drawing at least that well, the pipeline stops and the human
-                decides what to do. No "looks fine" — a number, with a threshold.
+                It doesn't. It's a short decision tree: how far away is the other fighter? Are
+                they attacking? Am I low on health? It reads the exact same frame data a human
+                reads, so it plays by the same rules.
               </p>
               <p>
-                This is what makes the pipeline trustworthy. A small local AI judging
-                "does this look right?" is exactly the kind of fuzzy check that lets bad
-                results slip through. Gating on a measured number does not.
+                Difficulty only changes how often it picks the best option instead of a random
+                one. On the easiest setting it guesses about half the time.
               </p>
             </details>
 
             <details>
-              <summary><span class="tag">ai art</span>Was the art drawn by an AI?</summary>
+              <summary><span class="tag">AI art</span>Was the art made by AI?</summary>
               <p>
-                The <em>silhouettes</em> were generated by an image-to-3D service from
-                hand-made reference drawings. Everything else — the painted colour, the
-                skeleton, the bones, every pose, every clip, every hit effect, every
-                sound, the music, the announcer calls, the code, the font styling, the
-                menus, the HUD — was authored or assembled by hand on top of those
-                generated surfaces.
+                The raw <em>silhouettes</em> came from an image-to-3D service fed hand-made
+                reference drawings. Everything else — the painted colour, the skeleton, every
+                pose and clip, every hit effect, the sound, the music, the announcer, the code,
+                the menus and the HUD — was authored or assembled by hand on top of those
+                surfaces.
               </p>
               <p>
-                The pages and the README are explicit that this is a fictional parody and
-                not affiliated with any real person or organisation.
+                The game is a fictional parody and is not affiliated with any real person or
+                organisation.
               </p>
             </details>
           </div>
 
-          <h2>The game</h2>
+          <!-- ============================ 02 ============================ -->
+          <h2 id="game"><span class="secnum">02</span> How the game is built</h2>
           <p>
-            A standalone Vite + Three.js combat prototype with two fictional fighters, a
-            standing-stance Lake America stage, locked 60 Hz simulation and one-shot visual
-            ceremony. The match is frame-data driven: every move is N frames on a 144 Hz
-            monitor and on a throttled phone. Rendering is the only thing that interpolates.
+            A standalone combat prototype: fictional fighters, a single stage, and a
+            simulation locked to 60 steps per second. Every move lasts the same number of
+            frames on a 144 Hz desktop and on a throttled phone. Drawing is the only layer
+            that smooths anything out.
           </p>
 
-          <h3>Tech stack</h3>
           <ul class="detail-list">
-            <li><b>Engine</b><span>Three.js (vendored, MIT) + WebGL2. No physics engine, no animation library other than Three's <code>AnimationMixer</code>.</span></li>
-            <li><b>Sim loop</b><span>Fixed-step accumulator at 60 Hz. Effects pull from a frame-data table in <code>engine/frameData.js</code> and a <code>Match</code> state machine.</span></li>
-            <li><b>CPU</b><span>Decision tree with four difficulty dials. Reads the same frame data the human reads, so the AI plays by the same rules.</span></li>
-            <li><b>Input</b><span>Keyboard, gamepad, touch. One set of chord macros reaches both the P1 keyboard and any gamepad.</span></li>
-            <li><b>Audio</b><span>77 mono 32 kHz PCM effects, three music tracks, an announcer pool with ducking. Sound starts after a user gesture.</span></li>
-            <li><b>Build</b><span>Vite, single CSS theme driven by <code>COLOR_BIBLE.md</code> tokens, no UI framework.</span></li>
+            <li><b>Renderer</b><span>Three.js (vendored, MIT) on WebGL2. No physics engine, and no animation library beyond Three's own mixer.</span></li>
+            <li><b>Sim loop</b><span>Fixed-step accumulator at 60 Hz, driven by a frame-data table and a match state machine.</span></li>
+            <li><b>CPU</b><span>Decision tree with four difficulty dials, reading the same frame data the player does.</span></li>
+            <li><b>Input</b><span>Keyboard, gamepad and touch folded into one button struct, with chord macros for two-button moves.</span></li>
+            <li><b>Audio</b><span>77 mono sound effects, three music tracks, and an announcer pool that ducks the mix. Sound starts after a user gesture.</span></li>
+            <li><b>Interface</b><span>HUD, menus and round reel are plain DOM and one stylesheet. No UI framework.</span></li>
           </ul>
 
-          <h3>Only Three.js</h3>
+          <h3>One library, not an engine</h3>
           <p>
-            <b>Three.js is not a game engine.</b> It is a renderer — a library that turns
-            "put this mesh here, light it that way, point a camera at it" into the thousands of
-            low-level WebGL calls a graphics card actually wants. It draws. It has no opinion
-            about what a round is, what a hitbox does, or when a match ends.
+            <b>Three.js is a renderer, not a game engine.</b> It turns "put this mesh here,
+            light it that way, point a camera at it" into the thousands of low-level calls a
+            graphics card wants. It has no opinion about what a round is, what a hitbox does,
+            or when a match ends. Everything above the triangles is first-party.
           </p>
 
-          <div class="callout">
-            <b>The 30-second version.</b>
-            <p>
-              Most browser games are built on an engine that owns the whole thing: the game
-              loop, physics, collision, scenes, UI, audio, an editor. This one is built on a
-              library that only knows how to draw triangles. Everything above the triangles —
-              the fighting game — is in this repository.
-            </p>
-          </div>
-
-          <p>
-            That library is the entire third-party runtime. Not "few dependencies" as a figure
-            of speech: <code>package.json</code> lists exactly one, and it is vendored into the
-            source tree as a single MIT-licensed file, so the shipped game makes
-            <span class="accent-gold">no network request to anything it does not own</span>.
-            No CDN, no off-site import map, no analytics, no webfont fetch. Vite builds it and
-            never ships with it.
-          </p>
-
-          <div class="stats">
+          <div class="stats wide">
             <span>Runtime dependencies</span><b>1 — three r170</b>
             <span>Vendored as</span><b>one 1.31 MB file</b>
-            <span>Three.js API used</span><b>60 classes</b>
-            <span>Script tags in index.html</span><b>1</b>
+            <span>Script tags on the page</span><b>1</b>
             <span>Non-relative imports</span><b>0</b>
             <span>Shipped bundle</span><b>812 KB → 225 KB gzip</b>
+            <span>First-party game code</span><b>~8,000 lines, 57 modules</b>
           </div>
 
-          <p>Three.js earns its place. It carries the genuinely hard graphics work:</p>
-          <ul class="detail-list">
-            <li><b>Draws</b><span>WebGL2 state management, shader compilation, the render graph. <code>WebGLRenderer</code> plus <code>setAnimationLoop</code> — the only outside code that calls into this game each frame.</span></li>
-            <li><b>Skins</b><span><code>SkinnedMesh</code> and <code>Skeleton</code> deform ~105k vertices against the 25-bone rig on the GPU, per fighter, per frame.</span></li>
-            <li><b>Blends</b><span><code>AnimationMixer</code> cross-fades the 32 clips each fighter carries. The only animation code in the project not written here.</span></li>
-            <li><b>Lights</b><span>Shadow maps, ACES filmic tone mapping, physically-based materials for the stage and both fighters.</span></li>
-            <li><b>Composes</b><span>The passes in <code>render/postfx.js</code> are Three's own addons — bloom, copy, output — wired by hand into a stack this repo controls.</span></li>
-          </ul>
+          <div class="twocol">
+            <div>
+              <h4 class="colhead">Three.js does</h4>
+              <ul class="detail-list">
+                <li><b>Draws</b><span>Graphics state, shader compilation, the render graph, and the per-frame callback.</span></li>
+                <li><b>Skins</b><span>Deforms ~105k vertices against the 25-bone rig on the GPU, per fighter, per frame.</span></li>
+                <li><b>Blends</b><span>Cross-fades the 32 clips each fighter carries — the only animation code not written here.</span></li>
+                <li><b>Lights</b><span>Shadow maps, filmic tone mapping, physically-based materials, and the bloom pass.</span></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="colhead">This project does</h4>
+              <ul class="detail-list">
+                <li><b>Loop</b><span>The fixed-step 60 Hz accumulator. Three supplies a frame callback and nothing more.</span></li>
+                <li><b>Combat</b><span>Frame-data table, match state machine, hit resolution, blocking, combos and meter.</span></li>
+                <li><b>Collision</b><span>Axis-aligned hit and hurt boxes resolved by hand. No physics library at all.</span></li>
+                <li><b>Audio &amp; UI</b><span>Raw Web Audio buffers and gain nodes; HUD and menus in DOM and CSS.</span></li>
+              </ul>
+            </div>
+          </div>
 
-          <p>
-            What it does not do is everything an engine would have handed over. All of this is
-            first-party:
-          </p>
+          <h3>Why that trade is worth it</h3>
           <ul class="detail-list">
-            <li><b>Game loop</b><span>The fixed-step 60 Hz accumulator in <code>main.js</code>. Three supplies a frame callback and nothing more.</span></li>
-            <li><b>Combat</b><span>1,715 lines across eight files in <code>engine/</code>: frame-data table, <code>Match</code> state machine, hit resolution, blocking, combos, meter.</span></li>
-            <li><b>Collision</b><span>Axis-aligned hit and hurt boxes resolved by hand. No physics engine — no Rapier, no Cannon, no Ammo.</span></li>
-            <li><b>Input</b><span>Keyboard, Gamepad API and touch polled into one button struct, with a chord resolver for the two-button macros.</span></li>
-            <li><b>Audio</b><span>Raw Web Audio — buffer sources, gain nodes, announcer ducking. <code>THREE.Audio</code> is not used.</span></li>
-            <li><b>Interface</b><span>HUD, menus and round reel are DOM and one stylesheet. No React, no UI kit, no tween library.</span></li>
+            <li><b>Auditable</b><span>One direct dependency, with no branches beneath it. The complete list of third-party code running in a player's browser is Three.js r170, MIT — no CDN, no analytics, no remote font.</span></li>
+            <li><b>Durable</b><span>ES modules and WebGL2, nothing else. No engine version to migrate, no editor project to open, no licensed runtime. Nothing here needs a company to stay in business.</span></li>
+            <li><b>Deterministic</b><span>An engine owns the tick and hands you a variable time step, which quietly makes your rules depend on how fast the machine ran. Because nothing outside owns the loop here, the simulation is a plain function: one call advances exactly one frame.</span></li>
           </ul>
-
-          <h3>Why one library instead of an engine</h3>
-          <p>
-            <b class="accent-gold">1. The dependency tree is readable in an afternoon.</b>
-            One direct dependency means one transitive tree, and this one has no branches.
-            There is no 400-package <code>node_modules</code> under the shipped game, so there
-            is no supply chain to audit and no postinstall script to trust. The complete list
-            of third-party code running in a player's browser is: Three.js r170, MIT.
-          </p>
-          <p>
-            <b class="accent-gold">2. It will still run.</b> No engine version to migrate, no
-            editor project format to open, no proprietary runtime to keep licensed. The game is
-            ES modules and WebGL2 — two things browsers have committed to indefinitely.
-            Nothing here needs a company to stay in business.
-          </p>
-          <p>
-            <b class="accent-gold">3. It is the reason the combat is deterministic.</b> This is
-            the one that actually matters, and it is not a philosophical point. An engine owns
-            the update tick and hands you a variable <code>deltaTime</code>, which quietly makes
-            your game logic a function of how fast the machine happened to be running. Because
-            nothing outside this repository owns the loop, the simulation could be written as a
-            pure function instead: <code>step(inputs)</code> advances exactly one 60 Hz frame,
-            and rendering is the only layer that interpolates.
-          </p>
 
           <div class="callout">
-            <b>What that buys.</b>
+            <b>What determinism buys.</b>
             <p>
-              The <code>engine/</code> folder contains no <code>Math.random</code>, no
-              <code>Date.now</code>, no <code>performance.now</code> and no trigonometry —
-              nothing that can differ between two machines. A four-frame jab is four frames on
-              a 144 Hz desktop and four frames on a throttled phone, and a whole round can be
-              reconstructed from nothing but the button presses. That property is very hard to
-              retrofit and nearly impossible to guarantee inside an engine that owns your tick.
-              Here it falls out of the architecture for free.
+              The combat code contains no random numbers, no clock reads and no trigonometry —
+              nothing that can differ between two machines. A four-frame jab is four frames
+              everywhere, and a whole round can be rebuilt from nothing but the button presses.
+              That is very hard to retrofit and nearly impossible to guarantee inside an engine
+              that owns your tick.
             </p>
           </div>
 
           <p>
-            The cost is honest, and it is the rest of this repository:
-            <span class="accent-red">roughly 8,000 lines across 57 modules</span> doing work an
-            engine would have shipped for you. "Only Three.js" is not a claim to have written a
-            renderer — Three.js is carrying enormous weight, and reimplementing
-            <code>WebGLRenderer</code> would be foolish. The claim is narrower and more useful:
-            there is exactly one seam between this game and somebody else's code, it is
-            documented, and everything on this side of it can be changed without asking
-            anyone's permission.
+            The cost is honest, and it is the rest of the project: thousands of lines doing
+            work an engine would have handed over. "Only Three.js" is not a claim to have
+            written a renderer — Three.js carries enormous weight. The narrower claim is that
+            there is exactly <span class="accent-gold">one seam</span> between this game and
+            somebody else's code, and everything on this side of it can change without asking
+            permission.
           </p>
 
           <h3>Ceremony and feedback</h3>
           <p>
-            The round reel is locked: title → versus shot → intros → round announcement →
-            <span class="accent-gold">FIGHT</span> slam → live input. KO holds impact state for
-            32 slow-mo frames plus a freeze before the card. Flawless, Double KO, Fatality,
-            Draw and ordinary Victory each get a distinct end card with its own colour pair
-            from the bible. Reduced-motion mode strips scaling slams and camera kicks but
-            keeps the callouts.
+            The round reel is fixed: title → versus shot → intros → round call →
+            <span class="accent-gold">FIGHT</span> → live input. A KO holds the impact for 32
+            slow-motion frames and a freeze before the result card. Flawless, Double KO,
+            Fatality, Draw and ordinary Victory each get their own card and colour pair.
+            Reduced-motion mode drops the scaling slams and camera kicks but keeps every
+            callout.
           </p>
 
-          <h2>The character pipeline</h2>
+          <!-- ============================ 03 ============================ -->
+          <h2 id="fighters"><span class="secnum">03</span> How a fighter is made</h2>
           <p>
-            Every fighter in the roster comes out of one automated four-command pipeline.
-            The run is fail-closed by gates — numbers, not vibes. Re-roll is cheap; signed-off
-            results are not re-touched.
+            Every fighter comes out of the same automated pipeline. Each step ends in a gate —
+            a measured number with a threshold — so a bad result stops the run instead of
+            slipping through. Re-rolling is cheap; a signed-off result is never touched up by
+            hand.
           </p>
 
           <div class="pipeline">
             <div class="step">
               <span class="num">01</span>
               <span class="name">Reference turnaround</span>
-              <p>Front / side / back, RGBA, single connected alpha, tight crop.</p>
+              <p>Front, side and back drawings with a clean cut-out and a tight crop.</p>
             </div>
             <div class="step">
               <span class="num">02</span>
-              <span class="name">Hitem3D two-export</span>
-              <p>Textured mesh + named parts mesh of the same sculpt. Bounds must match exactly.</p>
+              <span class="name">Two matching exports</span>
+              <p>A textured mesh and a named-parts mesh of the same sculpt.</p>
               <span class="gate">gate: bounds ≤ 1 mm/m</span>
             </div>
             <div class="step">
               <span class="num">03</span>
-              <span class="name">Bake atlas → parts</span>
-              <p>Transfer the 8K colour atlas onto the six named anatomical parts in 3D.</p>
+              <span class="name">Bake colour onto parts</span>
+              <p>Transfer the 8K colour atlas onto the six named body parts in 3D.</p>
               <span class="gate">gate: median ≤ 0.5 mm</span>
             </div>
             <div class="step">
               <span class="num">04</span>
-              <span class="name">Decimate (QEM)</span>
-              <p>Curvature- and colour-aware quadric error metric, per-part budget.</p>
-              <span class="gate">gate: IoU ≥ 98.5%, head ΔE50 ≤ 4</span>
+              <span class="name">Reduce triangles</span>
+              <p>Curvature- and colour-aware simplification, with a budget per part.</p>
+              <span class="gate">gate: overlap ≥ 98.5 %</span>
             </div>
             <div class="step">
               <span class="num">05</span>
               <span class="name">Measure joints</span>
-              <p>Joints come from the part bounds. Wrist is the only landmark searched — the two arms cross-check each other.</p>
-              <span class="gate">gate: wrist agree ≤ 3%</span>
+              <p>Joints are read from the part bounds. Only the wrist is searched, and the two arms cross-check each other.</p>
+              <span class="gate">gate: wrists agree ≤ 3 %</span>
             </div>
             <div class="step">
               <span class="num">06</span>
-              <span class="name">Rig &amp; pose check</span>
-              <p>Canonical 25-bone skeleton. Pose check runs the same IK outside the browser and prints trunk clearance.</p>
-              <span class="gate">gate: clearance ∈ band</span>
+              <span class="name">Rig and pose check</span>
+              <p>Fit the shared 25-bone skeleton, then re-run the posing outside the browser and print the clearances.</p>
+              <span class="gate">gate: clearance in band</span>
             </div>
             <div class="step">
               <span class="num">07</span>
-              <span class="name">Encode to TypeScript</span>
-              <p>Pack positions, normals, colours, joints and weights into one Base64 stream in <code>surfaceData.js</code>.</p>
-              <span class="gate">no .glb fetch</span>
+              <span class="name">Encode to code</span>
+              <p>Pack positions, normals, colours and skin weights into one stream the game imports as a module.</p>
+              <span class="gate">no model fetch</span>
             </div>
             <div class="step">
               <span class="num">08</span>
               <span class="name">Author clips</span>
-              <p>Keyframes on the frozen tree, never retargeted mocap. One jab first, then idle, walk, hurt, special.</p>
+              <p>Keyframe by hand on the frozen skeleton. One jab first, then idle, walk, hurt and specials.</p>
             </div>
           </div>
 
           <div class="callout">
-            <b>Fighter lab.</b>
+            <b>Numbers, not eyeballs.</b>
             <p>
-              The <a href="fighter-lab.html" style="color:var(--gold)">fighter lab</a>
-              puts the original vertex-color sculpt beside the textured GLB export:
-              camera presets, animation scrubbing, and wireframe. It is the production
-              proof for the bake in steps 02–03, not a second game.
+              The biggest lesson from building this was that
+              <span class="accent-red">asking a model "does this look right?" is the wrong
+              check</span> — that is exactly the component that waves through a grey,
+              washed-out regression. Every gate above is a number with a threshold instead:
+              silhouette overlap, colour delta, clearance in metres, left-right agreement. The
+              pipeline can run unattended <em>because</em> the gates are measurements.
             </p>
           </div>
 
+          <h3>One skeleton for everyone</h3>
           <p>
-            The single biggest lesson is that
-            <span class="accent-red">vision QA of the mesh is the wrong place for a model</span>.
-            A small local VLM asked "does this look right?" is the exact component that says
-            "looks fine" to a clay-coloured regression that ships at ΔE 104. Every gate above
-            is a number with a threshold: silhouette IoU, ΔE50/ΔE95, trunk clearance in
-            metres, floor penetration, left-right wrist agreement. The pipeline is
-            automatable because the gates are floats.
+            All fighters share the same 25-bone rig, so combat clips are authored once and
+            inherited by the whole roster.
           </p>
-
-          <h3>The canonical skeleton</h3>
-          <p>
-            Every fighter shares the same 25-bone rig so combat clips can be authored once
-            and inherited. The canonical tree:
-          </p>
-<pre style="background:var(--panel);padding:0.9rem 1rem;border-radius:4px;border:1px solid var(--border);overflow:auto;font-size:0.85rem;color:var(--paper);">
-root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
+<pre class="tree">root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
                             &gt; shoulderL/R &gt; upperArmL/R &gt; forearmL/R &gt; handL/R &gt; handEndL/R
             &gt; upLegL/R &gt; legL/R &gt; footL/R &gt; toeL/R</pre>
 
-          <h3>Why no GLB ships at runtime</h3>
+          <h3>No model files ship with the game</h3>
           <p>
-            The 9 MB rigged GLB inside <code>site/fighters/&lt;id&gt;</code> is the
-            <em>measurement source</em>, not the deliverable. The runtime game ships a
-            Three.js factory that decodes a packed surface stream and rig data from
-            JavaScript modules. It is, structurally, code. No <code>.glb</code>,
-            <code>.bin</code>, or texture image is fetched during play.
+            The 9 MB rigged file is the <em>measurement source</em>, not the deliverable. The
+            game ships a factory that rebuilds the fighter from a packed stream imported as a
+            JavaScript module — structurally, it is code. During play, no model, buffer or
+            texture file is fetched at all.
           </p>
 
-          <h2>Roster</h2>
+          <!-- ============================ 04 ============================ -->
+          <h2 id="roster"><span class="secnum">04</span> The roster</h2>
           <p>
-            Click a fighter to load it into the viewer on the right. Drag the explode slider
-            to separate the six named parts along their centroid vectors. Use the pose pills
-            to switch between bound, idle and authored moves.
+            Pick a fighter to load it into the viewer. Use the pose buttons to switch between
+            the bound pose, idle and authored moves, and the <em>Explode</em> slider to
+            separate the six named body parts.
           </p>
 
           <div class="roster">
             <div class="fighter" data-id="trump">
               <h4>Trump</h4>
               <div class="sub">Fighter · P1 default</div>
-              <p>Established caricature, taller stance, narrow trunk. First fighter through the pipeline — every default number in <code>FIGHTER_PLAYBOOK.md</code> was tuned against this mesh.</p>
+              <p>Taller stance, narrow trunk. The first fighter through the pipeline, so every default setting was tuned against this mesh.</p>
               <div class="stats">
                 <span>Height</span><b>1.92 m</b>
                 <span>Verts</span><b>105,159</b>
@@ -1185,7 +1300,7 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
             <div class="fighter carney" data-id="carney">
               <h4>Carney</h4>
               <div class="sub">Fighter · P2 default</div>
-              <p>Slimmer build (0.25 m deep vs 0.38 m). Generated with closed fists, so the jab reads as a punch, not a traffic-cop gesture. The pipeline transferred unchanged except for a 0.13 m aim-offset sidecar.</p>
+              <p>Slimmer build, 0.25 m deep against 0.38 m. Sculpted with closed fists so the jab reads as a punch rather than a traffic-cop gesture. The pipeline transferred unchanged apart from a small aim offset.</p>
               <div class="stats">
                 <span>Height</span><b>1.92 m</b>
                 <span>Verts</span><b>104,894</b>
@@ -1200,7 +1315,7 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
             <div class="fighter officer-flock" data-id="officer_flock">
               <h4>Officer Flock</h4>
               <div class="sub">Fighter · surveillance specialist</div>
-              <p>Retargeted imported rig with preserved PBR textures and closed hands. The shared combat animation set is mapped onto the source skeleton without replacing its five textured meshes.</p>
+              <p>An imported model rather than a pipeline build. The shared animation set is mapped onto its own skeleton, keeping its five textured meshes and closed hands intact.</p>
               <div class="stats">
                 <span>Height</span><b>1.92 m</b>
                 <span>Tris</span><b>134,431</b>
@@ -1213,234 +1328,213 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
             </div>
           </div>
 
-          <h3>Try it: explode</h3>
-          <p>
-            Each fighter is a group of six named anatomical parts — <code>Head</code>,
-            <code>Torso</code>, <code>LeftArm</code>, <code>RightArm</code>,
-            <code>LeftLeg</code>, <code>RightLeg</code>. The codec already pre-computes an
-            <code>explode</code> vector per part — its own centroid offset from the figure's
-            centre. Drag the slider and the parts move along those vectors; the bones do not
-            detach, they merely separate. <code>explode(1)</code> is what you see in the
-            versus setup before the round starts.
+          <p class="muted small">
+            Each fighter is a group of six named parts — head, torso, two arms and two legs.
+            Every part already knows its own offset from the body's centre, so the
+            <em>Explode</em> slider just slides them along those directions. The bones never
+            detach; the parts only separate. Fully exploded is what you see in the versus setup
+            before a round starts.
           </p>
 
-          <h2>Taking a fighter apart</h2>
+          <!-- ============================ 05 ============================ -->
+          <h2 id="damage"><span class="secnum">05</span> The damage system</h2>
 
           <div class="callout warn">
             <b>Content note.</b>
             <p>
-              Everything below this heading is the game's dismemberment system, running
-              live in the viewer on the right: severed limbs, cartoon arterial blood, and
-              organs on the floor. It only happens when you press something. If you would
-              rather not, skip ahead to <a href="made.html#refnums" style="color:var(--gold)">reference
-              numbers</a> &mdash; nothing later on depends on this section.
+              This section is the game's dismemberment system, running live in the viewer:
+              severed limbs, cartoon blood and organs on the floor. It only happens when you
+              press something, and it stays collapsed until you open it. Nothing later on the
+              page depends on it — <a href="#numbers">skip to the numbers</a> if you'd rather
+              not.
             </p>
           </div>
 
-          <p>
-            A fighting game that only drains a bar tells you the same story every round.
-            This one keeps a record. The rule the whole system is built around is that
-            <span class="accent-red">a limb is never taken by the health bar alone</span>.
-            A region severs when it has been <em>hit</em> while the fighter is below that
-            region's threshold &mdash; so the damage on screen is a record of how the round
-            was actually fought. Beat someone to the body and the torso opens. Headhunt and
-            the jaw goes. A fighter who never gets hit in the legs keeps them, at any
-            health.
-          </p>
+          <details class="spoiler">
+            <summary>Show the damage system</summary>
 
-          <div class="callout">
-            <b>The 30-second version.</b>
             <p>
-              Two things have to agree before anything comes off: <em>where</em> the hit
-              landed on the body, and <em>how hurt</em> the fighter already was. The hit
-              height picks which regions it could plausibly have removed; the health
-              threshold decides which of those are eligible at all. Neither is enough on
-              its own, which is what stops a body blow at 20&nbsp;% health from taking a
-              head off.
+              A fighting game that only drains a bar tells the same story every round. This one
+              keeps a record. The rule everything is built around:
+              <span class="accent-red">a limb is never taken by the health bar alone</span>. A
+              region comes off when it is <em>hit</em> while the fighter is already below that
+              region's threshold. Beat someone to the body and the torso opens; headhunt and the
+              jaw goes. A fighter who never gets hit in the legs keeps them at any health.
             </p>
-          </div>
 
-          <h3>The seven regions</h3>
+            <div class="callout">
+              <b>Two things must agree.</b>
+              <p>
+                <em>Where</em> the hit landed picks which regions it could plausibly have
+                removed. <em>How hurt</em> the fighter already was decides which of those are
+                eligible at all. Neither is enough on its own — which is what stops a body blow
+                at 20 % health from taking a head off.
+              </p>
+            </div>
+
+            <h3>The seven regions</h3>
+            <p>
+              This is the shipped table, thresholds and all. <b>Threshold</b> is remaining
+              health. The two <span class="accent-gold">lethal</span> regions sit at 0 % because
+              they can only ever be the last thing that happens; an ordinary hit is never
+              allowed to take them, so rounds don't end on a decapitation nobody chose. Only a
+              KO, a finisher, or the <b>Cut</b> button asks for those directly.
+            </p>
+
+            <div class="regions" id="regions"></div>
+
+            <p class="muted small">
+              Regions are named after the <em>bones</em> their geometry hangs from, and matched
+              by pattern rather than exact name — the roster doesn't agree on a skeleton, since
+              imported models arrive on whatever rig they were built with. Pattern matching
+              means a new model can be dismembered on arrival instead of after someone
+              hand-writes a bone map. It also means a region can come back <em>not rigged</em>:
+              neither fighter here has a jaw bone, so the jaw card marks itself and cutting it
+              does nothing, rather than failing silently.
+            </p>
+
+            <h3>What happens on the frame a limb comes off</h3>
+            <p>
+              Four things, all read from the same <em>posed</em> skeleton, so they agree about
+              where the cut was:
+            </p>
+            <ul class="detail-list">
+              <li><b>Geometry</b><span>Everything attached to the severed bone chain stops being drawn — at the limb's current position, not where the rest pose left it.</span></li>
+              <li><b>Momentum</b><span>The limb becomes a prop carrying 55 % of the blow's force. A limb that flies off along the blow reads as caused by it; one that drops straight down reads as a bug.</span></li>
+              <li><b>Spill</b><span>The region's organs follow, thrown a little more softly so they trail behind the limb instead of arriving in a clump.</span></li>
+              <li><b>Bleed</b><span>The stump is soaked before the limb has finished leaving. A cut that isn't bleeding at its edge reads as plastic.</span></li>
+            </ul>
+
+            <h3>Nothing is actually deleted</h3>
+            <p>
+              The obvious way to remove an arm is to rebuild the mesh without it. This doesn't.
+              Every vertex carries how strongly it belongs to the severed chain, and the shader
+              simply throws away anything above 0.94. The fighter keeps
+              <span class="accent-gold">one draw call all round</span>, and restoring the limb
+              next round is a reset rather than a rebuild.
+            </p>
+
+            <div class="callout">
+              <b>The seam lands in the right place for free.</b>
+              <p>
+                Deep in the forearm, every bit of a vertex belongs to the severed chain. Across
+                the elbow that falls off exactly as the skinning blend does. The band left in
+                between is the cut face, and the shader paints it raw instead of skin. Without
+                that band a severed arm reads as a rendering glitch rather than a wound — and
+                nobody had to model a cut cap.
+              </p>
+            </div>
+
+            <h3>The limb is the body's own vertices</h3>
+            <p>
+              At the moment of the cut, the posed positions of the removed vertices are lifted
+              straight out of the fighter and thrown as a dense cloud of points. It is the same
+              silhouette that was attached a frame earlier, which is the whole reason it beats
+              throwing a generic lump. As fast-moving points they read as wet tissue in motion
+              and cost nothing to build — the right trade for something on screen for under a
+              second. Once it lands it fades, leaving what actually belongs there: the stain,
+              and the solid chunk that spilled alongside it.
+            </p>
+
+            <h3>Organs have real sizes</h3>
+            <p>
+              Every organ is authored against one number: its longest axis <em>in metres</em>,
+              on a fighter a little under two of them tall. That single source of truth is why
+              an imported heart and a generated one come out the same size. Eyeballing it
+              instead produced organs the size of a torso.
+            </p>
+            <table class="organ-table">
+              <thead>
+                <tr><th>Prop</th><th>Span</th><th>Mass</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>heart</td><td><b>0.135 m</b></td><td><b>0.5</b></td><td>keeps beating for nine seconds after it lands</td></tr>
+                <tr><td>brain</td><td><b>0.170 m</b></td><td><b>0.6</b></td><td>head only</td></tr>
+                <tr><td>intestine</td><td><b>0.780 m</b></td><td><b>0.9</b></td><td>stretched on one axis so it reads as rope, not another lump</td></tr>
+                <tr><td>guts</td><td><b>0.560 m</b></td><td><b>1.1</b></td><td>strand</td></tr>
+                <tr><td>ribcage</td><td><b>0.300 m</b></td><td><b>1.4</b></td><td>heaviest piece, lands first</td></tr>
+                <tr><td>eyeball</td><td><b>0.030 m</b></td><td><b>0.2</b></td><td>two of them, from the head</td></tr>
+                <tr><td>armChunk</td><td><b>0.230 m</b></td><td><b>0.9</b></td><td>the piece that comes <em>off</em></td></tr>
+              </tbody>
+            </table>
+            <p class="muted small">
+              The viewer generates these props procedurally from the same spans. The game loads
+              a baked library and falls back to exactly this generated blob for anything the
+              library doesn't carry — so the system is never blocked on art, and a test that
+              loads no assets still exercises the whole path.
+            </p>
+
+            <h3>Blood goes into the mesh, not on top of it</h3>
+            <p>
+              Wounds are painted into the model's own vertex colours in <em>rest</em> space, so
+              they follow every animation for free — no decals, no texture copies, no per-frame
+              work. The wound is placed by finding the nearest vertex on the <em>posed</em>
+              surface, which is what stops a crouching fighter's head wound landing on their
+              jacket. Each splash gets a narrow downward tail so it reads as a trickle rather
+              than a round paint blot.
+            </p>
+            <p>
+              Debris bleeds <em>in flight</em> too: a limb that only stains where it lands
+              leaves a clean floor between body and piece, which is the tell that the two events
+              are unrelated. Pieces get one heavily damped bounce and then stay put, because
+              debris that skitters distracts from a round it is no longer part of.
+            </p>
+
+            <h3>Try it</h3>
+            <p>Every control in the viewer is a real entry point in the shipped system:</p>
+            <ul class="detail-list">
+              <li><b>Health</b><span>Drag it and watch the cards arm themselves. This is the only thing gating which regions an ordinary hit may take.</span></li>
+              <li><b>Land a hit</b><span>Rolls a height and a force, then runs the same path a real hit takes. Small hits only bleed; heavy ones take something.</span></li>
+              <li><b>Beat down</b><span>Lands one every 0.42 s until there is nothing left to take. The body comes apart in the order it was beaten, and no two runs match.</span></li>
+              <li><b>Cut</b><span>Severs a region directly, ignoring the gate — which is what a KO and a finisher do.</span></li>
+              <li><b>Fatality</b><span>Every region at once, ordered from the extremities inwards so the body falls apart rather than the head simply vanishing.</span></li>
+              <li><b>Patch up</b><span>Starts a clean round: masks and blood zeroed, debris retired, floor washed.</span></li>
+            </ul>
+
+            <div class="callout warn">
+              <b>What this demo is not.</b>
+              <p>
+                It uses the shipped design, thresholds and numbers, but the viewer is its own
+                small copy of the runtime rather than the game in an iframe. The difference that
+                matters: a real hit gets its height and force from the collision solver, while
+                <b>Land a hit</b> rolls them. Everything downstream of that roll is the logic
+                described above.
+              </p>
+              <p>
+                One thing genuinely had to change, and it's a property of the asset rather than
+                the system. This page loads the 9 MB <em>measurement</em> model, which is
+                blended far more softly than the rig the game ships — a vertex in the middle of
+                this head is only about half bound to the head bone, so the shipped absolute cut
+                would leave it attached. Here the threshold is measured against the strongest
+                hold that chain has anywhere on the fighter, then the same 0.94 and 0.02 cutoffs
+                are applied unchanged. On a tightly rigged fighter the two are the same thing.
+              </p>
+            </div>
+          </details>
+
+          <!-- ============================ 06 ============================ -->
+          <h2 id="numbers"><span class="secnum">06</span> Numbers &amp; next steps</h2>
           <p>
-            This is the shipped table out of <code>render/goreAtlas.js</code>, thresholds
-            and all. <b>Threshold</b> is remaining health. The two
-            <span class="accent-gold">lethal</span> regions sit at 0&nbsp;% because they can
-            only ever be the last thing that happens &mdash; an ordinary hit is never
-            allowed to take them, so the round does not routinely end on a decapitation
-            nobody chose. Only a KO or a finisher asks for those directly, which is what
-            the <b>Cut</b> button on each card is doing.
-          </p>
-
-          <div class="regions" id="regions"></div>
-
-          <p class="muted" style="font-size:0.88rem;">
-            Regions are named by the <em>bones</em> their geometry hangs from, matched by
-            pattern rather than by exact name, because the roster does not agree on a
-            skeleton: the authored fighters use this project's rig (<code>upperArmL</code>,
-            <code>forearmL</code>, <code>upLegR</code>) and imported models arrive on
-            whatever their source used. Matching on a pattern means a new model is
-            dismemberable on arrival instead of after someone hand-writes a bone map. It
-            also means a region can come back <em>not rigged</em> &mdash; neither fighter
-            here has a jaw bone, so the jaw card marks itself and cutting it is a no-op
-            rather than a silently retired region.
-          </p>
-
-          <h3>What happens on the frame a limb comes off</h3>
-          <p>
-            Four things, all driven from the same <em>posed</em> skeleton, so they agree
-            about where the cut was:
+            The gate results for the first shipped fighter — the build that beat every other
+            budget on both axes:
           </p>
           <ul class="detail-list">
-            <li><b>Geometry</b><span>Everything skinned to the severed bone chain stops being drawn. The stump bone is looked up on the animated skeleton, so the wound is where the limb <em>is now</em>, not where the bind pose left it.</span></li>
-            <li><b>Momentum</b><span>The limb becomes a prop carrying 55&nbsp;% of the blow's force. A limb that flies off along the blow reads as caused by it; one that drops straight down reads as a bug.</span></li>
-            <li><b>Spill</b><span>The region's organs follow the cut, thrown a little more softly than the limb so they trail behind it instead of arriving together in a clump.</span></li>
-            <li><b>Bleed</b><span>The stump is soaked before the limb has finished leaving. A cut that is not bleeding at its edge reads as plastic.</span></li>
+            <li><b>Silhouette</b><span><b>99.146 %</b> overlap head-on and <b>99.318 %</b> at three-quarters, against the 2 M-triangle source at identical framing.</span></li>
+            <li><b>Head colour</b><span>Median delta <b>3.00</b>, 95th percentile <b>20.27</b>, measured inside the shared silhouette.</span></li>
+            <li><b>Wrist position</b><span><b>±0.4452</b> on both arms — a four-decimal cross-check between two independently built sides.</span></li>
+            <li><b>Trunk width</b><span><b>0.54 m</b> at the belly, <b>0.40 m</b> at the chest, which is what drives the elbow angle.</span></li>
           </ul>
 
-          <h3>Nothing is actually deleted</h3>
-          <p>
-            The obvious way to remove an arm is to rebuild the index buffer without it.
-            This does not do that. Every vertex carries a <code>severMask</code> &mdash; its
-            total skin weight on the severed chain &mdash; and the fragment shader
-            <code>discard</code>s anything above 0.94. The fighter keeps
-            <span class="accent-gold">one draw call and one index buffer all round</span>,
-            and putting the limb back for the next round is a <code>fill(0)</code> rather
-            than a rebuild.
-          </p>
-
-          <div class="callout">
-            <b>The seam lands in the right place for free.</b>
-            <p>
-              Deep in the forearm every skin weight belongs to the severed chain and the
-              mask is 1. Across the elbow it falls off exactly as the skinning blend does.
-              The band left in between &mdash; mask between 0.02 and 0.94 &mdash; is the cut
-              face, and the shader paints it raw meat instead of skin. Without that band a
-              severed arm reads as a rendering glitch rather than a wound, and nobody had to
-              author a cut cap for any of it.
-            </p>
-          </div>
-
-          <h3>The limb is the body's own vertices</h3>
-          <p>
-            At the moment of the cut, the posed positions of the removed vertices are
-            lifted straight out of the fighter and thrown as a dense point cloud. It is the
-            same silhouette that was attached a frame ago, which is the whole reason it is
-            worth doing rather than throwing a generic lump. Those vertices are a
-            <em>point cloud</em> and not a surface &mdash; their triangles are still indexed
-            against the body &mdash; but as fast-moving points they read as wet tissue in
-            motion and cost nothing to build. That is the right trade for something on
-            screen for under a second. Once it lands it fades, and what stays behind is
-            what actually belongs there: the blood stain, and the real severed chunk the
-            atlas spilled alongside it.
-          </p>
-
-          <h3>Organs are props with real sizes</h3>
-          <p>
-            Every organ is authored against one number &mdash; <code>span</code>, its
-            longest axis <em>in metres</em>, on a fighter a little under two of them tall.
-            It is the single source of truth for scale: the build tool normalises each
-            imported mesh to it, and the procedural fallback generates to it, so a real
-            heart and a generated one are the same size. Authoring these by eye instead
-            produced organs the size of a torso.
-          </p>
-          <table class="organ-table">
-            <thead>
-              <tr><th>Prop</th><th>Span</th><th>Mass</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>heart</td><td><b>0.135 m</b></td><td><b>0.5</b></td><td>keeps beating for nine seconds after it lands</td></tr>
-              <tr><td>brain</td><td><b>0.170 m</b></td><td><b>0.6</b></td><td>head only</td></tr>
-              <tr><td>intestine</td><td><b>0.780 m</b></td><td><b>0.9</b></td><td>strand &mdash; stretched on one axis so it reads as rope, not another lump</td></tr>
-              <tr><td>guts</td><td><b>0.560 m</b></td><td><b>1.1</b></td><td>strand</td></tr>
-              <tr><td>ribcage</td><td><b>0.300 m</b></td><td><b>1.4</b></td><td>heaviest piece, lands first</td></tr>
-              <tr><td>eyeball</td><td><b>0.030 m</b></td><td><b>0.2</b></td><td>two of them, from the head</td></tr>
-              <tr><td>armChunk</td><td><b>0.230 m</b></td><td><b>0.9</b></td><td>salvaged from the gib library &mdash; the piece that comes <em>off</em></td></tr>
-            </tbody>
-          </table>
-          <p class="muted" style="font-size:0.88rem;">
-            The viewer on this page generates its props procedurally from those same spans.
-            The shipped game loads a baked library and falls through to exactly this
-            generated blob for anything the library does not carry &mdash; so the system is
-            never blocked on art, and a headless test that loads no assets still runs the
-            whole path.
-          </p>
-
-          <h3>Blood goes into the mesh, not on top of it</h3>
-          <p>
-            Wounds are painted into a per-vertex attribute in <em>bind space</em>, so they
-            follow every animation for free &mdash; no decal meshes, no texture copies, no
-            per-frame work. The wound is located by sampling the <em>posed</em> surface for
-            the nearest vertex to the hit, then painting that vertex's bind-space
-            neighbourhood, which is what stops a crouching fighter's head wound landing on
-            their jacket. Each splash gets a narrow downward tail so it reads as a trickle
-            rather than a perfectly round paintbrush.
-          </p>
-          <p>
-            Debris bleeds <em>in flight</em>, not only where it lands &mdash; a limb that
-            only stains its landing spot leaves a clean floor between the body and the
-            piece, which is the tell that the two events are unrelated. Pieces get exactly
-            one heavily damped bounce and then stay. Debris that skitters is distracting
-            during a round it is not part of any more.
-          </p>
-
-          <h3>Try it</h3>
-          <p>
-            The controls are in the viewer panel on the right, and every one of them is a
-            real entry point in the shipped system:
-          </p>
+          <h3>Where to go next</h3>
           <ul class="detail-list">
-            <li><b>Health</b><span>Drag it and watch the cards above arm themselves. This is the only thing gating which regions an ordinary hit may take.</span></li>
-            <li><b>Land a hit</b><span>Rolls a height and a force, then runs <code>onHit</code> &mdash; the same path a real hit takes. Small hits only bleed. Heavy ones take something.</span></li>
-            <li><b>Beat down</b><span>Lands one every 0.42&nbsp;s until there is nothing left to take. This is the honest demo: the body comes apart in the order it was beaten, and no two runs are the same.</span></li>
-            <li><b>Cut</b><span>Calls <code>sever</code> directly, ignoring the gate, which is what the KO and the finisher do.</span></li>
-            <li><b>Fatality</b><span><code>explode()</code> &mdash; every region at once, ordered extremities-inward so the body falls apart rather than the head simply vanishing first.</span></li>
-            <li><b>Patch up</b><span><code>resetRound()</code>. Masks and blood are zeroed, debris is retired, the floor is washed. A new round starts on a clean stage.</span></li>
+            <li><b>Play it</b><span><a href="./">The full game</a> — the build everything on this page describes.</span></li>
+            <li><b>Inspect it</b><span><a href="fighter-lab.html">Fighter lab</a> puts the raw sculpt beside the textured export, with camera presets, animation scrubbing and wireframe.</span></li>
           </ul>
-
-          <div class="callout warn">
-            <b>What this demo is not.</b>
-            <p>
-              It is the shipped design, the shipped thresholds and the shipped numbers, but
-              the viewer on this page is its own small copy of the runtime rather than the
-              game booted in an iframe. The difference that matters: a real hit gets its
-              height and force from the collision solver, and <b>Land a hit</b> rolls them.
-              Everything downstream of that roll &mdash; which regions are eligible, what
-              severs, where the cut lands, what spills, how it falls &mdash; is the logic
-              described above.
-            </p>
-            <p>
-              One thing genuinely had to change, and it is a property of the asset rather
-              than of the system. This page loads the 9&nbsp;MB <em>measurement</em> GLB,
-              which is blended much more softly than the rig the game ships: a vertex in the
-              middle of this Trump's head is only about half bound to the head bone and
-              nearly half to the chest, so the chain never reaches 0.94 anywhere on the head
-              and the shipped absolute cut would leave it attached. So the mask here is
-              scaled against the strongest hold the chain has on the fighter &mdash; what
-              &ldquo;fully attached&rdquo; means is read off the rig instead of assumed
-              &mdash; and the 0.94 and 0.02 thresholds are then applied unchanged. On a
-              tightly rigged fighter the two are the same thing.
-            </p>
-          </div>
-
-          <h3 id="refnums">Reference numbers</h3>
-          <p>Trump, the shipped build that beat every other budget on both axes:</p>
-          <ul class="detail-list">
-            <li><b>hero IoU</b><span><b>99.146 %</b> against the 2 M-triangle source at identical framing</span></li>
-            <li><b>3/4 IoU</b><span><b>99.318 %</b></span></li>
-            <li><b>head ΔE50</b><span><b>3.00</b> (median colour delta inside the silhouette intersection)</span></li>
-            <li><b>head ΔE95</b><span><b>20.27</b> (95th percentile)</span></li>
-            <li><b>Wrist x</b><span>±0.4452 on both arms — four-decimal cross-check between independently tessellated sides</span></li>
-            <li><b>Trunk width</b><span>0.54 m at the belly, 0.40 m at the chest — drives the elbow pole</span></li>
-          </ul>
-
-          <h3>What this page isn't</h3>
-          <p>
-            A walkthrough of the mixer or the IK. A demo of the input chords. An
-            endorsement of mixing ragdoll with a deterministic sim. The full game lives at
-            <code><a href="./" style="color:var(--gold)">../dist/index.html</a></code>.
-            Side-by-side mesh inspection lives in the
-            <a href="fighter-lab.html" style="color:var(--gold)">fighter lab</a>.
-            This is the behind-the-scenes note pinned to the same build.
+          <p class="muted small">
+            This page deliberately isn't a walkthrough of the animation mixer or the inverse
+            kinematics, a guide to the input chords, or an argument for mixing ragdoll physics
+            with a deterministic simulation. It's the behind-the-scenes note pinned to the same
+            build.
           </p>
         </main>
 
@@ -1506,11 +1600,8 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
       </div>
 
       <footer>
-        Built procedurally with Three.js · Fonts:
-        <span class="accent-gold">Fatal Fighter</span>,
-        <span class="accent-gold">Great Fighter</span>,
-        <span class="accent-gold">Single Fighter</span> ·
-        Palette from <code>COLOR_BIBLE.md</code> · Fictional parody.
+        <p>A fictional parody prototype. Not affiliated with any real person or organisation.</p>
+        <p>Built with Three.js &middot; Display faces: Fatal Fighter, Great Fighter, Single Fighter.</p>
       </footer>
     </div>
 
@@ -1526,6 +1617,10 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
     <script type="module">
       import * as THREE from "three";
       import { GLTFLoader } from "three/addons/GLTFLoader.js";
+      // The published GLBs are meshopt-compressed and Flock ships as a scene
+      // pack (web/tools/asset-pipeline.json); both readers come from the game.
+      import { MeshoptDecoder } from "three/addons/meshopt_decoder.module.js";
+      import { parseScenePack } from "three/addons/scenePackFormat.js";
 
       const FIGHTERS = {
         trump: {
@@ -1538,8 +1633,8 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
         },
         officer_flock: {
           label: "Officer Flock",
-          model: "./fighters/officer_flock/model.json",
-          format: "three",
+          model: "./fighters/officer_flock/model.bin",
+          format: "pack",
           facingRotationY: Math.PI / 2 - 0.3,
         },
       };
@@ -2495,7 +2590,7 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
         cameraRadius = Math.min(8.0, Math.max(1.4, cameraRadius * factor));
       }, { passive: false });
 
-      const gltfLoader = new GLTFLoader();
+      const gltfLoader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
       const tmpBox = new THREE.Box3();
 
       function clearScene() {
@@ -2551,8 +2646,10 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
 
         let gltf;
         try {
-          if (cfg.format === "three") {
-            const object = await new THREE.ObjectLoader().loadAsync(cfg.model);
+          if (cfg.format === "pack") {
+            const response = await fetch(cfg.model);
+            if (!response.ok) throw new Error(`${cfg.model}: ${response.status}`);
+            const object = await parseScenePack(await response.arrayBuffer(), { ObjectLoader: THREE.ObjectLoader, MeshoptDecoder });
             gltf = { scene: object, animations: object.animations || [] };
           } else {
             gltf = await gltfLoader.loadAsync(cfg.model);
@@ -3047,6 +3144,19 @@ root &gt; hips &gt; spine &gt; chest &gt; neck &gt; head &gt; headEnd
       requestAnimationFrame(tick);
 
       loadFighter("trump");
+    </script>
+    <script>
+      // Single-column layouts stack the viewer above the text rather than
+      // beside it, so a control further down the page has nothing visible to
+      // show. Bring the viewer back into frame when one is used.
+      // Delegated, because the per-region Cut buttons are built by the module
+      // script after this one runs.
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest("button[data-load], button[data-sever]")) return;
+        if (!window.matchMedia("(max-width: 1024px)").matches) return;
+        const rail = document.querySelector(".viewer-rail");
+        if (rail) rail.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     </script>
   </body>
 </html>
