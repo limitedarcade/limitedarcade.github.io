@@ -3,6 +3,42 @@ import * as THREE from '../vendor/three.module.js';
 const clamp = THREE.MathUtils.clamp;
 const point = new THREE.Vector3(), posed = new THREE.Vector3(), worldScale = new THREE.Vector3();
 const MAX_WOUNDS = 16;
+const CONTACT_SAMPLES = 4096;
+
+// Vertex-to-face adjacency is immutable: build it while loading, rather than
+// searching every triangle of a detailed fighter on every contact.
+function faceAdjacency(geometry) {
+  const vertices = geometry.attributes.position.count, index = geometry.index;
+  const count = index?.count ?? vertices, offsets = new Uint32Array(vertices + 1);
+  for (let i = 0; i < count; i++) offsets[(index ? index.getX(i) : i) + 1]++;
+  for (let i = 1; i <= vertices; i++) offsets[i] += offsets[i - 1];
+  const cursors = offsets.slice(), faces = new Uint32Array(count);
+  for (let i = 0; i < count; i++) faces[cursors[index ? index.getX(i) : i]++] = i - i % 3;
+  return { offsets, faces };
+}
+
+// Intersections at the same threshold the visible and shadow shaders discard.
+// Keep vertex references so the seam can be evaluated again in a later pose.
+function cutBoundary(record, previous) {
+  const { geometry, sever } = record, mask = sever.array;
+  const indices = geometry.index, count = indices?.count ?? mask.length;
+  const seam = [], seen = new Set();
+  for (let i = 0; i < count; i += 3) {
+    const x = indices ? indices.getX(i) : i, y = indices ? indices.getX(i + 1) : i + 1,
+      z = indices ? indices.getX(i + 2) : i + 2;
+    if (!(mask[x] > .5 && previous[x] <= .5) && !(mask[y] > .5 && previous[y] <= .5)
+      && !(mask[z] > .5 && previous[z] <= .5)) continue;
+    for (let j = 0; j < 3; j++) {
+      const a = j === 0 ? x : j === 1 ? y : z, b = j === 0 ? y : j === 1 ? z : x;
+      if ((mask[a] > .5) === (mask[b] > .5)) continue;
+      const key = `${Math.min(a, b)}:${Math.max(a, b)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      seam.push({ record, a, b, t: (.5 - mask[a]) / (mask[b] - mask[a]) });
+    }
+  }
+  return seam;
+}
 
 // Bruising and deformation use vertices; blood uses continuous bind-space
 // fields evaluated per fragment, so its edge never inherits the mesh triangles.
@@ -54,13 +90,19 @@ export class FighterDamage {
           shader.vertexShader = 'attribute float severMask; varying float vSeverMask;\n' + shader.vertexShader;
           shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvSeverMask = severMask;');
           shader.fragmentShader = 'varying float vSeverMask;\n' + shader.fragmentShader;
-          shader.fragmentShader = shader.fragmentShader.replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>\nif (vSeverMask > 0.94) discard;');
+          shader.fragmentShader = shader.fragmentShader.replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>\nif (vSeverMask > 0.5) discard;');
         };
         shadow.customProgramCacheKey = () => 'fighter-sever-shadow-v1';
       }
       [mesh.customDepthMaterial, mesh.customDistanceMaterial] = shadows;
-      this.meshes.push({ mesh, originalGeometry, geometry, damage, sever, materials, originalDepth, originalDistance, shadows });
+      this.meshes.push({ mesh, originalGeometry, geometry, damage, sever, materials, originalDepth, originalDistance, shadows,
+        adjacency: faceAdjacency(geometry), cutBindings: new Map() });
     });
+    const totalVertices = this.meshes.reduce((sum, r) => sum + r.geometry.attributes.position.count, 0);
+    for (const record of this.meshes) {
+      const count = record.geometry.attributes.position.count;
+      record.contactStride = Math.max(1, Math.ceil(count / Math.max(24, CONTACT_SAMPLES * count / totalVertices)));
+    }
   }
 
   attachMaterial(material, geometry) {
@@ -111,9 +153,9 @@ export class FighterDamage {
         // Fully severed geometry is gone. The partial band left at the seam is
         // the cut face itself, which is raw meat rather than skin -- without it
         // a severed arm reads as a rendering glitch instead of a wound.
-        if (vSeverMask > 0.94) discard;
-        if (vSeverMask > 0.02) {
-          float raw = smoothstep(0.02, 0.94, vSeverMask);
+        if (vSeverMask > 0.5) discard;
+        if (vSeverMask > 0.36) {
+          float raw = smoothstep(0.36, 0.5, vSeverMask);
           diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.135, 0.011, 0.014), raw * 0.96);
           diffuseColor.rgb += vec3(0.16, 0.02, 0.02) * raw * 0.35;
         }
@@ -180,25 +222,42 @@ export class FighterDamage {
       const mesh = record.mesh;
       mesh.skeleton?.update();
       const count = record.geometry.attributes.position.count;
-      const stride = Math.max(1, Math.floor(count / 3500));
+      const stride = record.contactStride;
       for (let i = 0; i < count; i += stride) {
+        if (record.sever.array[i] > .5) continue;
         mesh.getVertexPosition(i, posed).applyMatrix4(mesh.matrixWorld);
         const distance = posed.distanceToSquared(point);
         if (distance < bestDistance) { bestDistance = distance; nearest = { record, index: i }; }
       }
     }
     if (!nearest) return;
-    const { record, index } = nearest, position = record.geometry.attributes.position;
+    const { record } = nearest, position = record.geometry.attributes.position;
+    let { index } = nearest;
+    const indices = record.geometry.index;
+    const { offsets, faces } = record.adjacency;
+    // Walk to the nearest vertex around the coarse sample before refining its
+    // surface. This keeps small face/hand wounds accurate at a bounded cost.
+    for (let ring = 0; ring < 12; ring++) {
+      let next = index;
+      for (let a = offsets[index]; a < offsets[index + 1]; a++) for (let j = 0; j < 3; j++) {
+        const id = indices ? indices.getX(faces[a] + j) : faces[a] + j;
+        if (record.sever.array[id] > .5) continue;
+        record.mesh.getVertexPosition(id, posed).applyMatrix4(record.mesh.matrixWorld);
+        const distance = posed.distanceToSquared(point);
+        if (distance < bestDistance) { bestDistance = distance; next = id; }
+      }
+      if (next === index) break;
+      index = next;
+    }
     // Refine the nearest vertex onto its adjacent posed triangles. Barycentric
     // interpolation places even a tiny wound inside a large, low-poly face.
     const surface = record.geometry.attributes.battleSurfacePosition;
     const center = new THREE.Vector3().fromBufferAttribute(surface, index);
-    const indices = record.geometry.index;
     const triangle = new THREE.Triangle(), closest = new THREE.Vector3(), bary = new THREE.Vector3();
     const vertexIds = [0, 0, 0], bind = new THREE.Vector3();
-    for (let face = 0; face < (indices?.count ?? position.count); face += 3) {
+    for (let adjacent = offsets[index]; adjacent < offsets[index + 1]; adjacent++) {
+      const face = faces[adjacent];
       for (let j = 0; j < 3; j++) vertexIds[j] = indices ? indices.getX(face + j) : face + j;
-      if (!vertexIds.includes(index)) continue;
       for (const [j, vertex] of [triangle.a, triangle.b, triangle.c].entries()) {
         record.mesh.getVertexPosition(vertexIds[j], vertex).applyMatrix4(record.mesh.matrixWorld);
       }
@@ -258,7 +317,27 @@ export class FighterDamage {
   //
   // Returns the posed triangles that were removed, so the caller can build the
   // flying limb out of the same geometry the body just lost.
-  severByBones(matchers, { collect = true, wholeMeshes = [] } = {}) {
+  prepareSever(matchers) {
+    const key = matchers.map(String).join('|');
+    for (const record of this.meshes) {
+      if (record.cutBindings.has(key)) continue;
+      const skeleton = record.mesh.skeleton, { skinIndex: index, skinWeight: weight } = record.geometry.attributes;
+      const vertices = [], weights = [];
+      if (skeleton && index && weight) {
+        const bones = skeleton.bones.map(bone => matchers.some(m => m.test(bone.name)));
+        for (let i = 0; i < index.count; i++) {
+          const bound = (bones[index.getX(i)] ? weight.getX(i) : 0) + (bones[index.getY(i)] ? weight.getY(i) : 0)
+            + (bones[index.getZ(i)] ? weight.getZ(i) : 0) + (bones[index.getW(i)] ? weight.getW(i) : 0);
+          if (bound > .02) { vertices.push(i); weights.push(bound); }
+        }
+      }
+      record.cutBindings.set(key, { vertices: Uint32Array.from(vertices), weights: Float64Array.from(weights) });
+    }
+    return key;
+  }
+
+  severByBones(matchers, { collect = true, wholeMeshes = [], plane = null } = {}) {
+    const bindingKey = this.prepareSever(matchers);
     const removed = [];
     let cut = false;
     for (const record of this.meshes) {
@@ -273,7 +352,7 @@ export class FighterDamage {
           parent = parent.parent;
         }
         if (!attached) continue;
-        const positions = [], mask = record.sever.array;
+        const positions = [], mask = record.sever.array, previous = mask.slice();
         record.mesh.updateWorldMatrix(true, false);
         skeleton?.update();
         for (let i = 0; i < mask.length; i++) {
@@ -285,41 +364,42 @@ export class FighterDamage {
           }
         }
         record.sever.needsUpdate = true;
-        if (positions.length) removed.push({ record, positions });
+        if (positions.length) removed.push({ record, positions, seam: cutBoundary(record, previous) });
         continue;
       }
-      const severedBones = new Set();
-      skeleton.bones.forEach((bone, index) => {
-        if (matchers.some(m => m.test(bone.name))) severedBones.add(index);
-      });
-      if (!severedBones.size) continue;
-      const geometry = record.geometry;
-      const index = geometry.attributes.skinIndex, weight = geometry.attributes.skinWeight;
-      if (!index || !weight) continue;
+      const binding = record.cutBindings.get(bindingKey);
+      if (!binding.vertices.length) continue;
       const mask = record.sever.array;
+      const previous = mask.slice();
       const positions = [];
       record.mesh.skeleton.update();
       record.mesh.updateWorldMatrix(true, false);
-      for (let i = 0; i < index.count; i++) {
-        let bound = 0;
-        for (const component of ['x', 'y', 'z', 'w']) {
-          if (severedBones.has(index[`get${component.toUpperCase()}`](i))) {
-            bound += weight[`get${component.toUpperCase()}`](i);
-          }
+      for (let selected = 0; selected < binding.vertices.length; selected++) {
+        const i = binding.vertices[selected];
+        let bound = binding.weights[selected];
+        if (plane && bound < .5) {
+          record.mesh.getVertexPosition(i, posed).applyMatrix4(record.mesh.matrixWorld);
+          // Bone ownership selects the limb; an anatomical plane defines its
+          // blended edge. Distal vertices owned by the severed chain leave even when a bent
+          // wrist, knee or finisher pose folds back across the joint's plane.
+          bound = clamp(.5 + (posed.x - plane.point.x) * plane.normal.x / plane.span
+            + (posed.y - plane.point.y) * plane.normal.y / plane.span
+            + (posed.z - plane.point.z) * plane.normal.z / plane.span, 0, 1);
+        } else if (plane) {
+          bound = 1;
         }
-        if (bound <= 0.02) continue;
         const alreadyRemoved = mask[i] > .5;
         // A region owning most of a vertex owns the vertex. Keeping a raw
         // 0.8 skin weight as opacity left almost the entire head behind.
-        const value = clamp(Math.max(mask[i], bound >= 0.5 ? 1 : bound), 0, 1);
+        const value = clamp(Math.max(mask[i], plane ? bound : bound >= 0.5 ? 1 : bound), 0, 1);
         if (value > mask[i]) { mask[i] = value; cut = true; }
-        if (collect && bound >= 0.5 && !alreadyRemoved) {
+        if (collect && bound > (plane ? 0.5 : 0.499999) && !alreadyRemoved) {
           record.mesh.getVertexPosition(i, posed).applyMatrix4(record.mesh.matrixWorld);
           positions.push(posed.x, posed.y, posed.z, i);
         }
       }
       record.sever.needsUpdate = true;
-      if (positions.length) removed.push({ record, positions });
+      if (positions.length) removed.push({ record, positions, seam: cutBoundary(record, previous) });
     }
     return cut ? removed : null;
   }

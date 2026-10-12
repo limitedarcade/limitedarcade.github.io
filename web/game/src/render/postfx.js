@@ -44,10 +44,10 @@ export const GRADES = {
   lawn: { lift: [-0.008, 0.013, 0.01], gain: [0.96, 1.04, 1.01], saturation: 0.92, contrast: 1.05 },
   // Blue ice and steel shadows under an amber winter sunset.
   lakeAmerica: {
-    lift: [0.001, 0.003, 0.006],
-    gain: [1.025, 1.01, 1.025],
-    saturation: .93,
-    contrast: 1.015,
+    lift: [-.001, 0, .003],
+    gain: [1.035, 1.015, 1.025],
+    saturation: 1.035,
+    contrast: 1.065,
   },
 };
 
@@ -183,6 +183,18 @@ export class PostFx {
   }
 
   setGrade(name) {
+    // Canvas antialiasing does not cover the composer's offscreen HDR targets.
+    // Resolve geometry edges before bloom and grading; retain the lighter
+    // mobile path and release the old GPU buffers when changing stages.
+    const samples = name === 'lakeAmerica'
+      ? Math.min(this.lowPower ? 2 : 4, this.renderer.capabilities.maxSamples)
+      : 0;
+    for (const target of [this.composer.renderTarget1, this.composer.renderTarget2]) {
+      if (target.samples !== samples) {
+        target.dispose();
+        target.samples = samples;
+      }
+    }
     const preset = GRADES[name] || GRADES.neutral;
     this.preset = preset;
     const u = this.gradePass.uniforms;
@@ -212,6 +224,12 @@ export class PostFx {
     if (amount <= 0) return;
     this.radial = Math.max(this.radial, 0.05 * amount);
     this.chroma = Math.max(this.chroma, 0.0035 * amount);
+  }
+
+  resetImpact() {
+    this.radial = this.chroma = 0;
+    this.gradePass.uniforms.uRadial.value = 0;
+    this.gradePass.uniforms.uAberration.value = 0;
   }
 
   // Driven from the real frame delta, not the sim delta: the blur should hold

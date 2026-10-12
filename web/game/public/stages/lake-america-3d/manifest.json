@@ -1,11 +1,11 @@
 {
-  "objects": 186,
-  "meshObjects": 158,
-  "vertices": 158405,
-  "triangles": 221564,
+  "objects": 275,
+  "meshObjects": 244,
+  "vertices": 296320,
+  "triangles": 236871,
   "source": "web/stages/lake_america/blender/lake-america.blend",
   "seed": 7319,
-  "bounds": "Arena contact Y=0; layered skyline 178\u2013220m away; 360 degree island coverage",
+  "bounds": "Arena contact Y=0; layered skyline 178–220m away; 360 degree island coverage",
   "axe": {
     "node": "lake-america-axe",
     "position": [
@@ -14,8 +14,8 @@
       -0.65
     ],
     "bladeCenterLocal": [
-      0.12,
-      0.36,
+      0.17,
+      -0.29,
       0
     ],
     "stumpCollection": "lake-america-axe-stump",
@@ -75,7 +75,33 @@
     "Traffic-cone-crowned goose marshal and two safety deputies",
     "Binocular-wielding moose lifeguard",
     "Snowman-driven maple-syrup Zamboni",
-    "Curling catastrophe and civic festival bunting"
+    "Curling catastrophe and civic festival bunting",
+    "Cohesive enamel, glass and brushed-metal material response",
+    "Baked color variation across terrain, trees, skyline and props",
+    "Two-tone winter woodland, warm occupied city windows and cyan pressure ice",
+    "Beveled joinery, metalwork, pickups and rounded wildlife silhouettes",
+    "Palmated moose antlers, knitted toque, coat stitches and glazed binoculars",
+    "Layered goose flight feathers, bright safety vests and miniature checklists",
+    "Rescue hut rivets, side glazing, snow pillows, log rings and rescue shovel",
+    "Dock nail heads, bench fixings and detailed lantern cages",
+    "Zamboni tire treads, louvers, bolts, bumpers, cab frames, steering wheel and maple badge",
+    "Snowman scarf, mittens and hat band; banded syrup tank and guarded beacon",
+    "Ferry deck rails, rigging, life rings, navigation stripe and warm wheelhouse",
+    "Riveted and scored axe, stump growth rings, stitched rescue ring and metal grommets",
+    "Raised curling handles, polished running bands, broom bristles and ironwork trail sign",
+    "Sculpted snow pillows and branchwork across the near pine groves",
+    "Fine peripheral ice veins, local floe fractures and ribbed landmark knitwear",
+    "Thirty near pines rebuilt with rounded drooping snow boughs and varied dark needle undersides",
+    "Moose lifeguard staged visibly in front of the grove, with rounded muzzle and finished rescue vest",
+    "Rebuilt rescue axe: curved oval hickory haft, forged socket and pick, honed curved edge, enamel face, rubber grip and safety lanyard",
+    "24 authored seamless normal/roughness maps across wood, bark, granite, snow, forged/brushed steel, enamel, rubber, canvas, ice, fur and glass; packed into the editable master and GLB",
+    "Directional warm key, restrained cool fill and shore rim, stronger contact shadows, deeper blue ice and less washed-out skyline haze",
+    "The axe rescue cross is replaced by a small ivory maple leaf",
+    "A curled and tattered Bill of Rights scroll with a large dirty boot tread, fine paper normals and frosted edges",
+    "A physically split, patinated bronze Liberty Bell on a timber yoke with an OUT OF ORDER plaque",
+    "A sold-out Freedom vending machine: one word of speech $499.99, 0.1 second of privacy $999.99, travel-size due process $9,999.99; no refunds",
+    "Rounded shoreline rocks and snow silhouettes, with angle-aware curved shading throughout",
+    "Three-segment corner highlights and weighted planar normals on park props and equipment"
   ],
   "previews": [
     "lake-america-combat.png",
@@ -83,5 +109,103 @@
     "lake-america-axe-detail.png",
     "lake-america-waterfront.png",
     "lake-america-absurdity.png"
-  ]
+  ],
+  "mcpFinish": {
+    "version": "2026-10-09-mcp-rich-v1",
+    "recipe": "web/tools/polish-lake-america-mcp.py",
+    "backup": "web/artifacts/lake-america/before-big-mcp-pass-20261009-193434",
+    "method": "Native Blender MCP; modeled detail, baked vertex color, stable gameplay pivots"
+  },
+  "surfacePass": {
+    "version": "2026-10-09-mcp-pbr-v2",
+    "method": "Native Blender MCP; authored tangent normal and roughness maps, rebuilt axe, runtime lighting and grade",
+    "recipe": "web/tools/surface-lake-america-mcp.py",
+    "backup": "web/artifacts/lake-america/before-surface-pass-20261009-231038",
+    "families": [
+      "wood",
+      "bark",
+      "granite",
+      "snow",
+      "forged",
+      "brushed",
+      "enamel",
+      "rubber",
+      "canvas",
+      "ice",
+      "fur",
+      "glass"
+    ],
+    "images": 24,
+    "keyPosition": [
+      -16,
+      11,
+      9
+    ],
+    "keyIntensity": 3.35,
+    "hemisphereIntensity": 0.6,
+    "fillIntensity": 0.55,
+    "rimIntensity": 0.85
+  },
+  "satireProps": {
+    "version": "2026-10-09-mcp-satire-v3",
+    "recipe": "web/tools/props-lake-america-mcp.py",
+    "backup": "web/artifacts/lake-america/before-satire-props-20261009-234007",
+    "axeEmblem": "ivory maple leaf",
+    "props": [
+      {
+        "node": "lake-america-bill-of-rights",
+        "position": [
+          -2.35,
+          0.055,
+          -3.5
+        ],
+        "description": "Tattered, curled parchment with a large muddy boot tread"
+      },
+      {
+        "node": "lake-america-liberty-bell",
+        "position": [
+          3.55,
+          0.02,
+          -4.65
+        ],
+        "description": "Split bronze bell with LIBERTY / OUT OF ORDER plaque"
+      },
+      {
+        "node": "lake-america-freedom-machine",
+        "position": [
+          -7.25,
+          0.025,
+          -5.55
+        ],
+        "description": "Sold-out Freedom vending machine; pay more, get less",
+        "prices": [
+          "Free speech / one word / $499.99",
+          "Privacy / 0.1 second / $999.99",
+          "Due process / travel size / $9,999.99"
+        ]
+      }
+    ],
+    "surfaceImagesAdded": 5,
+    "reference": "Original local lake_america_props.jpg, interpreted as 3D park props",
+    "footprint": "Asymmetric muddy boot impression with broad toe, inset arch, separated heel and worn block lugs"
+  },
+  "edgeCleanup": {
+    "version": "2026-10-10-mcp-edges-v4",
+    "recipe": "web/tools/edges-lake-america-mcp.py",
+    "backup": "web/artifacts/lake-america/before-edge-cleanup-20261010-004254",
+    "shadedMeshes": 238,
+    "roundedProps": 17,
+    "method": "Native Blender MCP; angle-aware smoothing, weighted planar normals, rounded near-shore silhouettes and three-segment prop bevels",
+    "renderAntialiasing": {
+      "desktopSamples": 4,
+      "lowPowerSamples": 2,
+      "cappedToHardware": true
+    }
+  },
+  "propReadability": {
+    "version": "2026-10-10-print-and-upright-leaf",
+    "backup": "web/artifacts/lake-america/before-print-leaf-fix-20261010-102548",
+    "bootPrint": "Rounded sole, narrowed arch, separate heel and broad recessed tread channels",
+    "zamboniBadge": "Rotated 180 degrees in its own plane; stem points down"
+  }
 }

@@ -25,18 +25,26 @@ export class ConfidenceProps {
     const glow = new THREE.MeshBasicMaterial({ color: 0xffd271, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
     this.arc = new THREE.Mesh(new THREE.RingGeometry(0.65, 0.9, 48, 1, -0.6, 2.5), glow);
     this.root.add(this.arc);
-    this.flash = new THREE.PointLight(0xffb444, 0, 5); this.root.add(this.flash);
-    this.key = new THREE.PointLight(0xffe3c2, 18, 8, 2); this.root.add(this.key);
+    // Keep the light count stable. Hiding lights with the prop group changes
+    // NUM_POINT_LIGHTS and recompiles every lit material on the first finish.
+    this.flash = new THREE.PointLight(0xffb444, 0, 5); scene.add(this.flash);
+    this.key = new THREE.PointLight(0xffe3c2, 0, 8, 2); scene.add(this.key);
     this.hand = new THREE.Vector3(); this.target = new THREE.Vector3();
     this.root.visible = false;
+  }
+  hide() {
+    this.root.visible = false;
+    this.key.intensity = this.flash.intensity = 0;
   }
   update(snapshot, views, frame, reducedMotion = false) {
     const finish = snapshot.finisher;
     this.root.visible = ['cold-cut', 'cold-cut-flock'].includes(finish?.script) && ['finisher', 'matchEnd'].includes(snapshot.phase);
+    this.key.intensity = this.root.visible ? 18 : 0;
+    this.flash.intensity = 0;
     if (!this.root.visible) return;
     const view = views[finish.attacker];
     const hand = view?.model?.getObjectByName('handR');
-    if (!hand) { this.root.visible = false; return; }
+    if (!hand) { this.root.visible = false; this.key.intensity = 0; return; }
     view.root.updateMatrixWorld(true); hand.getWorldPosition(this.hand);
     const x = Math.max(-1.4, Math.min(1.4, finish.originX));
     const facing = finish.facing;

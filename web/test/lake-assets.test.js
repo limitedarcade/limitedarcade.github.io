@@ -5,6 +5,8 @@ import * as THREE from '../game/src/vendor/three.module.js';
 import { GLTFLoader } from '../game/src/vendor/GLTFLoader.js';
 import { STAGE_AXE_ZONE } from '../game/src/engine/frameData.js';
 import { WeaponView } from '../game/src/render/weapons.js';
+import { enableNodeImageDecoding } from './helpers/node-image-decoding.js';
+enableNodeImageDecoding();
 
 const directory = new URL('../game/public/stages/lake-america-3d/', import.meta.url);
 const bytes = readFileSync(new URL('lake-america.glb', directory));
@@ -170,4 +172,65 @@ test('WeaponView throws actual exported axe meshes while leaving its stump and s
   view.update({ ...snapshot, round: 2 });
   assert.equal(axe.visible, true); assert.equal(view.live.size, 0);
   view.clear();
+});
+
+test('surface materials carry embedded normal and roughness maps with valid UVs and decoded pixels', async () => {
+  const { scene } = await loaded;
+  const materials = new Set(), normals = new Set(), roughness = new Set();
+  scene.traverse(object => {
+    if (!object.isMesh) return;
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      materials.add(material);
+      if (!material.normalMap && !material.roughnessMap) continue;
+      assert.ok(material.normalMap && material.roughnessMap, material.name + ': paired surface maps');
+      const uv = object.geometry.attributes.uv;
+      assert.ok(uv && uv.array.every(Number.isFinite), object.name + ': finite UVs');
+      assert.notEqual(material.normalMap.colorSpace, THREE.SRGBColorSpace, 'normal map is linear data');
+      assert.notEqual(material.roughnessMap.colorSpace, THREE.SRGBColorSpace, 'roughness map is linear data');
+      normals.add(material.normalMap); roughness.add(material.roughnessMap);
+    }
+  });
+  for (const family of ['Hickory','Tool steel','Tool grip','Granite','Cedar','Snow','Ice','Rescue','Rope']) {
+    const found = [...materials].filter(material => material.name.startsWith(family));
+    assert.ok(found.length, family + ': present');
+    assert.ok(found.every(material => material.normalMap && material.roughnessMap), family + ': mapped');
+  }
+  assert.ok(normals.size >= 10 && roughness.size >= 10, 'material families have distinct maps');
+  for (const texture of normals) {
+    const { data, width, height } = texture.image;
+    assert.ok(data && width >= 512 && height >= 512, 'actual normal image decoded');
+    let min = 255, max = 0;
+    const stride = Math.max(1, Math.floor(width * height / 4096));
+    for (let pixel = 0; pixel < width * height; pixel += stride) {
+      const i = pixel * 4, x = data[i] / 127.5 - 1, y = data[i + 1] / 127.5 - 1, z = data[i + 2] / 127.5 - 1;
+      assert.ok(z > 0 && Math.abs(x*x + y*y + z*z - 1) < .035, 'unit tangent-space normals');
+      min = Math.min(min, data[i], data[i+1]); max = Math.max(max, data[i], data[i+1]);
+    }
+    assert.ok(max - min >= 4, 'normal texture contains surface relief');
+  }
+  for (const texture of roughness) {
+    const { data } = texture.image;
+    let min = 255, max = 0;
+    for (let i = 1; i < data.length; i += 4 * 137) { min = Math.min(min, data[i]); max = Math.max(max, data[i]); }
+    assert.ok(max - min >= 12, 'roughness texture has spatial variation in the glTF green channel');
+  }
+});
+
+test('the rebuilt axe separates honed metal, forged steel, hickory and rubber surfaces', async () => {
+  const { scene } = await loaded, axe = scene.getObjectByName('lake-america-axe');
+  const materials = [];
+  axe.traverse(object => { if (object.isMesh) materials.push(object.material); });
+  const find = prefix => materials.find(material => material.name.startsWith(prefix));
+  const bit = find('Tool steel · honed'), head = find('Tool steel · hand'), grip = find('Tool grip'), wood = find('Hickory');
+  assert.ok(bit && head && grip && wood);
+  assert.ok(bit.metalness > .9 && head.metalness > .85);
+  assert.equal(grip.metalness, 0); assert.equal(wood.metalness, 0);
+  const averageRoughness = material => {
+    const data = material.roughnessMap.image.data;
+    let sum = 0, count = 0;
+    for (let i = 1; i < data.length; i += 4 * 137) { sum += data[i]; count++; }
+    return sum / count;
+  };
+  assert.ok(averageRoughness(bit) < averageRoughness(head));
+  assert.ok(averageRoughness(head) < averageRoughness(grip));
 });

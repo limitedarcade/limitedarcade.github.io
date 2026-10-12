@@ -7,6 +7,7 @@
 //   npm run smoke -- --headed
 //   npm run smoke -- --phone    # landscape phone: touch input, coarse pointer
 //   npm run smoke -- --gore-off # with the Blood/gore option off
+//   npm run smoke -- --gpu      # installed graphics card, for dense 3D scenes
 //
 // Evidence lands in artifacts/smoke/: 01-title.png ... 05-results.png and
 // report.json. Exit code 1 on any failed step or page error. This catches "it
@@ -26,11 +27,11 @@ export const MATCH_ASSET = /\/(stages|fighters|props|vfx|gore|weapons|fx)\//;
 
 // `until: 'fight'` stops once the first fight starts (check-budget uses that).
 // `settings` pre-seeds saved Options (e.g. { gore: false }) before the game boots.
-export async function runSmoke({ mode = 'preview', headless = true, phone = false, settings = null, screenshots = true, until = 'results', outDir = SMOKE_DIR, log = console.log } = {}) {
+export async function runSmoke({ mode = 'preview', headless = true, gpu = false, phone = false, settings = null, screenshots = true, until = 'results', outDir = SMOKE_DIR, log = console.log } = {}) {
   mkdirSync(outDir, { recursive: true });
-  const session = await openGame({ mode, headless, phone });
+  const session = await openGame({ mode, headless, phone, gpu });
   if (settings) await session.context.addInitScript(s => localStorage.setItem('bfi.options.v1', JSON.stringify({ settings: s })), settings);
-  const { page, network } = session, report = { mode, phone, steps: [], bytes: {}, errors: session.errors };
+  const { page, network } = session, report = { mode, phone, gpu, steps: [], bytes: {}, errors: session.errors };
   const tap = selector => phone ? page.tap(selector) : page.click(selector);
   const shot = async name => { if (screenshots) await page.screenshot({ path: resolve(outDir, `${name}.png`) }); };
   const step = async (name, run) => {
@@ -108,6 +109,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   const outDir = outputIndex >= 0 ? resolve(args[outputIndex + 1])
     : resolve(SMOKE_DIR, [phone && 'phone', goreOff && 'gore-off'].filter(Boolean).join('-') || '.');
   const report = await runSmoke({ mode: args.includes('--dev') ? 'dev' : 'preview', headless: !args.includes('--headed'), phone,
+    gpu: args.includes('--gpu'),
     settings: goreOff ? { gore: false } : null,
     outDir });
   console.log(`  title ${report.summary.titleMB} MB, first fight ${report.summary.firstFightMB} MB`);

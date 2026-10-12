@@ -35,6 +35,13 @@ export class Dismemberment {
     this.pending = [];
     this.enabled = true;
     this.flesh = new StumpFlesh(model, damage);
+    // Bone ownership is fixed across poses. Resolve it at load time; the cut
+    // only evaluates the selected surface in its current animated pose.
+    for (const region of REGIONS) {
+      damage.prepareSever?.(region.chain);
+      if (/Arm$/.test(region.id)) damage.prepareSever?.([...region.chain, region.stump]);
+      if (region.id === 'head') damage.prepareSever?.([region.chain[0]]);
+    }
   }
 
   get count() { return this.severed.size; }
@@ -62,14 +69,17 @@ export class Dismemberment {
   onHit(event, healthPct, { standHeight = 1.86 } = {}) {
     if (!this.enabled || !event || event.type === 'block') return null;
     if (!Number.isFinite(event.y)) return null;
+    // The stage axe always takes an available arm, including at full health.
+    // It must not randomly select a leg when a crouching target is struck.
+    if (event.weapon === 'axe') {
+      const arm = ['leftArm', 'rightArm'].find(id => !this.severed.has(id));
+      return arm ? this.sever(arm, { dx: event.push ?? event.facing ?? (this.side === 0 ? -1 : 1),
+        dy: 1, force: 2.4, cinematic: true }) : null;
+    }
     const fraction = THREE.MathUtils.clamp(event.y / standHeight, 0, 1.4);
-    // A thrown axe is an edged weapon arriving at speed: it takes a limb on the
-    // hit that lands it, at any health, rather than waiting for the usual
-    // attrition thresholds. Height still decides which limb.
-    const gate = event.weapon === 'axe' ? 0 : healthPct;
     const candidates = regionsForHeight(fraction)
       .map(id => REGION_BY_ID[id])
-      .filter(region => region && !this.severed.has(region.id) && gate <= region.threshold);
+      .filter(region => region && !this.severed.has(region.id) && healthPct <= region.threshold);
     if (!candidates.length) return null;
 
     // A lethal region is never taken by an ordinary hit -- those are reserved
@@ -97,10 +107,19 @@ export class Dismemberment {
     if (!region || this.severed.has(regionId) || !this.enabled) return null;
     if (cinematic && /Arm$/.test(regionId)) region = { ...region, chain: [...region.chain, region.stump] };
     if (cinematic && regionId === 'head') region = { ...region, chain: [region.chain[0]], stump: region.chain[1] };
+    let plane = null;
+    const anchor = this.flesh.stumpBone(region);
+    if (anchor && (/Arm$|Leg$/.test(regionId) || regionId === 'torso')) {
+      const normal = this.flesh.cutAxis(region, anchor, new THREE.Vector3());
+      const distance = region.chain.some(pattern => pattern.test(anchor.name)) ? 0 : normal.cutDistance || 0;
+      const point = anchor.getWorldPosition(new THREE.Vector3()).addScaledVector(normal, distance);
+      plane = { point, normal, span: regionId === 'torso' ? .35 : .18 };
+    }
     // Authored six-part fighters have an explicit Head mesh. Their face can
     // retain chest weights near the neck; the entire named part must detach.
     const removed = this.damage.severByBones(region.chain, {
       wholeMeshes: cinematic && regionId === 'head' ? [/^Head(?:_\d+)?$/i] : [],
+      plane,
     });
     // No geometry answered to those bones: this model does not have that part
     // rigged separately, so there is nothing to take. Recording it as severed
@@ -108,8 +127,11 @@ export class Dismemberment {
     if (!removed || !removed.length) return null;
     this.severed.add(regionId);
 
+    const stump = this.flesh.attach(region, { force, dx, dy, debris: this.debris, removed });
+
     const point = this.stumpPoint(region, origin);
     if (!point) origin.set(0, 1, 0).applyMatrix4(this.model.matrixWorld);
+    if (stump?.seam.samples.length) origin.copy(stump.seam.center);
 
     const direction = Math.sign(dx) || (this.side === 0 ? -1 : 1);
     const pieces = [];
@@ -120,10 +142,35 @@ export class Dismemberment {
         (dy + 1.4) * (0.8 + force * 0.25),
         (Math.random() - 0.5) * 1.8,
       );
-      const piece = cinematic
-        ? this.debris?.addSurfaceLimb(chunk, origin, velocity, { mass: region.mass })
-        : this.debris?.addLimb(positions, origin, velocity, { mass: region.mass });
+      const piece = this.debris?.addSurfaceLimb(chunk, origin, velocity, { mass: region.mass })
+        || this.debris?.addLimb?.(positions, origin, velocity, { mass: region.mass });
       if (piece) pieces.push(piece);
+    }
+    // The outgoing surface keeps its own cut face. Parenting it to the limb
+    // makes the sleeve and tissue travel as one object through a slapshot.
+    if (pieces.length && stump) {
+      const primary = pieces.reduce((a, b) => a.mesh.geometry.attributes.position.count > b.mesh.geometry.attributes.position.count ? a : b);
+      this.flesh.update(0);
+      const cap = stump.cap.clone(true);
+      cap.name = `detachedCut:${region.id}`;
+      stump.cap.getWorldPosition(cap.position).sub(origin);
+      stump.cap.getWorldQuaternion(cap.quaternion);
+      cap.traverse(node => {
+        if (!node.geometry) return;
+        node.geometry = node.geometry.clone();
+        this.debris.owned.add(node.geometry);
+      });
+      if (stump.surface) {
+        const plug = cap.getObjectByName('stumpPlug'), position = plug.geometry.attributes.position;
+        const { base, localRadius } = stump.surface;
+        for (let i = 0; i < position.count; i++) position.setY(i, position.getY(i) - 2 * base[i * 3 + 1] * localRadius);
+        const index = plug.geometry.index;
+        for (let i = 0; i < index.count; i += 3) { const b = index.getX(i + 1); index.setX(i + 1, index.getX(i + 2)); index.setX(i + 2, b); }
+        position.needsUpdate = true; index.needsUpdate = true;
+        plug.geometry.computeVertexNormals(); plug.geometry.computeBoundingBox(); plug.geometry.computeBoundingSphere();
+      } else cap.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI));
+      stump.cap.getWorldScale(cap.scale);
+      primary.mesh.add(cap);
     }
 
     // Organs follow the cut, thrown a little more softly than the limb so they
@@ -139,7 +186,6 @@ export class Dismemberment {
     }
 
     this.damage.bleedStump(origin, region.spurt);
-    this.flesh.attach(region, { force, dx, dy, debris: this.debris });
     // Queued rather than returned into the caller's frame: the renderer wants
     // to run its own spray, shake and sound off this, and doing that inside a
     // hit handler would put VFX ordering inside the gore system.

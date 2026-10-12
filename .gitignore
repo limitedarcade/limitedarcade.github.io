@@ -61,3 +61,12 @@ desktop.ini
 # Local source snapshots used only for before/after review.
 /web/artifacts/polish-2026-10-07/baseline-source/
 /web/artifacts/polish-2026-10-07/baseline-git-status.txt
+
+# Local review captures, performance traces and original stage backups.
+/web/artifacts/gore-2026-10-10/
+/web/artifacts/intro-2026-10-10/
+/web/artifacts/intro-2026-10-11/
+/web/artifacts/performance-2026-10-12/
+/web/artifacts/sign-clearance-2026-10-12/
+/web/artifacts/lake-america/before-*/
+/web/artifacts/lake-america/mcp-*

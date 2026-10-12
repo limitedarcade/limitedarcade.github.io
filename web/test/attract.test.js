@@ -15,14 +15,45 @@ test(`Carney's exhibition always performs Cold Cut and holds the beaver ending: 
   for (let i=0; i<7500 && !director.ready(match); i++) {
     const input = [director.input(0,match),director.input(1,match)];
     director.beforeStep(match);
-    for (const event of match.step(input))
-      if (event.type === 'finisherStart') finishers.push(event.finisherId);
+    const events = match.step(input);
     director.afterStep(match);
+    for (const event of events) {
+      if (event.type === 'finisherStart') finishers.push(event.finisherId);
+      if (event.type === 'hit' && event.move === 'stageAxe') assert.equal(event.attacker, side, 'Carney uses the cutting prop so he keeps his hands for Cold Cut');
+      if (['hit', 'block'].includes(event.type) && event.move === 'stageAxe')
+        assert.equal(director.propBeat, 'ring-approach', 'next pickup starts on contact, without a fixed wait');
+      if (['hit', 'block'].includes(event.type) && event.move === 'stageRing')
+        assert.equal(director.propBeat, 'brawl', 'combat resumes as the ring lands');
+      if (event.type === 'roundEnd') {
+        assert.equal(match.phase, PHASE.FINISHER, 'winning tick goes directly into Cold Cut');
+        assert.ok(events.some(e => e.type === 'finisherStart'), 'start event is delivered with the winning contact');
+        assert.ok(match.phaseFrame >= 48, 'opens on the windup, beyond the idle guard hold');
+      }
+    }
     if (match.phase === PHASE.FINISHER) assert.equal(director.ready(match),false);
   }
   assert.deepEqual(finishers,['carney-cold-cut']);
   assert.equal(match.winner,side); assert.equal(match.phase,PHASE.MATCH_END);
+  assert.equal(match.axeUsed, true, 'exhibition demonstrates the left pickup');
+  assert.equal(match.ringUsed, true, 'exhibition demonstrates the right pickup');
+  assert.deepEqual([...director.propContacts], ['stageAxe', 'stageRing'], 'both throws make real contact before the finale');
   assert.ok(match.phaseFrame >= 210);
+});
+
+test('the prop thrower advances behind the projectile instead of waiting for its flight to finish', () => {
+  const match = new Match({ left: { id: 'carney' }, right: { id: 'trump' }, stageId: 'lake-america' });
+  const director = new AttractDirector(); director.begin(match);
+  match.phase = PHASE.FIGHT; match.left.state = 'idle'; match.left.x = -4;
+  director.propBeat = 'axe-flight';
+  assert.equal(director.input(0, match).right, true);
+});
+
+test('ordinary matches retain their player-controlled finisher window', () => {
+  const match = new Match({ left: { id: 'carney' }, right: { id: 'trump' }, roundsToWin: 1 });
+  match.left.addMeter(9999); match.endRound(0, 'ko');
+  for (let i = 0; i < 240; i++) match.step([{}, {}]);
+  assert.equal(match.phase, PHASE.FINISHER_WINDOW);
+  assert.equal(match.finisher, null);
 });
 
 test('unconfirmed default fighters reserve neither slot; confirmed picks reserve only their owner', () => {

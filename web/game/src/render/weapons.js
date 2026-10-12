@@ -127,10 +127,13 @@ export class WeaponView {
       const ready = !snapshot.axeUsed && snapshot.axePrompt?.length;
       const glow = ready ? (this.stage.reducedMotion ? 0.7 : 0.65 + Math.sin(this.time * 4.2) * 0.25) : 0;
       for (const [original, material] of this.axeStyle.materials) {
-        if (material.color) material.color.copy(original.color).lerp(READY_GOLD, glow * 0.24);
+        // The mapped rescue axe keeps its steel, enamel and rubber palette.
+        // A faint readiness pulse leaves their surface response readable.
+        const mapped = Boolean(original.normalMap && original.roughnessMap);
+        if (material.color) material.color.copy(original.color).lerp(READY_GOLD, mapped ? 0 : glow * 0.24);
         if (material.emissive) {
-          material.emissive.copy(original.emissive).lerp(READY_GOLD, glow * 0.36);
-          material.emissiveIntensity = original.emissiveIntensity + glow * 0.7;
+          material.emissive.copy(original.emissive).lerp(READY_GOLD, glow * (mapped ? 0.06 : 0.36));
+          material.emissiveIntensity = original.emissiveIntensity + glow * (mapped ? 0.12 : 0.7);
         }
       }
     }

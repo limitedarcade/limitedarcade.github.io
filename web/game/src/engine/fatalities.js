@@ -58,10 +58,12 @@ export const FINISHER_SCRIPTS = Object.freeze({
   'cold-cut': Object.freeze({ duration: 218 + TRIBUTE.end, impactFrame: 218,
     shots: Object.freeze([
       shot(0, 3.4, 1.3, 1.3, actor('guard', -0.58), actor('dizzy', 0.58), 0, { orbit: -0.22 }),
-      shot(48, 2.8, 1.9, 1.55, actor('confidenceWindup', -0.56), actor('dizzy', 0.56), -0.35, { orbit: 0.32, roll: -0.045 }),
-      shot(102, 3.5, 1.05, 1.22, actor('confidenceSlash', -0.56), actor('hitLow', 0.58), 0.1, { orbit: -0.18 }),
-      shot(142, 2.8, 1.88, 1.55, actor('confidenceWindup', -0.58), actor('hitHigh', 0.62), 0.36, { orbit: -0.34, roll: 0.035 }),
-      shot(192, 3.3, 1.15, 1.5, actor('confidenceSlash', -0.6), actor('dizzy', 0.63), 0.12, { orbit: 0.22 }),
+      // Hold the same side and a full two-person composition through both
+      // swings. Rapid close-up/reverse cuts hid the stick and the victim.
+      shot(48, 4.8, 1.8, 1.16, actor('confidenceWindup', -0.56), actor('dizzy', 0.56), 0, { orbit: 0.14 }),
+      shot(102, 4.8, 1.8, 1.16, actor('confidenceSlash', -0.56), actor('hitLow', 0.58), 0, { orbit: 0.14 }),
+      shot(142, 4.8, 1.8, 1.16, actor('confidenceWindup', -0.58), actor('hitHigh', 0.62), 0, { orbit: 0.14 }),
+      shot(192, 4.8, 1.8, 1.16, actor('confidenceSlash', -0.6), actor('dizzy', 0.63), 0, { orbit: 0.14 }),
       shot(234, 4.8, 0.62, 1.20, actor('confidenceRaise', -0.75), actor('defeat', 0.85), 0, { orbit: -0.3 }),
       shot(306, 5.4, 1.35, 1.13, actor('confidenceRaise', -0.75), actor('defeat', 0.85), 0, { orbit: 0.15 }),
     ]), beats: Object.freeze([beat(121, 'slash', 2.4), beat(218, 'final', 4.8)]),

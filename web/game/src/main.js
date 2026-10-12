@@ -21,6 +21,7 @@ import { finisherTimeScale } from './engine/finisherTiming.js';
 import { coldCutCamera } from './render/finisherDirector.js';
 import { LakeOutcomeDirector } from './render/lakeOutcomeDirector.js';
 import { lakeEntranceCamera } from './render/lakeCameraDirector.js';
+import { exhibitionOpening, ExhibitionProps } from './render/exhibitionOpening.js';
 import { resultDuration, stageOutcome } from './engine/stageOutcomes.js';
 import { Stage } from './render/stage.js';
 import { Vfx } from './render/vfx.js';
@@ -208,6 +209,7 @@ const projected = new THREE.Vector3();
 let activeScreen = 'title', loadingMatch = false;
 let demoMode = null, demoLoading = false, demoFailed = false, demoEpoch = 0, loadEpoch = 0, pendingLoad = Promise.resolve();
 const attract = new AttractDirector(), attractIdle = new AttractIdle();
+const exhibitionProps = new ExhibitionProps();
 let debugSpeed = 1, debugBoxes = false, debugWireframe = false, debugWasPaused = false;
 let practiceActive = false, practiceEntry = null, practiceDemo = false, practiceFrame = 0, practiceDummy = 'idle', practiceSeen = new Set();
 let comboPractice = null, practiceRouteCost = false, practiceSwapped = false;
@@ -325,12 +327,15 @@ function showScreen(name) {
   touch?.setVisible(!demoMode && name === null && config.control.includes('human'));
   if (name === 'title') {
     if (previousScreen !== 'title') attractIdle.reset();
-    if (!demoMode && !demoFailed && !reviewMode) void startDemo();
+    // Finisher review opens over this same menu. Keep its exhibition alive
+    // until a review shot is selected, instead of leaving an empty arena.
+    if (!demoMode && !demoFailed && (!reviewMode || cinematicReview)) void startDemo();
   }
   resize();
 }
 
 function resetDemoPresentation() {
+  exhibitionProps.reset();
   beaverTribute.reset();
   lakeOutcome.reset(); confidenceProps.grip.restore(); confidenceProps.ice.reset();
   reel.reset(); impact.reset(); simulationClock.reset(); lastPhase = null; cinematicFocus = null;
@@ -353,7 +358,7 @@ async function startDemo(full = false) {
   demoMode = full ? 'full' : 'vignette';
   if (full) { void audio.unlock(); showScreen(null); }
   if (demoLoading || (running && match)) { updateDemoLabel(); return; }
-  const pair = demoPair(roster, STAGES, attract.pairIndex);
+  const pair = demoPair(roster, STAGES, full ? attract.pairIndex : 0);
   if (!pair) return;
   const token = ++demoEpoch;
   demoLoading = true;
@@ -371,6 +376,7 @@ async function startDemo(full = false) {
 
 function leaveDemo() {
   if (!demoMode && !demoLoading) return;
+  exhibitionProps.reset();
   beaverTribute.reset();
   demoMode = null; demoLoading = false; ++demoEpoch; ++loadEpoch; running = false; paused = false; match = null;
   attractIdle.reset(); audio.stop();
@@ -379,7 +385,7 @@ function leaveDemo() {
   for (const view of views) if (view) view.root.visible = false;
   document.body.classList.remove('demo-full');
   weapons.clear(); droneStrike.clear(); reel.reset();
-  lakeOutcome.reset(); confidenceProps.grip.restore(); confidenceProps.ice.reset(); confidenceProps.root.visible = false;
+  lakeOutcome.reset(); confidenceProps.grip.restore(); confidenceProps.ice.reset(); confidenceProps.hide();
   vfx.clear(); gore.resetRound();
 }
 
@@ -438,24 +444,60 @@ function startMatch({ demo = false, setup = config, quickIntro = false } = {}) {
 
 async function launchMatch(setup, demo, token, quickIntro = false) {
   if (token !== loadEpoch) return false;
+  exhibitionProps.reset();
   beaverTribute.reset();
   vfx.clear();
   running = false; match = null; hud?.root.remove(); hud = null;
-  lakeOutcome.reset(); confidenceProps.grip.restore(); confidenceProps.ice.reset(); confidenceProps.root.visible = false;
+  lakeOutcome.reset(); confidenceProps.grip.restore(); confidenceProps.ice.reset(); confidenceProps.hide();
   for (const view of views) if (view) view.root.visible = false;
   loadingMatch = true; audio.stop(); audio.pause(false);
   weapons.clear();
   stage.setStage(setup.stage); ambience.setStage(stage.definition);
   postfx.setGrade(({ 'lake-america': 'lakeAmerica', capitol: 'capitol', 'palm-resort': 'palms', 'executive-lawn': 'lawn' })[setup.stage]);
-  // Everything below downloads only for the fighters in this match. Gore stays
-  // fire-and-forget: a dismemberment before it lands uses generated props.
+  // Prepare anatomy with the fighters so the first cut uses the authored
+  // tissue. A missing gore library still resolves to generated props.
   const definitionsNeeded = setup.fighters.map(getFighter);
-  void gore.load();
+  const goreReady = gore.load();
   if (definitionsNeeded.some(f => Object.values(f.combat?.moves || {}).some(move => move?.overwatch))) droneStrike.load();
   // The title's background exhibition loads silently behind the menu.
   const doneLoading = demo && demoMode !== 'full' ? () => {} : showLoading('Loading arena and fighters');
   try {
-    await Promise.all([stage.ready, ensureViews(setup), weapons.load([...new Set(definitionsNeeded.flatMap(weaponsFor))]), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : staticPortraits.then(() => studio?.prewarm()), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
+    await Promise.all([stage.ready, goreReady, ensureViews(setup), weapons.load([...new Set(definitionsNeeded.flatMap(weaponsFor))]), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : staticPortraits.then(() => studio?.prewarm()), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
+    // compileAsync traverses hidden meshes too: stick, beavers and detached
+    // surfaces are ready before they appear. Compile for the composer's HDR
+    // target, which uses different tone-mapping defines from the canvas.
+    const probes = gore.warmupMeshes(views); scene.add(probes);
+    const textures = new Set();
+    scene.traverse(object => {
+      for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+        if (!material) continue;
+        for (const value of Object.values(material)) if (value?.isTexture && !value.isRenderTargetTexture && !value.isVideoTexture) textures.add(value);
+      }
+    });
+    for (const texture of textures) renderer.initTexture(texture);
+    const target = renderer.getRenderTarget();
+    let compiled, shadows;
+    try {
+      renderer.setRenderTarget(postfx.composer.renderTarget1);
+      compiled = renderer.compileAsync(scene, camera);
+      if (beaverTribute.shadowWarmup) {
+        // Shadow rendering passes no scene fog. Match that exact variant;
+        // otherwise the first beaver shadow still compiles during the finale.
+        const fog = scene.fog; scene.fog = null;
+        try { shadows = renderer.compileAsync(beaverTribute.shadowWarmup, camera, scene); }
+        finally { scene.fog = fog; }
+      }
+    } finally { renderer.setRenderTarget(target); }
+    try { await Promise.all([compiled, shadows]); } finally { scene.remove(probes); }
+    // A compile does not upload vertex/bone buffers or exercise the shadow
+    // pass. Render the hidden supporting cast once offscreen during loading.
+    const tributeVisible = beaverTribute.root.visible, warmTarget = renderer.getRenderTarget();
+    const warmCamera = camera.clone(); warmCamera.position.set(0, 3, 10); warmCamera.lookAt(0, 1, 0);
+    try {
+      beaverTribute.root.visible = true;
+      renderer.setRenderTarget(postfx.composer.renderTarget1);
+      renderer.render(scene, warmCamera);
+    } finally { beaverTribute.root.visible = tributeVisible; renderer.setRenderTarget(warmTarget); }
   } catch (error) {
     doneLoading();
     dom.loaderCopy.textContent = `Unable to load arena or fighters: ${error.message}. Try Fight again.`;
@@ -649,6 +691,7 @@ function handleEvent(event) {
   }
   if (!practiceActive && !demoMode) playerProfile.event(event, match.snapshot());
   if (event.type === 'finisherStart') {
+    impact.reset(); fightCamera.resetImpact(); postfx.resetImpact();
     beaverTribute.reset();
     confidenceProps.ice.reset();
     hud.clearSay(); audio.voice(event.kind === 'friendship' ? 'disappointing' : 'execution');
@@ -701,7 +744,9 @@ function handleEvent(event) {
     // zero-health attrition system used during normal combat.
     const defenderView = views[event.defender];
     let torn;
-    if (match.finisher && match.phase === PHASE.FINISHER) {
+    // Ordinary exhibition hits preserve the performers for the finale. The
+    // axe earns its arm cut on contact and that injury persists into Cold Cut.
+    if (event.weapon !== 'axe' && (demoMode || (match.finisher && match.phase === PHASE.FINISHER))) {
       defenderView?.recoil?.hit(event, profile);
       defenderView?.damage?.onHit(event, profile.power);
     } else torn = defenderView?.flinch(event, profile, defenderHealth ?? 1);
@@ -900,33 +945,57 @@ function frame() {
       aspect: camera.aspect, fraction: paused || !running ? 0 : simulationClock.fraction(1) });
     if (ending) actors = ending.actors;
     actors = beaverTribute.actors(snapshot, actors, choreographyFrame);
+    const opening = demoMode ? exhibitionOpening(snapshot, { reducedMotion, aspect: camera.aspect,
+      fraction: paused || demoBlocked ? 0 : simulationClock.fraction(1) }) : null;
+    if (opening) actors = opening.actors;
+    exhibitionProps.update(stage.group, opening?.cue, reducedMotion);
+    if (demoMode) {
+      const caption = opening?.label || (snapshot.phase === PHASE.FIGHT
+        ? attract.propBeat.startsWith('axe') ? 'Ice axe · one throw. Make it count.'
+          : attract.propBeat.startsWith('ring') ? 'Rescue ring · returning the favour.'
+            : 'The gloves are off.'
+        : snapshot.phase === PHASE.FINISHER || snapshot.phase === PHASE.FINISHER_WINDOW
+          ? 'Carney · Cold Cut' : 'Exhibition · CPU vs CPU');
+      for (const id of ['demo-caption', 'demo-full-caption']) {
+        const node = document.getElementById(id);
+        if (node.textContent !== caption) node.textContent = caption;
+      }
+    }
     beaverTribute.restore();
     confidenceProps.grip.restore();
     for (let side = 0; side < 2; side++) {
       const v = actors[side]; v.lastHitLevel = match.fighters[side].lastHitLevel;
-      if (edit.stage === 'versus') { v.state = 'idle'; v.x = side ? 1 : -1; v.reelKey = `${snapshot.round}:versus`; }
-      if (edit.stage === 'walkout') {
+      if (!opening && edit.stage === 'versus') { v.state = 'idle'; v.x = side ? 1 : -1; v.reelKey = `${snapshot.round}:versus`; }
+      if (!opening && edit.stage === 'walkout') {
         v.state = 'intro'; v.reelKey = `${snapshot.round}:intro`;
         const amount = Math.max(0, 1 - edit.t / 1.5);
         v.x += (side ? 1 : -1) * amount * 0.8;
       }
-      if (edit.stage === 'round' || edit.stage === 'fight') v.state = 'idle';
+      if (!opening && (edit.stage === 'round' || edit.stage === 'fight')) v.state = 'idle';
       views[side]?.apply(v, paused || (match?.hitStop > 0) ? 0 : dt, { scale, freeAnimation: cinematic });
-      views[side]?.applyRecoil(paused || (match?.hitStop > 0) ? 0 : dt * scale);
+      views[side]?.applyRecoil(paused || (match?.hitStop > 0) ? 0 : dt * scale, { gore: false });
       if (choreography && !v.cinematicClip?.startsWith('lakeAmerica') && views[side]?.pivot) views[side].pivot.rotation.z = v.cinematicTurn * snapshot.finisher.facing;
       // FighterView restores the pivot before sampling. Zeroing one Euler
       // component here would erase part of a composed recovery roll or hop.
-      if (edit.stage === 'versus' && views[side]?.pivot) views[side].pivot.rotation.y = side ? -0.5 : 0.5;
+      if (!opening && edit.stage === 'versus' && views[side]?.pivot) views[side].pivot.rotation.y = side ? -0.5 : 0.5;
+      if (opening && views[side]) {
+        views[side].root.position.z = v.z || 0;
+        if (v.openingYaw !== undefined) views[side].pivot.rotation.y = v.openingYaw;
+      }
     }
+    exhibitionProps.pose(opening, views);
     lakeOutcome.pose(ending, views, snapshot);
     confidenceProps.update(ending ? { ...snapshot, finisher: null } : snapshot, views, choreographyFrame, reducedMotion);
     const tribute = beaverTribute.update(snapshot, views, choreographyFrame, { reducedMotion, gore: preferences.settings.gore !== false });
+    // Grip IK and tribute posing can move the arms after recoil. Sample the
+    // wound seam from that final skeleton so the flesh stays on the sleeve.
+    for (const view of views) view?.gore?.update(paused || (match?.hitStop > 0) ? 0 : dt * scale);
     if (reviewStats) reviewStats.dataset.tribute = tribute ? JSON.stringify(tribute) : '';
     if (tribute && tribute.t >= TRIBUTE.lift) confidenceProps.stick.visible = false;
     else confidenceProps.stick.visible = true;
     beaverTribute.root.visible &&= Boolean(demoMode) || activeScreen === null || activeScreen === 'pause' || activeScreen === 'result';
     if (!choreography) confidenceProps.ice.reset();
-    confidenceProps.root.visible &&= Boolean(demoMode) || activeScreen === null || activeScreen === 'pause' || activeScreen === 'result';
+    if (!(Boolean(demoMode) || activeScreen === null || activeScreen === 'pause' || activeScreen === 'result')) confidenceProps.hide();
     const shown = { ...snapshot, fighters: actors, distance: Math.abs(actors[1].x - actors[0].x) };
     let shot = null;
     if (edit.stage === 'versus') shot = { z: reducedMotion ? 6.4 : 7.4 - Math.min(1, edit.t / 1.8), y: 1.65, lookY: 1.05 };
@@ -945,7 +1014,7 @@ function frame() {
         { reducedMotion, portrait: fightCamera.portrait, trackLimbs: preferences.settings.gore !== false,
           subjects: confidenceProps.ice.subjects() });
     }
-    shot = ending?.shot || lakeEntranceCamera(snapshot, { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect }) || shot;
+    shot = ending?.shot || opening?.shot || lakeEntranceCamera(snapshot, { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect }) || shot;
     if (tribute && tribute.t >= 12) shot = tributeCamera(tribute.t, stagedOrigin(snapshot.finisher), snapshot.finisher.facing,
       { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect });
     if (reviewCamera) shot = reviewCamera;
@@ -1240,7 +1309,8 @@ window.__FIGHT__ = {
   camera,
   fightCamera,
   renderer,
-  demo: () => ({ mode: demoMode, label: attract.label, seconds: attractIdle.seconds }),
+  demo: () => ({ mode: demoMode, label: attract.label, seconds: attractIdle.seconds,
+    frame: attract.frame, beat: attract.propBeat, propContacts: [...(attract.propContacts || [])] }),
 };
 // tools/render-portraits.mjs drives this: live-render every portrait with the
 // real studio and hand back the images to write to public/portraits.
@@ -1293,7 +1363,11 @@ let finisherReviewStop = Infinity;
 let reviewCamera = null, reviewStats = null;
 if (cinematicReview) {
   const panel = document.createElement('aside');
+  panel.setAttribute('aria-label', 'Finisher review');
   panel.style.cssText = 'position:fixed;z-index:10000;bottom:8px;right:8px;background:#101923ed;padding:10px;border:1px solid #9cc8db;color:white;font:13px system-ui;display:flex;gap:6px;flex-wrap:wrap;max-width:650px';
+  const back = document.createElement('a');
+  back.textContent = 'Back to main menu'; back.href = import.meta.env.BASE_URL;
+  back.style.cssText = 'color:#ffd353;align-self:center;padding:8px'; panel.append(back);
   const status = document.createElement('span'); status.textContent = 'Carney finisher review'; panel.append(status);
   let side = 0, opponent = 'officer_flock';
   const launch = async target => {
@@ -1338,6 +1412,47 @@ if (cinematicReview) {
   }
   reviewStats = document.createElement('span'); reviewStats.style.cssText = 'flex-basis:100%;font-size:11px;color:#c3d7e3'; panel.append(reviewStats);
   document.body.append(panel);
+}
+
+if (reviewMode === 'gore') {
+  const panel = document.createElement('aside');
+  panel.style.cssText = 'position:fixed;z-index:10000;bottom:12px;left:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px;background:#101923ee;border:1px solid #9cc8db;color:white;font:14px system-ui';
+  const label = document.createElement('strong'); label.textContent = 'Gore anatomy review'; panel.append(label);
+  const fighter = document.createElement('select'); fighter.setAttribute('aria-label', 'Fighter');
+  for (const [id, name] of [['carney', 'Carney'], ['trump', 'Trump'], ['officer_flock', 'Flock'], ['lang', 'Lang']]) {
+    const option = document.createElement('option'); option.value = id; option.textContent = name; fighter.append(option);
+  }
+  panel.append(fighter);
+  let facing = 1;
+  const show = async region => {
+    if (loadingMatch) return;
+    config.fighters = [fighter.value, 'trump']; config.control = ['human', 'human']; config.hazards = false;
+    if (await startMatch() === false) return;
+    playerProfile.abandon(); paused = true;
+    match.phase = PHASE.FIGHT; match.phaseFrame = 1;
+    views[0].resetDamage(); views[1].resetDamage(); gore.resetRound();
+    const actor = match.fighters[0]; actor.x = -1.5; actor.facing = facing; actor.state = 'idle';
+    views[0].apply({ ...match.snapshot().fighters[0], state: 'idle', x: actor.x, facing }, 0, { scale: 1 });
+    views[0].root.updateMatrixWorld(true);
+    if (region !== 'clean') views[0].gore.sever(region, { cinematic: false });
+    // Move outgoing geometry through the normal debris simulation before the
+    // close-up; pausing at spawn overlays it on the body and hides the cut.
+    for (let i = 0; i < 150; i++) gore.update(1 / 60);
+    // Close-up uses the game's stage, light, skin shaders, and post stack.
+    const targetY = /Leg/.test(region) ? .72 : region === 'torso' ? 1.05 : 1.38;
+    reviewCamera = { authored: true, position: [actor.x + .75 * facing, targetY + .25, 2.05], target: [actor.x, targetY, 0], fov: 36 };
+    label.textContent = `${fighter.options[fighter.selectedIndex].text} · ${region}`;
+  };
+  for (const [text, region] of [['Clean', 'clean'], ['Left arm', 'leftArm'], ['Right arm', 'rightArm'], ['Left leg', 'leftLeg'], ['Right leg', 'rightLeg'], ['Torso', 'torso']]) {
+    const button = document.createElement('button'); button.textContent = text; button.onclick = () => { void show(region); }; panel.append(button);
+  }
+  const mirror = document.createElement('button'); mirror.textContent = 'Mirror'; mirror.onclick = () => { facing *= -1; void show('leftArm'); }; panel.append(mirror);
+  const motion = document.createElement('button'); motion.textContent = 'Move wounds'; motion.onclick = () => {
+    const view = views[0]; if (!view?.gore?.count) return;
+    paused = false; match.fighters[0].state = 'attack'; match.fighters[0].move = 'heavyPunch'; match.fighters[0].moveFrame = 0;
+  }; panel.append(motion);
+  document.body.append(panel);
+  void show('leftArm');
 }
 
 if (lakePlayReview) {

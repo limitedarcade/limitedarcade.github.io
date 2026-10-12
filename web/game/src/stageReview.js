@@ -53,6 +53,9 @@ async function startReview() {
     { id: 'aerial', label: 'Aerial', title: 'Aerial · the whole island', position: [34, 40, 38], target: [0, 0, -2], fov: 46 },
     { id: 'shore', label: 'Shoreline', title: 'Shoreline · water and rock', position: [26, 3.5, 22], target: [13, .6, -2] },
     { id: 'axe', label: 'Axe station', title: 'Axe station · pickup detail', position: [-4.6, 1.6, 3.4], target: [-5, .65, -.8], fov: 36 },
+    { id: 'rights', label: 'Rights scroll', title: 'Bill of Rights · handled with care', position: [-.95, 1.98, 1.15], target: [-2.35, .99, -3.5], fov: 31 },
+    { id: 'liberty', label: 'Liberty bell', title: 'Liberty · out of order', position: [4.9, 1.9, -.2], target: [3.55, .91, -4.65], fov: 30 },
+    { id: 'freedom', label: 'Freedom machine', title: 'Freedom · pay more, get less', position: [-5.5, 2.3, -.3], target: [-7.25, 1.15, -5.55], fov: 31 },
   ];
   const presetButtons = new Map();
   let activePreset = 'combat';
@@ -224,7 +227,7 @@ async function startReview() {
     if (key === 's' && ready) { event.preventDefault(); saveSceneImage(); return; }
     if (event.target !== canvas && event.target !== document.body) return;
     if (event.code === 'Space') { event.preventDefault(); setPaused(!paused); }
-    else if (/^[1-6]$/.test(key)) selectPreset(presets[Number(key) - 1].id);
+    else if (/^[1-9]$/.test(key)) selectPreset(presets[Number(key) - 1].id);
     else if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown'].includes(key)) {
       event.preventDefault(); $('orbit').checked = false;
       spherical.theta += key === 'arrowleft' ? .06 : key === 'arrowright' ? -.06 : 0;

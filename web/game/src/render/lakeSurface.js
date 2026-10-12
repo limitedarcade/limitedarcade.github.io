@@ -47,7 +47,7 @@ export function lakeFractures() {
 export function lakeReflection() {
   const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 256;
   const ctx = canvas.getContext('2d'), gradient = ctx.createLinearGradient(0, 0, 0, 256);
-  for (const [stop, color] of [[0,'#26394f'],[.3,'#526f8b'],[.46,'#a9b4c0'],[.5,'#e8c4a0'],[.55,'#486474'],[1,'#132635']]) gradient.addColorStop(stop,color);
+  for (const [stop, color] of [[0,'#203449'],[.3,'#6f8ea8'],[.46,'#c5d2dc'],[.5,'#ffddb1'],[.55,'#3c566c'],[1,'#0c1b27']]) gradient.addColorStop(stop,color);
   ctx.fillStyle = gradient; ctx.fillRect(0,0,512,256);
   const sun = ctx.createRadialGradient(294,116,1,294,116,40);
   sun.addColorStop(0,'#fff4d7'); sun.addColorStop(.13,'#ffe2ab'); sun.addColorStop(1,'#e8c4a000');
@@ -77,15 +77,15 @@ export function glacialIce(fractures, reflection, noise) {
       float clouds=fbm(p*.37+fbm(p*.63)*2.);
       float frost=smoothstep(.44,.79,clouds);
       float shore=smoothstep(5.,12.,abs(p.y))+smoothstep(9.,21.,abs(p.x));
-      frost=clamp(frost*.55+shore*.55,0.,1.);
-      vec3 deep=mix(vec3(.035,.10,.135),vec3(.13,.245,.28),clouds);
+      frost=clamp(frost*.4+shore*.45,0.,1.);
+      vec3 deep=mix(vec3(.025,.075,.115),vec3(.10,.21,.265),clouds);
       diffuseColor.rgb=mix(deep,vec3(.42,.52,.56),frost);
       diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.30,.56,.61),fracture.g*.72);
       diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.025,.105,.14),fracture.r*.8);
       diffuseColor.rgb+=fracture.b*.045;
     `);
-    shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=mix(.24,.8,frost);');
+    shader.fragmentShader = shader.fragmentShader.replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=clamp(mix(.18,.72,frost)*mix(.65,1.45,roughnessFactor),.1,.95);');
   };
-  material.customProgramCacheKey = () => 'lake-glacial-ice-v1';
+  material.customProgramCacheKey = () => 'lake-glacial-ice-v2';
   return material;
 }

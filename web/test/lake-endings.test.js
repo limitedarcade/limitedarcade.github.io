@@ -10,6 +10,9 @@ import { LAKE_OUTCOMES, stageOutcome, resultDuration } from '../game/src/engine/
 import { FightCamera } from '../game/src/render/camera.js';
 import { CinematicGrip } from '../game/src/render/cinematicGrip.js';
 import { decodeClips } from '../game/src/render/binaryClips.js';
+import { enableNodeImageDecoding } from './helpers/node-image-decoding.js';
+
+enableNodeImageDecoding();
 
 const ids = Object.keys(LAKE_OUTCOMES);
 const snapshot = (a = 'carney', b = 'trump', winner = 0) => ({ stageId: 'lake-america', phase: 'matchEnd',

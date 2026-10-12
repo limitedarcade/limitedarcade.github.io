@@ -136,3 +136,22 @@ test('late axe loading and projectile removal never retain stale clones', () => 
   assert.equal(axe.visible, false);
   view.clear(); assert.equal(axe.visible, true);
 });
+
+
+test('mapped axe readiness preserves the material palette and shares its surface maps', () => {
+  const { view, head, handle, steel, wrap } = fixture();
+  const normal = new THREE.Texture(), roughness = new THREE.Texture();
+  for (const material of [steel, wrap]) { material.normalMap = normal; material.roughnessMap = roughness; }
+  view.update(snapshot({ axePrompt: [1] }), 0.2);
+  for (const [original, copy] of [[steel, head.material[0]], [wrap, handle.material]]) {
+    assert.ok(copy.color.equals(original.color), 'readiness preserves steel and grip color');
+    assert.equal(copy.normalMap, normal); assert.equal(copy.roughnessMap, roughness);
+    assert.ok(copy.emissiveIntensity > original.emissiveIntensity);
+    assert.ok(copy.emissiveIntensity - original.emissiveIntensity < .12, 'pulse stays below a surface wash');
+  }
+  view.update(snapshot({ axeUsed: true, projectiles: [throwAt()] }));
+  const thrown = view.live.get(1).children[0].children[1].material[0];
+  assert.ok(thrown.color.equals(steel.color)); assert.equal(thrown.normalMap, normal);
+  assert.equal(thrown.roughnessMap, roughness); assert.ok(thrown.emissive.equals(steel.emissive));
+  view.clear();
+});

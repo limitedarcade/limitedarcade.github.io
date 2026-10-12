@@ -55,6 +55,6 @@ test('fixed six-match exhibition cycle covers ground and juggle routes for every
     }
   }
   for (const fighter of ['trump', 'carney', 'officer_flock'])
-    assert.deepEqual([...coverage.get(fighter)].sort(), ['ground', 'juggle'], fighter);
+    assert.deepEqual([...(coverage.get(fighter) || [])].sort(), ['ground', 'juggle'], fighter);
   assert.equal(coverage.has('lang'), false, 'Lang keeps his intentionally combo-ineligible kit');
 });

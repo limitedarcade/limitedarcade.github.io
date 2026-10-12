@@ -50,7 +50,7 @@ test('tribute camera mirrors and keeps the sign in the final frame at desktop an
     const shot = tributeCamera(TRIBUTE.hero, 0, facing, { portrait: aspect < 1, aspect });
     camera.position.fromArray(shot.position); camera.lookAt(new THREE.Vector3(...shot.target)); camera.updateMatrixWorld(true);
     for (const x of [.275, 1.825]) for (const y of [.6, 1.65]) {
-      const projected = new THREE.Vector3(x * facing, y, .72).project(camera);
+      const projected = new THREE.Vector3(x * facing, y, tributePose(TRIBUTE.hero).signZ).project(camera);
       assert.ok(Math.abs(projected.x) < 1 && Math.abs(projected.y) < 1);
     }
   }

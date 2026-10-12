@@ -22,6 +22,10 @@ export function tributePose(t) {
     headX: t < TRIBUTE.lift ? 3.05 : lerp(3.05, -.08, carry),
     groupX: lerp(7.8, 3.05, approach) - 3.13 * carry,
     carneyX: lerp(-.65, -.3, smooth((t - TRIBUTE.lift) / 80)) + .7 * smooth((place - .35) / .65) - 1.05 * retreat,
-    signX: 1.05, signZ: .72, signTop: 1.28,
+    // Carry the collapse away from the head's foreground path and finish
+    // beside the board before it appears, leaving its lettering unobstructed.
+    bodyOffsetX: 1.9 * smooth(t / 55), bodyZ: -1.15 * smooth(t / 55),
+    // Keep the board behind the pickup/handoff, where it cannot mask the head.
+    signX: 1.05, signZ: -.35, signTop: 1.28,
   };
 }

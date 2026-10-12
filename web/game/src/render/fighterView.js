@@ -355,11 +355,11 @@ export class FighterView {
 
   resetDamage() { this.damage?.resetRound(); this.gore?.resetRound(); }
 
-  applyRecoil(dt) {
+  applyRecoil(dt, { gore = true } = {}) {
     this.recoil?.apply(dt);
     // Hanging strands need the posed-and-recoiled skeleton, otherwise they
     // pin to last frame's shoulder and drag through the sleeve.
-    this.gore?.update(dt);
+    if (gore) this.gore?.update(dt);
   }
 
   play(key, view) {

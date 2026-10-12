@@ -3,6 +3,7 @@ import { createGltfLoader } from './gltf.js';
 import { LakeAtmosphere } from './lakeAtmosphere.js';
 import { lakeFractures, lakeReflection, glacialIce } from './lakeSurface.js';
 import { iceReflection } from './lakeIceReflection.js';
+import { batchStaticMeshes } from './staticBatch.js';
 
 const BASE = import.meta.env?.BASE_URL || '/';
 const NOISE = /* glsl */`
@@ -79,7 +80,7 @@ function paintSignFaces(scene, reflection) {
 
 function sky() {
   const material = new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false,
-    uniforms: { time: { value: 0 }, top: { value: new THREE.Color('#283e60') }, horizon: { value: new THREE.Color('#d9b9a0') } },
+    uniforms: { time: { value: 0 }, top: { value: new THREE.Color('#1e3757') }, horizon: { value: new THREE.Color('#d2ae8d') } },
     vertexShader: 'varying vec3 vDirection; void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
     fragmentShader: /* glsl */`
       varying vec3 vDirection; uniform float time; uniform vec3 top,horizon;
@@ -87,7 +88,7 @@ function sky() {
       void main(){
         vec3 d=normalize(vDirection); float h=max(0.,d.y);
         vec3 col=mix(horizon,top,1.-exp(-h*8.));
-        vec3 sunDir=normalize(vec3(.48,.16,-1.));
+        vec3 sunDir=normalize(vec3(-.62,.43,.55));
         float alignment=max(0.,dot(d,sunDir));
         col+=vec3(.32,.125,.035)*pow(alignment,12.);
         vec2 cloud=d.xz/(max(.05,d.y)+.18)*vec2(1.4,4.)+vec2(time*.0015,0.);
@@ -133,9 +134,9 @@ function water() {
         vec3 col=mix(vec3(.012,.035,.055),vec3(.17,.215,.255),fresnel);
         float ripples=fbm(p*.8+vec2(time*.06,0.)); col+=vec3(.009,.015,.022)*ripples;
         vec3 reflected=reflect(-view,n);
-        float sunset=pow(max(0.,dot(reflected,normalize(vec3(.48,.16,-1.)))),28.);
+        float sunset=pow(max(0.,dot(reflected,normalize(vec3(-.62,.43,.55)))),28.);
         col=mix(col,vec3(.38,.245,.15),sunset*.55);
-        vec3 halfV=normalize(view+normalize(vec3(.48,.16,-1.)));
+        vec3 halfV=normalize(view+normalize(vec3(-.62,.43,.55)));
         float spec=pow(max(0.,dot(n,halfV)),240.);
         col+=vec3(1.,.65,.3)*spec*1.6;
         // Fine foam along the island, with opaque water under it.
@@ -211,19 +212,22 @@ function flag() {
 export function buildLakeAmerica(stage) {
   const root=new THREE.Group();root.name='Lake America · Blender environment';stage.group.add(root);
   const backdrop=sky(), lake=water(), banner=flag();root.add(backdrop,lake,banner.mesh);
-  stage.scene.background=new THREE.Color('#aab8c5');
-  stage.scene.fog=new THREE.Fog('#a5abb5',100,370);
-  stage.key.color.set('#ffd2a5'); stage.key.intensity=2.7;
-  stage.key.position.set(16,14,-18);
-  stage.key.shadow.bias=-.00025;
-  stage.key.shadow.normalBias=.035;
+  stage.scene.background=new THREE.Color('#8195a6');
+  stage.scene.fog=new THREE.Fog('#8396a5',135,510);
+  stage.key.color.set('#ffe0b8'); stage.key.intensity=3.35;
+  stage.key.position.set(-16,11,9);
+  stage.key.target.position.set(0,0,-4); stage.group.add(stage.key.target);
+  stage.key.shadow.bias=-.00012;
+  stage.key.shadow.normalBias=.018;
   for (const light of stage.group.children) {
-    if (light.isHemisphereLight) { light.color.set('#bacde0'); light.groundColor.set('#304958'); light.intensity=.95; }
-    else if (light.isDirectionalLight && light !== stage.key) { light.color.set('#c3d9f3'); light.position.set(-8,8,12); light.intensity=1.5; }
+    if (light.isHemisphereLight) { light.color.set('#9dbbd4'); light.groundColor.set('#1c3040'); light.intensity=.6; }
+    else if (light.isDirectionalLight && light !== stage.key) { light.color.set('#bed8f1'); light.position.set(10,8,-8); light.intensity=.55; }
     else if (light.isPointLight && light !== stage.impactLight) light.intensity=0;
   }
-  Object.assign(stage.key.shadow.camera, { left: -14, right: 14, top: 11, bottom: -11, near: 1, far: 65 });
+  Object.assign(stage.key.shadow.camera, { left: -20, right: 20, top: 16, bottom: -16, near: 1, far: 80 });
   stage.key.shadow.camera.updateProjectionMatrix();
+  const rim=new THREE.DirectionalLight('#a9d1eb',.85);
+  rim.position.set(14,7,-21); rim.target.position.set(0,1,-5); root.add(rim,rim.target);
   const reflection=lakeReflection(), fractures=lakeFractures();
   const ice=glacialIce(fractures,reflection,NOISE);
   const mirror=iceReflection(fractures,NOISE); root.add(mirror);
@@ -279,17 +283,27 @@ export function buildLakeAmerica(stage) {
       object.castShadow=/^(02[ _]|06[ _]|07[ _]|08[ _]|10[ _]|lake-america-axe)/.test(object.name) || object.parent?.name === 'lake-america-axe';
       const mats=Array.isArray(object.material)?object.material:[object.material];
       for(const mat of mats) {
-        if(mat.name.startsWith('Slate')) { object.material=ice; iceAttached=true; mat.dispose(); continue; }
+        if(mat.name.startsWith('Slate')) {
+          ice.normalMap=mat.normalMap; ice.roughnessMap=mat.roughnessMap;
+          if(mat.normalMap) ice.normalScale.copy(mat.normalScale);
+          if(mat.roughnessMap) ice.roughness=1;
+          object.material=ice; iceAttached=true; mat.dispose(); continue;
+        }
         if(mat.name.startsWith('Granite')) stoneMaterial(mat);
         if(mat.name.startsWith('Cedar') || mat.name.startsWith('Bark')) timberMaterial(mat);
         if(mat.name.startsWith('Lantern')) mat.emissiveIntensity = 1.35;
         mat.envMap=reflection;
-        mat.envMapIntensity=mat.name.startsWith('Snow')?.28:.45;
+        mat.envMapIntensity=mat.name.startsWith('Snow')?.18:mat.metalness>.5?1.2:.38;
+        for(const map of [mat.normalMap,mat.roughnessMap]) if(map) map.anisotropy=8;
         if(mat.name.startsWith('Snow')) { mat.roughness=.94; mat.color.set('#d6e3ee'); }
-        if(mat.name.startsWith('City')) mat.color.set('#758899');
+        if(mat.name.startsWith('City')) mat.color.set('#a2aeb9');
       }
     });
     paintSignFaces(gltf.scene, reflection);
+    // Background dressing stays at full detail. Interactive props and moving
+    // floes keep their named nodes and independent transforms.
+    gltf.scene.userData.batching = batchStaticMeshes(gltf.scene,
+      mesh => /^(03|04|05|07|10|11|13)[ _]/.test(mesh.name));
     root.add(gltf.scene);
   });
   // Preserve rejection for startMatch while avoiding an unhandled startup promise.

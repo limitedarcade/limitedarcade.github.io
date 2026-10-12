@@ -52,8 +52,31 @@ export class BeaverTribute {
         model.traverse(node => { if (node.isMesh) { node.castShadow = true; node.receiveShadow = true; node.frustumCulled = false; } });
         const mixer = new THREE.AnimationMixer(model), actions = {};
         for (const clip of asset.animations) actions[clip.name] = mixer.clipAction(clip).play();
+        // Sorting computes SkinnedMesh bounds even with frustumCulled=false.
+        // Do the dense skin scan while loading, before the entrance beat.
+        mixer.update(0); model.updateWorldMatrix(true, true);
+        model.traverse(mesh => {
+          if (mesh.isSkinnedMesh) { mesh.skeleton.update(); mesh.computeBoundingSphere(); }
+        });
         this.beavers.push({ pivot, model, mixer, actions });
       }
+      // The beavers use Three's regular skinned shadow shader; the fighters
+      // use a custom sever-mask shader. Warm this separate variant as well.
+      const source = this.beavers[0].model;
+      this.shadowWarmup = new THREE.Group(); this.shadowWarmup.visible = false;
+      this.shadowMaterials = [];
+      source.traverse(mesh => {
+        if (mesh.isMesh) {
+          const material = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+          const side = material.shadowSide ?? (material.side === THREE.DoubleSide ? THREE.DoubleSide
+            : material.side === THREE.FrontSide ? THREE.BackSide : THREE.FrontSide);
+          const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking,
+            side, map: material.map, alphaMap: material.alphaMap, alphaTest: material.alphaTest });
+          this.shadowMaterials.push(depth);
+          const probe = mesh.clone(false); probe.material = depth;
+          this.shadowWarmup.add(probe);
+        }
+      });
     })().catch(error => { this.ready = null; throw error; });
     return this.ready;
   }
@@ -83,8 +106,11 @@ export class BeaverTribute {
   actors(snapshot, actors, frame) {
     if (!this.active(snapshot)) return actors;
     const t = tributeTime(snapshot.finisher, frame);
+    const pose = tributePose(t), finish = snapshot.finisher;
+    const victim = actors[finish.defender];
+    if (victim) actors[finish.defender] = { ...victim, x: victim.x + pose.bodyOffsetX * finish.facing };
     if (t < TRIBUTE.lift) return actors;
-    const pose = tributePose(t), side = snapshot.finisher.attacker, actor = actors[side];
+    const side = finish.attacker, actor = actors[side];
     const origin = Math.max(-1.4, Math.min(1.4, snapshot.finisher.originX));
     actors[side] = { ...actor, x: origin + pose.carneyX * snapshot.finisher.facing, y: 0,
       cinematicClip: 'beaverPresentation', clipTime: (t - TRIBUTE.lift) / 60,
@@ -98,6 +124,8 @@ export class BeaverTribute {
     if (!this.root.visible) return null;
     const finish = snapshot.finisher, facing = finish.facing, origin = Math.max(-1.4, Math.min(1.4, finish.originX));
     const pose = tributePose(t), worldX = x => origin + x * facing;
+    const body = views[finish.defender];
+    if (body?.root) { body.root.position.z = pose.bodyZ; body.root.updateWorldMatrix(true, true); }
     if (this.sign) { this.sign.position.set(worldX(pose.signX), 0, pose.signZ); this.sign.visible = t >= 55; }
     const carryWeight = pose.lift * (1 - smooth((t - TRIBUTE.take) / 35));
     const walking = (t > 55 && t < TRIBUTE.arrive) || (t > TRIBUTE.lift && t < TRIBUTE.present);
@@ -156,7 +184,7 @@ export class BeaverTribute {
         const raise = smooth(pose.place / .45), across = smooth((pose.place - .4) / .45), lower = smooth((pose.place - .85) / .15);
         head.set(worldX(lerp(-.08, pose.signX, across)),
           lerp(.43 + this.radius, pose.signTop + this.radius + .24, raise) - .24 * lower,
-          lerp(.9, pose.signZ, across));
+          lerp(.9, pose.signZ, smooth(pose.place)));
       }
       if (view?.model && t >= TRIBUTE.present - 20 && t < TRIBUTE.release) {
         const reach = smooth((t - TRIBUTE.present + 20) / 20) * (1 - smooth((t - TRIBUTE.place) / (TRIBUTE.release - TRIBUTE.place)));

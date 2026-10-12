@@ -14,7 +14,8 @@
 // With --publish it then commits on top of each live branch and pushes as a
 // fast-forward. It never force-pushes.
 //
-// Flags: --skip-smoke (gates 1 without the browser pass), --keep (leave the
+// Flags: --skip-smoke (gates 1 without the browser pass), --gpu-smoke (use the
+// installed graphics card for the same browser checks), --keep (leave the
 // staging folders for inspection).
 import { spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -153,6 +154,7 @@ const gates = [
 ];
 if (!args.has('--skip-smoke')) gates.push(gate('smoke test', 'node', [
   'tools/smoke-test.mjs', '--out-dir', join(REPO, '.verification', 'release-smoke'),
+  ...(args.has('--gpu-smoke') ? ['--gpu'] : []),
 ]));
 const gatesOk = gates.every(Boolean);
 if (!gatesOk && publish) fail('a gate failed (see above).');

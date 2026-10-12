@@ -80,9 +80,16 @@ export class ColdCutIce {
       // the ice without flattening the glove or allowing half an arm to sink.
       let lowest = 0;
       for (const piece of arm.pieces) {
-        const box = piece.mesh.geometry.boundingBox;
-        for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z])
-          lowest = Math.min(lowest, new THREE.Vector3(x, y, z).applyQuaternion(rotation).y);
+        piece.mesh.updateMatrixWorld(true);
+        const inverse = piece.mesh.matrixWorld.clone().invert();
+        piece.mesh.traverse(node => {
+          if (!node.geometry) return;
+          node.geometry.computeBoundingBox();
+          const transform = new THREE.Matrix4().multiplyMatrices(inverse, node.matrixWorld);
+          const box = node.geometry.boundingBox;
+          for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z])
+            lowest = Math.min(lowest, new THREE.Vector3(x, y, z).applyMatrix4(transform).applyQuaternion(rotation).y);
+        });
       }
       for (const piece of arm.pieces) {
         piece.mesh.position.set(pose.x, Math.max(pose.y, 0.025 - lowest), pose.z);
