@@ -8,10 +8,12 @@ export function createCutSeam(removed, bone, outward, fallback, cutDistance = 0)
     // Clothing/armour can have additional weight boundaries at a cuff or boot.
     // Those are not part of the joint's opening and would stretch the wound.
     const pivot = bone.getWorldPosition(new THREE.Vector3());
+    const poses = new Map(removed.map(chunk => [chunk.record, chunk.pose]));
     const ranked = samples.map(sample => {
       const mesh = sample.record.mesh;
-      mesh.getVertexPosition(sample.a, a); mesh.getVertexPosition(sample.b, b);
-      a.lerp(b, sample.t).applyMatrix4(mesh.matrixWorld).sub(pivot);
+      const pose = poses.get(sample.record);
+      if (pose) { pose(sample.a, a); pose(sample.b, b); a.lerp(b, sample.t).sub(pivot); }
+      else { mesh.getVertexPosition(sample.a, a); mesh.getVertexPosition(sample.b, b); a.lerp(b, sample.t).applyMatrix4(mesh.matrixWorld).sub(pivot); }
       const error = Math.abs(a.dot(outward) - (cutDistance || 0));
       return { sample, error };
     });
@@ -22,17 +24,30 @@ export function createCutSeam(removed, bone, outward, fallback, cutDistance = 0)
   if (!samples.length) {
     // Named, separately authored limb meshes have no triangles crossing their
     // join. Use their proximal surface, rather than the skeleton's pivot.
-    const pivot = bone.getWorldPosition(new THREE.Vector3()), candidates = [];
-    for (const { record, positions } of removed) for (let i = 0; i < positions.length; i += 4) {
-      a.fromArray(positions, i).sub(pivot);
-      const along = a.dot(outward);
-      if (a.addScaledVector(outward, -along).length() > fallback * 4) continue;
-      candidates.push({ record, a: positions[i + 3], b: positions[i + 3], t: 0, along });
+    const pivot = bone.getWorldPosition(new THREE.Vector3());
+    const capacity = removed.reduce((n, chunk) => n + chunk.positions.length / 4, 0);
+    const along = new Float64Array(capacity), chunks = new Uint32Array(capacity), vertices = new Uint32Array(capacity);
+    let count = 0;
+    for (let chunk = 0; chunk < removed.length; chunk++) {
+      const { positions } = removed[chunk];
+      for (let i = 0; i < positions.length; i += 4) {
+        a.fromArray(positions, i).sub(pivot);
+        const distance = a.dot(outward);
+        if (a.addScaledVector(outward, -distance).length() > fallback * 4) continue;
+        along[count] = distance; chunks[count] = chunk; vertices[count++] = positions[i + 3];
+      }
     }
-    candidates.sort((x, y) => x.along - y.along);
-    if (candidates.length) {
-      const start = candidates[Math.floor(candidates.length * .025)].along;
-      samples = candidates.filter(s => s.along >= start && s.along <= start + fallback * .32);
+    if (count) {
+      // Sort only numbers to locate the proximal percentile. Allocate seam
+      // objects for the selected band, rather than for every head vertex.
+      const start = along.slice(0, count).sort()[Math.floor(count * .025)], selected = [];
+      for (let i = 0; i < count; i++) if (along[i] >= start && along[i] <= start + fallback * .32) selected.push(i);
+      selected.sort((x, y) => along[x] - along[y]);
+      const size = Math.min(192, selected.length);
+      samples = Array.from({ length: size }, (_, i) => {
+        const at = selected[Math.floor(i * selected.length / size)];
+        return { record: removed[chunks[at]].record, a: vertices[at], b: vertices[at], t: 0, along: along[at] };
+      });
     }
   }
   // Bound per-frame skin evaluation independently of source mesh density.

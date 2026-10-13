@@ -1,6 +1,7 @@
 import * as THREE from '../vendor/three.module.js';
 import { REGIONS, REGION_BY_ID, ORGANS, regionsForHeight } from './goreAtlas.js';
 import { StumpFlesh } from './stumpFlesh.js';
+import { surfaceNormals } from './surfaceNormals.js';
 
 // When a fighter comes apart, and into what.
 //
@@ -167,7 +168,7 @@ export class Dismemberment {
         const index = plug.geometry.index;
         for (let i = 0; i < index.count; i += 3) { const b = index.getX(i + 1); index.setX(i + 1, index.getX(i + 2)); index.setX(i + 2, b); }
         position.needsUpdate = true; index.needsUpdate = true;
-        plug.geometry.computeVertexNormals(); plug.geometry.computeBoundingBox(); plug.geometry.computeBoundingSphere();
+        surfaceNormals(plug.geometry); plug.geometry.computeBoundingBox(); plug.geometry.computeBoundingSphere();
       } else cap.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI));
       stump.cap.getWorldScale(cap.scale);
       primary.mesh.add(cap);

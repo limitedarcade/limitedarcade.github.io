@@ -1,4 +1,5 @@
 import * as THREE from '../vendor/three.module.js';
+import { surfaceNormals } from './surfaceNormals.js';
 import { createCutSeam, updateCutSeam } from './cutSeam.js';
 
 // What is left on the body after a cut.
@@ -191,6 +192,17 @@ function worldScaleOf(node) {
   return Math.max(1e-4, Math.abs(_scale.x), Math.abs(_scale.y), Math.abs(_scale.z));
 }
 
+function surfaceFit(geometry) {
+  const base = geometry.attributes.position.array, count = geometry.attributes.position.count;
+  const index = new Uint8Array(count), blend = new Float64Array(count), radial = new Float64Array(count);
+  for (let i = 0; i < count; i++) {
+    const x = base[i * 3], z = base[i * 3 + 2], angle = Math.atan2(z, x);
+    const at = ((angle / (Math.PI * 2) % 1 + 1) % 1) * 48;
+    index[i] = Math.floor(at); blend[i] = at % 1; radial[i] = Math.min(1, Math.hypot(x, z));
+  }
+  return { index, blend, radial };
+}
+
 // Radial size of the remaining sleeve at the cut, from the posed seam the
 // sever mask already painted. Falls back to the recipe if the model has no
 // partial-weight band (a hard edge, or a region that owned every vertex).
@@ -230,6 +242,10 @@ export class StumpFlesh {
     this.damage = damage;
     this.stumps = [];
     this.owned = new Set();
+    this.templates = new Map();
+    this.preparedOwned = new Set();
+    this.bones = [];
+    model.traverse(node => { if (node.isBone) this.bones.push(node); });
     this.meat = meatMaterial();
     this.boneMat = boneMaterial();
     this.hanging = new THREE.Group();
@@ -239,13 +255,30 @@ export class StumpFlesh {
 
   get count() { return this.stumps.length; }
 
+  // Noise, colours and strand topology depend on the region, never the pose.
+  // Build them during loading; each live cut still gets private deformable
+  // buffers, the full authored tissue and the same deterministic variation.
+  prepareRegion(region, debris) {
+    const cutKind = /Arm$/.test(region.id) ? 'armCut' : /Leg$/.test(region.id) ? 'legCut' : region.id === 'torso' ? 'torsoCut' : null;
+    const authored = cutKind && debris?.library?.get(cutKind), authoredBone = debris?.library?.get('cutBone');
+    const cached = this.templates.get(region.id);
+    if (cached && cached.authored === authored && cached.authoredBone === authoredBone) return cached;
+    if (cached) for (const geometry of cached.owned) { geometry.dispose(); this.preparedOwned.delete(geometry); }
+    const seed = seedFor(region.id), recipe = recipeFor(region), owned = [];
+    const own = geometry => { owned.push(geometry); this.preparedOwned.add(geometry); return geometry; };
+    const template = { authored, authoredBone, owned,
+      plug: authored || own(unitPlug(seed)), lining: own(unitLining(seed + .13)),
+      bone: authoredBone || own(unitBone(seed + .29)),
+      rim: Array.from({ length: authored ? 0 : 6 + (region.id === 'torso' ? 3 : 0) }, (_, i) => own(unitChunk(seed + i * .17))),
+      strands: Array.from({ length: recipe.flaps + recipe.tendons }, (_, i) => own(strandGeometry(i >= recipe.flaps, seed + i))),
+      fit: authored ? surfaceFit(authored) : null,
+    };
+    this.templates.set(region.id, template);
+    return template;
+  }
+
   stumpBone(region) {
-    let found = null;
-    this.model.traverse(node => {
-      if (found || !node.isBone) return;
-      if (region.stump.test(node.name)) found = node;
-    });
-    return found;
+    return this.bones.find(node => region.stump.test(node.name)) || null;
   }
 
   // Direction the missing limb used to go, in world space: from the stump
@@ -255,13 +288,12 @@ export class StumpFlesh {
     bone.updateWorldMatrix(true, true);
     _world.setFromMatrixPosition(bone.matrixWorld);
     let best = null, bestDist = Infinity;
-    this.model.traverse(node => {
-      if (!node.isBone || node === bone) return;
-      if (!region.chain.some(pattern => pattern.test(node.name))) return;
+    for (const node of this.bones) {
+      if (node === bone || !region.chain.some(pattern => pattern.test(node.name))) continue;
       node.updateWorldMatrix(true, false);
       const dist = _worldB.setFromMatrixPosition(node.matrixWorld).distanceToSquared(_world);
       if (dist < bestDist) { bestDist = dist; best = node; }
-    });
+    }
     if (best) {
       out.cutDistance = Math.sqrt(bestDist);
       _worldB.setFromMatrixPosition(best.matrixWorld);
@@ -300,9 +332,8 @@ export class StumpFlesh {
     cap.position.copy(bone.worldToLocal(seam.center.clone())).addScaledVector(_outLocal, -localRadius * .04);
     bone.add(cap);
 
-    const cutKind = /Arm$/.test(region.id) ? 'armCut' : /Leg$/.test(region.id) ? 'legCut' : region.id === 'torso' ? 'torsoCut' : null;
-    const authored = cutKind && debris?.library?.get(cutKind);
-    const plugGeo = authored ? authored.clone() : unitPlug(seed);
+    const template = this.prepareRegion(region, debris), { authored, authoredBone } = template;
+    const plugGeo = template.plug.clone();
     this.owned.add(plugGeo);
     const plug = new THREE.Mesh(plugGeo, this.meat);
     plug.name = 'stumpPlug';
@@ -314,7 +345,7 @@ export class StumpFlesh {
     // Each authored cut gets a private surface fitted to this fighter's seam.
     plug.userData.authoredCut = Boolean(authored);
 
-    const liningGeo = unitLining(seed + 0.13);
+    const liningGeo = template.lining.clone();
     this.owned.add(liningGeo);
     const lining = new THREE.Mesh(liningGeo, this.meat);
     lining.name = 'stumpLining';
@@ -327,9 +358,7 @@ export class StumpFlesh {
     lining.frustumCulled = false;
     cap.add(lining);
 
-    const authoredBone = debris?.library?.get('cutBone');
-    const boneGeo = authoredBone || unitBone(seed + 0.29);
-    if (!authoredBone) this.owned.add(boneGeo);
+    const boneGeo = template.bone;
     const chip = new THREE.Mesh(boneGeo, this.boneMat);
     chip.name = 'stumpBone';
     chip.castShadow = true;
@@ -341,7 +370,7 @@ export class StumpFlesh {
 
     const rim = authored ? 0 : 6 + (region.id === 'torso' ? 3 : 0);
     for (let i = 0; i < rim; i++) {
-      const chunkGeo = unitChunk(seed + i * 0.17);
+      const chunkGeo = template.rim[i].clone();
       this.owned.add(chunkGeo);
       const chunk = new THREE.Mesh(chunkGeo, this.meat);
       chunk.name = 'stumpRim';
@@ -363,7 +392,7 @@ export class StumpFlesh {
 
     const strands = [];
     const addStrand = ({ kind, length, radius, segments, flatten, damp }) => {
-      const geo = strandGeometry(kind === 'tendon', seed + strands.length);
+      const geo = template.strands[strands.length].clone();
       this.owned.add(geo);
       const angle = random() * Math.PI * 2;
       const ring = worldRadius * (0.55 + random() * 0.4);
@@ -422,7 +451,7 @@ export class StumpFlesh {
       outward,
       seam,
       fallbackRadius: recipe.radius,
-      surface: authored ? { mesh: plug, base: new Float32Array(authored.attributes.position.array), localRadius } : null,
+      surface: authored ? { mesh: plug, base: authored.attributes.position.array, localRadius, fit: template.fit } : null,
       worldRadius,
       strands,
     };
@@ -467,8 +496,9 @@ export class StumpFlesh {
   fitSurface(stump) {
     if (!stump.surface || stump.seam.points.length < 3) return;
     const count = 48, profile = Array(count).fill(null);
+    _inv.copy(stump.cap.matrixWorld).invert();
     for (const point of stump.seam.points) {
-      _local.copy(point); stump.cap.worldToLocal(_local);
+      _local.copy(point).applyMatrix4(_inv);
       const angle = (Math.atan2(_local.z, _local.x) + Math.PI * 2) % (Math.PI * 2);
       const index = Math.round(angle / (Math.PI * 2) * count) % count;
       const radius = Math.hypot(_local.x, _local.z);
@@ -485,15 +515,16 @@ export class StumpFlesh {
       return { radius: (left.radius + point.radius * 2 + right.radius) / 4,
         y: THREE.MathUtils.clamp((left.y + point.y * 2 + right.y) / 4, -stump.surface.localRadius * .35, stump.surface.localRadius * .35) };
     });
-    const { mesh, base, localRadius } = stump.surface, pos = mesh.geometry.attributes.position;
+    const { mesh, base, localRadius, fit } = stump.surface, pos = mesh.geometry.attributes.position;
     mesh.scale.setScalar(1);
     for (let i = 0; i < pos.count; i++) {
       const x = base[i * 3], y = base[i * 3 + 1], z = base[i * 3 + 2];
-      const r = Math.hypot(x, z), angle = Math.atan2(z, x), rim = this.profileAt(stump, angle);
-      pos.setXYZ(i, x * rim.radius * 1.015, rim.y * Math.min(1, r) + y * localRadius, z * rim.radius * 1.015);
+      const a = stump.profile[fit.index[i]], b = stump.profile[(fit.index[i] + 1) % count], t = fit.blend[i];
+      const radius = THREE.MathUtils.lerp(a.radius, b.radius, t), rimY = THREE.MathUtils.lerp(a.y, b.y, t);
+      pos.setXYZ(i, x * radius * 1.015, rimY * fit.radial[i] + y * localRadius, z * radius * 1.015);
     }
     pos.needsUpdate = true;
-    mesh.geometry.computeVertexNormals();
+    surfaceNormals(mesh.geometry);
     mesh.geometry.computeBoundingBox();
     mesh.geometry.computeBoundingSphere();
   }
@@ -516,7 +547,7 @@ export class StumpFlesh {
         }
       }
       pos.needsUpdate = true;
-      mesh.geometry.computeVertexNormals();
+      surfaceNormals(mesh.geometry);
     }
   }
 
@@ -622,6 +653,8 @@ export class StumpFlesh {
 
   dispose() {
     this.reset();
+    for (const geometry of this.preparedOwned) geometry.dispose();
+    this.preparedOwned.clear(); this.templates.clear();
     this.model.remove(this.hanging);
     this.meat.dispose();
     this.boneMat.dispose();

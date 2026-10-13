@@ -1,5 +1,7 @@
 # Lake America — session handoff
 
+Latest checkpoint: [October 12 surface finish and performance verification](lake-america-shine-2026-10-12.md). The original September checkpoint below is historical; use the new record for the current Blender master, source/export backups, local before/after comparison, and checks.
+
 Updated 2026-09-12. **Active task:** finish the Blender artwork and make Lake America a complete playable level, including the existing arena axe. The user specifically wants documentation sufficient to resume after usage limits.
 
 ## Read first

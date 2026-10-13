@@ -1,6 +1,26 @@
 import * as THREE from '../vendor/three.module.js';
 import { ORGANS } from './goreAtlas.js';
 import { loadScenePack } from './scenePack.js';
+import { surfacePose } from './surfacePose.js';
+import { surfaceNormals } from './surfaceNormals.js';
+import { REGIONS } from './goreAtlas.js';
+
+function wholeSurfaceGeometry(source) {
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', source.attributes.position.clone().setUsage(THREE.DynamicDrawUsage));
+  geometry.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(source.attributes.position.count * 3), 3).setUsage(THREE.DynamicDrawUsage));
+  if (source.index) geometry.setIndex(source.index.clone());
+  geometry.groups = source.groups.map(g => ({ ...g }));
+  for (const name of ['uv', 'color']) if (source.attributes[name]) geometry.setAttribute(name, source.attributes[name].clone());
+  const color = geometry.attributes.color;
+  if (color) for (let i = 0; i < color.count; i++) {
+    let r = color.getX(i), g = color.getY(i), b = color.getZ(i);
+    const luma = .2126 * r + .7152 * g + .0722 * b;
+    if (luma < .08) { const t = (.08 - luma) / .08; r += (.14 - r) * t; g += (.18 - g) * t; b += (.32 - b) * t; }
+    color.setXYZ(i, r, g, b);
+  }
+  return geometry;
+}
 
 // Everything that leaves a body and stays on the floor.
 //
@@ -135,13 +155,38 @@ export class GoreDebris {
   warmupMeshes(views) {
     const probes = new THREE.Group(); probes.visible = false;
     for (const view of views) {
+      const flesh = view.gore?.flesh;
+      if (flesh) for (const region of REGIONS) flesh.prepareRegion(region, this);
+      // Exercise both clipping and whole-part baking while the loading screen
+      // is up. Otherwise V8's first large skin/normal loops compile on impact.
+      // The rehearsal has its own debris pool, and never emits live events.
+      if (view.gore?.sever && !view.gore.buildersReady && !view.gore.count && !view.damage.hits) {
+        const rehearsal = new GoreDebris(new THREE.Scene()), liveDebris = view.gore.debris;
+        rehearsal.library = this.library; rehearsal.libraryMaterials = this.libraryMaterials;
+        rehearsal.surfaceMaterials = this.surfaceMaterials;
+        try {
+          view.gore.debris = rehearsal;
+          for (const id of ['leftArm', 'rightArm', 'head']) {
+            view.gore.sever(id, { cinematic: true });
+            rehearsal.resetRound(); view.gore.resetRound(); view.damage.resetRound();
+          }
+          view.gore.buildersReady = true;
+        } finally {
+          rehearsal.resetRound(); view.gore.resetRound(); view.damage.resetRound();
+          view.gore.debris = liveDebris;
+        }
+      }
       for (const record of view.damage?.meshes || []) {
         const materials = (Array.isArray(record.mesh.material) ? record.mesh.material : [record.mesh.material])
           .map(material => this.surfaceMaterialFor(material, Boolean(record.geometry.attributes.color)));
         const mesh = new THREE.Mesh(record.geometry, materials.length === 1 ? materials[0] : materials);
         probes.add(mesh);
+        if (/^Head(?:_\d+)?$/i.test(record.mesh.name) || (!record.mesh.skeleton && record.mesh.parent?.isBone)) {
+          record.preparedSurface?.dispose();
+          record.preparedSurface = wholeSurfaceGeometry(record.geometry);
+          probes.add(new THREE.Mesh(record.preparedSurface, mesh.material));
+        }
       }
-      const flesh = view.gore?.flesh;
       if (flesh) for (const material of [flesh.meat, flesh.boneMat]) {
         const geometry = view.damage.meshes.find(r => r.geometry.attributes.color)?.geometry;
         if (geometry) probes.add(new THREE.Mesh(geometry, material));
@@ -225,51 +270,44 @@ export class GoreDebris {
 
   // Bake the selected triangles in the current world pose. UVs and vertex
   // colours survive, so a uniform sleeve and glove remain recognisable on ice.
-  addSurfaceLimb({ record, positions }, origin, velocity, { mass = 1 } = {}) {
+  addSurfaceLimb({ record, positions, faces = null, pose = null }, origin, velocity, { mass = 1 } = {}) {
     const sourceGeometry = record.geometry;
     if (positions.length / 4 === sourceGeometry.attributes.position.count) {
       // A complete authored part (head, helmet, etc.) already has its final
       // topology. Bake the pose into its indexed surface instead of clipping
       // and duplicating every triangle through Maps on the impact frame.
-      const geometry = new THREE.BufferGeometry();
-      const array = new Float32Array(sourceGeometry.attributes.position.count * 3);
+      const geometry = record.preparedSurface || wholeSurfaceGeometry(sourceGeometry);
+      record.preparedSurface = null;
+      const array = geometry.attributes.position.array;
       for (let i = 0; i < positions.length; i += 4) {
         const at = positions[i + 3] * 3;
         array[at] = positions[i] - origin.x; array[at + 1] = positions[i + 1] - origin.y; array[at + 2] = positions[i + 2] - origin.z;
       }
-      geometry.setAttribute('position', new THREE.BufferAttribute(array, 3));
-      if (sourceGeometry.index) geometry.setIndex(sourceGeometry.index.clone());
-      geometry.groups = sourceGeometry.groups.map(g => ({ ...g }));
-      for (const name of ['uv', 'color']) if (sourceGeometry.attributes[name]) geometry.setAttribute(name, sourceGeometry.attributes[name].clone());
+      geometry.attributes.position.needsUpdate = true;
       const color = geometry.attributes.color;
-      if (color) for (let i = 0; i < color.count; i++) {
-        let r = color.getX(i), g = color.getY(i), b = color.getZ(i);
-        const luma = .2126 * r + .7152 * g + .0722 * b;
-        if (luma < .08) { const t = (.08 - luma) / .08; r += (.14 - r) * t; g += (.18 - g) * t; b += (.32 - b) * t; }
-        color.setXYZ(i, r, g, b);
-      }
-      geometry.computeVertexNormals(); geometry.computeBoundingBox(); geometry.computeBoundingSphere();
+      surfaceNormals(geometry); geometry.computeBoundingBox(); geometry.computeBoundingSphere();
       const materials = (Array.isArray(record.mesh.material) ? record.mesh.material : [record.mesh.material])
         .map(material => this.surfaceMaterialFor(material, Boolean(color)));
       const mesh = new THREE.Mesh(geometry, materials.length === 1 ? materials[0] : materials);
       mesh.position.copy(origin); mesh.castShadow = true; this.owned.add(geometry);
       return this.add(mesh, { velocity, mass, wet: 1 });
     }
-    const source = record.geometry, selected = new Map();
-    for (let i = 0; i < positions.length; i += 4)
-      selected.set(positions[i + 3], positions.slice(i, i + 3));
+    const source = record.geometry, vertexCount = source.attributes.position.count;
+    const selected = new Int32Array(vertexCount).fill(-1);
+    for (let i = 0; i < positions.length; i += 4) selected[positions[i + 3]] = i;
     const buckets = new Map(), count = source.index?.count ?? source.attributes.position.count;
-    const interpolated = new Map(), intersections = new Map();
-    const worldVertex = id => {
-      if (selected.has(id)) return new THREE.Vector3().fromArray(selected.get(id));
-      return record.mesh.getVertexPosition(id, new THREE.Vector3()).applyMatrix4(record.mesh.matrixWorld);
+    const interpolated = [], intersections = new Map(), polygon = new Int32Array(4);
+    const vaWorld = new THREE.Vector3(), vbWorld = new THREE.Vector3();
+    const getPose = pose || surfacePose(record.mesh), uv = source.attributes.uv, color = source.attributes.color;
+    const worldVertex = (id, target) => {
+      const at = selected[id];
+      return at >= 0 ? target.fromArray(positions, at) : getPose(id, target);
     };
     const intersection = (a, b, va, vb) => {
-      const key = `${Math.min(a, b)}:${Math.max(a, b)}`;
+      const key = Math.min(a, b) * vertexCount + Math.max(a, b);
       if (intersections.has(key)) return intersections.get(key);
-      const t = (.5 - va) / (vb - va), id = -intersections.size - 1;
-      selected.set(id, worldVertex(a).lerp(worldVertex(b), t).toArray());
-      const attributes = {};
+      const t = (.5 - va) / (vb - va), id = -interpolated.length - 1;
+      const attributes = { position: worldVertex(a, vaWorld).lerp(worldVertex(b, vbWorld), t).toArray() };
       for (const name of ['uv', 'color']) {
         const attr = source.attributes[name];
         if (attr) attributes[name] = Array.from({ length: attr.itemSize }, (_, j) => {
@@ -277,40 +315,54 @@ export class GoreDebris {
           return av + (bv - av) * t;
         });
       }
-      interpolated.set(id, attributes); intersections.set(key, id); return id;
+      interpolated.push(attributes); intersections.set(key, id); return id;
     };
-    for (let i = 0; i < count; i += 3) {
-      const ids = [0, 1, 2].map(j => source.index ? source.index.getX(i + j) : i + j);
-      if (!ids.some(id => selected.has(id))) continue;
+    const ids = new Uint32Array(3), mask = record.sever?.array;
+    for (let face = 0; face < (faces?.length ?? count / 3); face++) {
+      const i = faces ? faces[face] : face * 3;
+      for (let j = 0; j < 3; j++) ids[j] = source.index ? source.index.getX(i + j) : i + j;
+      if (selected[ids[0]] < 0 && selected[ids[1]] < 0 && selected[ids[2]] < 0) continue;
       // Already severed regions must never be collected a second time.
-      if (ids.some(id => !selected.has(id) && record.sever?.array[id] > .5)) continue;
-      const polygon = [];
+      if ((selected[ids[0]] < 0 && mask?.[ids[0]] > .5) || (selected[ids[1]] < 0 && mask?.[ids[1]] > .5)
+        || (selected[ids[2]] < 0 && mask?.[ids[2]] > .5)) continue;
+      let length = 0;
       for (let j = 0; j < 3; j++) {
         const a = ids[(j + 2) % 3], b = ids[j];
-        const va = record.sever?.array[a] ?? (selected.has(a) ? 1 : 0);
-        const vb = record.sever?.array[b] ?? (selected.has(b) ? 1 : 0);
-        if ((va > .5) !== (vb > .5)) polygon.push(intersection(a, b, va, vb));
-        if (vb > .5) polygon.push(b);
+        const va = mask?.[a] ?? (selected[a] >= 0 ? 1 : 0);
+        const vb = mask?.[b] ?? (selected[b] >= 0 ? 1 : 0);
+        if ((va > .5) !== (vb > .5)) polygon[length++] = intersection(a, b, va, vb);
+        if (vb > .5) polygon[length++] = b;
       }
-      if (polygon.length < 3) continue;
+      if (length < 3) continue;
       const material = source.groups.find(g => i >= g.start && i < g.start + g.count)?.materialIndex ?? 0;
       if (!buckets.has(material)) buckets.set(material, []);
-      for (let j = 1; j < polygon.length - 1; j++) buckets.get(material).push(polygon[0], polygon[j], polygon[j + 1]);
+      for (let j = 1; j < length - 1; j++) buckets.get(material).push(polygon[0], polygon[j], polygon[j + 1]);
     }
     if (!buckets.size) return null;
-    const geometry = new THREE.BufferGeometry(), vertices = [], uvs = [], colors = [];
+    const geometry = new THREE.BufferGeometry();
+    let outputCount = 0;
+    for (const ids of buckets.values()) outputCount += ids.length;
+    const vertices = new Float32Array(outputCount * 3), uvs = uv ? new Float32Array(outputCount * 2) : null,
+      colors = color ? new Float32Array(outputCount * 3) : null;
+    let output = 0;
     for (const [material, ids] of buckets) {
-      const start = vertices.length / 3;
+      const start = output;
       for (const id of ids) {
-        const p = selected.get(id);
-        vertices.push(p[0] - origin.x, p[1] - origin.y, p[2] - origin.z);
-        const uv = source.attributes.uv, color = source.attributes.color;
-        if (uv) uvs.push(...(interpolated.get(id)?.uv || [uv.getX(id), uv.getY(id)]));
+        const edge = id < 0 ? interpolated[-id - 1] : null, at = edge ? 0 : selected[id];
+        const p = edge?.position || positions;
+        vertices[output * 3] = p[at] - origin.x;
+        vertices[output * 3 + 1] = p[at + 1] - origin.y;
+        vertices[output * 3 + 2] = p[at + 2] - origin.z;
+        if (uv) {
+          uvs[output * 2] = edge ? edge.uv[0] : uv.getX(id);
+          uvs[output * 2 + 1] = edge ? edge.uv[1] : uv.getY(id);
+        }
         if (color) {
           // Trump's suit is authored as near-black vertex colour. On the body the
           // stage keys still lift it; on the ice the low slapshot light leaves
           // only the skin/hand verts readable, so the limb reads as red scraps.
-          let [r, g, b] = interpolated.get(id)?.color || [color.getX(id), color.getY(id), color.getZ(id)];
+          let r = edge ? edge.color[0] : color.getX(id), g = edge ? edge.color[1] : color.getY(id),
+            b = edge ? edge.color[2] : color.getZ(id);
           const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
           if (luma < 0.08) {
             const t = (0.08 - luma) / 0.08;
@@ -318,15 +370,16 @@ export class GoreDebris {
             g += (0.18 - g) * t;
             b += (0.32 - b) * t;
           }
-          colors.push(r, g, b);
+          colors[output * 3] = r; colors[output * 3 + 1] = g; colors[output * 3 + 2] = b;
         }
+        output++;
       }
       geometry.addGroup(start, ids.length, material);
     }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    if (uvs.length) geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-    if (colors.length) geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    geometry.computeVertexNormals(); geometry.computeBoundingBox(); geometry.computeBoundingSphere();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    if (uvs) geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+    if (colors) geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    surfaceNormals(geometry); geometry.computeBoundingBox(); geometry.computeBoundingSphere();
     // Fresh materials, not clones of the fighter's battle/sever shader. Cloned
     // onBeforeCompile still samples severMask/battleDamage, which this geometry
     // does not carry. The small unlit fill is applied from diffuseColor after

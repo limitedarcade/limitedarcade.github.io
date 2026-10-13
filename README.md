@@ -46,7 +46,7 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](web/game/public/storefront/finisher.jpg)
+![Carney's Vote of No Confidence finisher on the updated Lake America arena](web/game/public/storefront/finisher.gif)
 
 ## Jump into a match
 

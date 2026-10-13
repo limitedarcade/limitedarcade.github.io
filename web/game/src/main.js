@@ -358,7 +358,7 @@ async function startDemo(full = false) {
   demoMode = full ? 'full' : 'vignette';
   if (full) { void audio.unlock(); showScreen(null); }
   if (demoLoading || (running && match)) { updateDemoLabel(); return; }
-  const pair = demoPair(roster, STAGES, full ? attract.pairIndex : 0);
+  const pair = demoPair(roster, STAGES, attract.pairIndex);
   if (!pair) return;
   const token = ++demoEpoch;
   demoLoading = true;
@@ -495,9 +495,10 @@ async function launchMatch(setup, demo, token, quickIntro = false) {
     const warmCamera = camera.clone(); warmCamera.position.set(0, 3, 10); warmCamera.lookAt(0, 1, 0);
     try {
       beaverTribute.root.visible = true;
+      probes.visible = true; scene.add(probes);
       renderer.setRenderTarget(postfx.composer.renderTarget1);
       renderer.render(scene, warmCamera);
-    } finally { beaverTribute.root.visible = tributeVisible; renderer.setRenderTarget(warmTarget); }
+    } finally { scene.remove(probes); beaverTribute.root.visible = tributeVisible; renderer.setRenderTarget(warmTarget); }
   } catch (error) {
     doneLoading();
     dom.loaderCopy.textContent = `Unable to load arena or fighters: ${error.message}. Try Fight again.`;

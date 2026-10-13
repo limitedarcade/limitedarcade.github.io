@@ -26,12 +26,16 @@ test('dense fighter contacts use a bounded posed sample and still find the surfa
     mesh.position.x = i * 4; model.add(mesh);
   }
   const damage = new FighterDamage(model);
-  let samples = 0;
-  for (const { mesh } of damage.meshes) {
-    const original = mesh.getVertexPosition;
-    mesh.getVertexPosition = function (...args) { samples++; return original.apply(this, args); };
+  let reads = 0;
+  for (const { geometry } of damage.meshes) {
+    const position = geometry.attributes.position, original = position.getX;
+    position.getX = function (...args) { reads++; return original.apply(this, args); };
   }
   damage.onHit({ type: 'hit', x: .12, y: .18, z: .98 });
+  // Bind-space paint reads each vertex of the winning mesh once, plus its
+  // center. The remaining position reads are the posed contact search.
+  const painted = damage.meshes.find(r => r.damage.version > 0);
+  const samples = reads - painted.geometry.attributes.position.count - 1;
   assert.ok(samples < 6000, `${samples} posed samples exceeded the per-contact budget`);
   const wound = damage.wounds[0]; assert.ok(Math.abs(wound.z - .976) < .02);
   assert.ok(Math.abs(wound.x - .12) < .02 && Math.abs(wound.y - .18) < .02);

@@ -1,10 +1,27 @@
 import fs from 'node:fs';
 import { resolve } from 'node:path';
-import { launchBrowser } from './browser.mjs';
+import { execFileSync } from 'node:child_process';
+import { createServer } from 'vite';
+import { launchBrowser, GAME_DIR } from './browser.mjs';
 
 const label = process.argv[2] || 'before';
 const out = resolve('artifacts/performance-2026-10-12');
 fs.mkdirSync(out, { recursive: true });
+let baselineServer = null;
+let url = 'http://127.0.0.1:5176/';
+const baselineFlag = process.argv.find(arg => arg.startsWith('--baseline='));
+const baseline = process.argv.includes('--baseline') || baselineFlag
+  ? execFileSync('git', ['rev-parse', baselineFlag?.slice('--baseline='.length) || 'HEAD'], { encoding: 'utf8' }).trim() : null;
+if (baseline || process.argv.includes('--isolated')) {
+  const paths = ['main.js', 'render/fighterDamage.js', 'render/goreProps.js', 'render/stumpFlesh.js', 'render/cutSeam.js', 'render/dismemberment.js'];
+  const key = path => path.replaceAll('\\', '/').split('?')[0].toLowerCase();
+  const sources = baseline ? new Map(paths.map(path => [key(resolve(GAME_DIR, 'src', path)),
+    execFileSync('git', ['show', `${baseline}:web/game/src/${path}`], { encoding: 'utf8' })])) : new Map();
+  baselineServer = await createServer({ root: GAME_DIR, configFile: resolve(GAME_DIR, 'vite.config.js'), logLevel: 'warn',
+    plugins: [{ name: 'severance-baseline', enforce: 'pre', load: id => sources.get(key(id)) }],
+    server: { host: '127.0.0.1', port: 5197, strictPort: true } });
+  await baselineServer.listen(); url = baselineServer.resolvedUrls.local[0];
+}
 const browser = await launchBrowser({ gpu: true });
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 const errors = [], warnings = [];
@@ -23,7 +40,7 @@ try {
       };
     }
   });
-  await page.goto('http://127.0.0.1:5176/', { waitUntil: 'load' });
+  await page.goto(url, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__FIGHT__?.match() && window.__FIGHT__.views.length === 2, null, { timeout: 90000 });
   await page.evaluate(() => {
     const api = window.__FIGHT__, report = window.perfReport;
@@ -41,6 +58,7 @@ try {
       for (const method of ['onHit', 'severByBones']) wrap(view.damage, method, `${view.definition.id}.damage.${method}`);
       wrap(view.gore, 'sever', `${view.definition.id}.sever`);
       wrap(view.gore?.flesh, 'attach', `${view.definition.id}.stump`);
+      for (const method of ['update', 'fitSurface', 'placeStrands', 'cutAxis']) wrap(view.gore?.flesh, method, `${view.definition.id}.flesh.${method}`);
     }
     wrap(api.match(), 'step', 'simulation');
     wrap(api.gore, 'addSurfaceLimb', 'detachedSurface');
@@ -77,11 +95,16 @@ try {
   await page.waitForFunction(() => window.__FIGHT__?.match()?.phase === 'finisher', null, { timeout: 120000 });
   if (process.argv.includes('--capture')) await page.screenshot({ path: resolve(out, `${label}-entry.png`) });
   console.log('Finisher entered.');
+  if (process.argv.includes('--capture')) {
+    await page.waitForFunction(() => window.__FIGHT__?.match()?.phaseFrame >= 225, null, { timeout: 90000 });
+    await page.screenshot({ path: resolve(out, `${label}-cut.png`) });
+  }
   await page.waitForFunction(() => window.__FIGHT__?.match()?.phase === 'matchEnd', null, { timeout: 90000 });
   if (process.argv.includes('--capture')) await page.screenshot({ path: resolve(out, `${label}-final.png`) });
 } catch (error) { errors.push(error.stack); process.exitCode = 1; }
 const report = await page.evaluate(() => window.perfReport).catch(() => ({}));
 report.errors = errors; report.warnings = warnings;
+report.baseline = baseline;
 const percentile = (values, p) => [...values].sort((a,b) => a-b)[Math.min(values.length - 1, Math.floor(values.length * p))];
 report.summary = Object.fromEntries(['intro', 'fight', 'finisher'].map(phase => {
   const frames = report.frames?.filter(f => f.phase === phase) || [], ms = frames.map(f => f.ms);
@@ -93,3 +116,4 @@ report.worstCosts = [...(report.costs || [])].sort((a,b) => b.ms-a.ms).slice(0, 
 fs.writeFileSync(resolve(out, `${label}.json`), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ device: report.device, summary: report.summary, worstCosts: report.worstCosts.slice(0,12), errors }, null, 2));
 await browser.close();
+await baselineServer?.close();

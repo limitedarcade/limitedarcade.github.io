@@ -1,8 +1,10 @@
 {
   "_readme": "Download caps enforced by `npm run check-budget` (tools/check-budget.mjs). Sizes are MB (1 MB = 1048576 bytes), measured uncompressed, so real transfers with gzip are smaller. Raise a cap only on purpose, in the same change that needs it, and say why in the commit.",
   "perAssetMB": 6,
-  "_lakeStage": "The expanded Lake America props and PBR textures compress from 25.65 MB to 7.83 MB. Allow 8 MB for this stage while preserving the 80 MB total and 35 MB first-fight caps.",
-  "perAssetExceptions": { "stages/lake-america-3d/lake-america.glb": 8 },
+  "_lakeStage": "The completed surface finish optimizes to 8,390,704 bytes, 2,096 bytes above 8 MiB. Allow 8.01 MiB for this stage to preserve the finished textures and geometry; the 80 MiB total and 35 MiB first-fight caps remain unchanged.",
+  "perAssetExceptions": {
+    "stages/lake-america-3d/lake-america.glb": 8.01
+  },
   "distMB": 80,
   "titleMB": 10,
   "firstFightMB": 35
