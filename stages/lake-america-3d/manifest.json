@@ -5,7 +5,7 @@
   "triangles": 236871,
   "source": "web/stages/lake_america/blender/lake-america.blend",
   "seed": 7319,
-  "bounds": "Arena contact Y=0; layered skyline 178–220m away; 360 degree island coverage",
+  "bounds": "Arena contact Y=0; layered skyline 178\u2013220m away; 360 degree island coverage",
   "axe": {
     "node": "lake-america-axe",
     "position": [
@@ -101,7 +101,10 @@
     "A physically split, patinated bronze Liberty Bell on a timber yoke with an OUT OF ORDER plaque",
     "A sold-out Freedom vending machine: one word of speech $499.99, 0.1 second of privacy $999.99, travel-size due process $9,999.99; no refunds",
     "Rounded shoreline rocks and snow silhouettes, with angle-aware curved shading throughout",
-    "Three-segment corner highlights and weighted planar normals on park props and equipment"
+    "Three-segment corner highlights and weighted planar normals on park props and equipment",
+    "Baked soft contact shading in snow folds, timber joinery and prop recesses",
+    "Cool winter bounce, amber cedar, cyan shoreline ice and deeper evergreen needles",
+    "Polished enamel, brushed metal and warm bronze with patinated recesses"
   ],
   "previews": [
     "lake-america-combat.png",
@@ -207,5 +210,16 @@
     "backup": "web/artifacts/lake-america/before-print-leaf-fix-20261010-102548",
     "bootPrint": "Rounded sole, narrowed arch, separate heel and broad recessed tread channels",
     "zamboniBadge": "Rotated 180 degrees in its own plane; stem points down"
+  },
+  "shinePass": {
+    "version": "2026-10-12-mcp-shine-v1",
+    "recipe": "web/tools/shine-lake-america-mcp.py",
+    "backup": "web/artifacts/lake-america/shine-2026-10-12/before",
+    "method": "Native Blender MCP; ray-traced vertex contact shading and packed PBR refinement",
+    "bakedMeshes": 198,
+    "rays": 1383012,
+    "addedTriangles": 0,
+    "addedMaterials": 0,
+    "addedImages": 0
   }
 }
