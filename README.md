@@ -1,8 +1,9 @@
 # Battle for Independence
+![](https://komarev.com/ghpvc/?username=limitedarcade&label=PROFILE+VIEWS)
 
 > **Politics got personal. The lake froze. Someone rang the bell.**
 
-**Battle for Independence** is a fast, ridiculous 3D fighting game built around larger-than-life political caricatures, dramatic arenas, named special moves, and spectacular finishes.
+**Battle for Independence** is a fast, ridiculous 3D fighting game built around Larger Than Life political caricatures, dramatic arenas, named Special Moves, and spectacular finishes.
 
 Inspired by [this Reddit post](https://www.reddit.com/r/aivideos/s/oTANiZJWjz).
 
