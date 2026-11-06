@@ -64,6 +64,20 @@ async function fixture(options = {}, sourceOptions = {}) {
   return { source, scene, library, calls };
 }
 
+test('warmup prepares every bounded model instance before overlapping attacks', async () => {
+  const { library, scene } = await fixture({ maxPerAsset: 3 }, { animated: true });
+  const prepared = new Set(library.warmupRoots());
+  assert.equal(prepared.size, 3); assert.equal(library.stats.active, 0);
+  assert.equal(scene.children.length, 0);
+  assert.deepEqual(new Set(library.warmupRoots()), prepared);
+  library.createInstance = () => { throw Error('allocation during attack'); };
+  const handles = Array.from({ length: 3 }, () => library.spawn('sample'));
+  assert.ok(handles.every(handle => prepared.has(handle.root)));
+  assert.equal(library.spawn('sample'), null);
+  for (const handle of handles) handle.stop();
+  library.dispose();
+});
+
 test('model effects preload once, obey both pool caps, reuse instances, and reject stale stop handles', async () => {
   const sources = { 'one.glb': asset(), 'two.glb': asset() }, calls = [];
   const scene = new THREE.Scene();

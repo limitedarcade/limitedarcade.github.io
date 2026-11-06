@@ -59,7 +59,7 @@ export class WeaponView {
   constructor(scene, stage, { loader = createGltfLoader(), kinds = WEAPON_KINDS } = {}) {
     this.scene = scene; this.stage = stage; this.models = {}; this.live = new Map();
     this.liveMaterials = new Map(); this.axeStyle = null; this.ringStyle = null; this.time = 0;
-    this.loader = loader; this.loading = new Map();
+    this.loader = loader; this.loading = new Map(); this.free = new Map();
     for (const kind of kinds) void this.load([kind]);
   }
   // Resolves once every requested model is ready or has failed. A missing
@@ -155,7 +155,7 @@ export class WeaponView {
         const style = p.kind === 'axe' ? this.axeStyle : p.kind === 'rescueRing' ? this.ringStyle : null;
         const originals = style
           ? new Map([...style.materials].map(([original, clone]) => [clone, original])) : undefined;
-        const projectile = projectileModel(source, originals);
+        const projectile = this.free.get(p.kind)?.pop() || projectileModel(source, originals);
         mesh = projectile.group; mesh.userData.weaponKind = p.kind;
         this.liveMaterials.set(p.id, projectile.materials);
         this.scene.add(mesh); this.live.set(p.id, mesh);
@@ -167,9 +167,27 @@ export class WeaponView {
     for (const id of this.live.keys()) if (!wanted.has(id)) this.remove(id);
   }
   remove(id) {
-    this.scene.remove(this.live.get(id));
-    for (const material of this.liveMaterials.get(id)?.values() || []) material.dispose();
+    const group = this.live.get(id), materials = this.liveMaterials.get(id);
+    this.scene.remove(group);
+    const pool = this.free.get(group?.userData.weaponKind);
+    if (pool && pool.length < 4) {
+      group.position.set(0, 0, 0); group.rotation.set(0, 0, 0); group.scale.setScalar(1);
+      pool.push({ group, materials });
+    } else for (const material of materials?.values() || []) material.dispose();
     this.liveMaterials.delete(id); this.live.delete(id);
+  }
+
+  warmupRoots(kinds) {
+    const roots = [];
+    for (const kind of kinds) {
+      const source = this.models[kind];
+      if (!source) continue;
+      if (!this.free.has(kind)) this.free.set(kind, []);
+      const pool = this.free.get(kind);
+      while (pool.length < 4) pool.push(projectileModel(source));
+      roots.push(...pool.map(item => item.group));
+    }
+    return roots;
   }
   restoreAxe() {
     if (!this.axeStyle) return;

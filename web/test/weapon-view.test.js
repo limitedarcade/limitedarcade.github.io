@@ -30,6 +30,30 @@ function fixture({ sprite = false } = {}) {
   return { scene, stage, view, axe, handle, head, neighbour, steel, wrap };
 }
 
+test('prewarmed thrown weapons reuse their meshes and materials across attacks and rounds', () => {
+  const { view, scene } = fixture();
+  const source = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshStandardMaterial());
+  view.models.knife = source;
+  const prepared = new Set(view.warmupRoots(['knife']));
+  assert.equal(prepared.size, 4);
+  assert.deepEqual(new Set(view.warmupRoots(['knife'])), prepared);
+  const originalClone = source.clone;
+  source.clone = () => { throw Error('cloned during attack'); };
+  let first;
+  for (const round of [1, 2]) {
+    view.update(snapshot({ round, projectiles: [throwAt({ kind: 'knife' })] }));
+    const mesh = view.live.get(1);
+    assert.ok(prepared.has(mesh));
+    if (first) assert.equal(mesh, first);
+    first = mesh;
+    view.update(snapshot({ round }));
+    assert.equal(mesh.parent, null);
+  }
+  assert.equal(scene.children.length, 1);
+  source.clone = originalClone;
+  view.clear();
+});
+
 test('a grouped axe highlights all child materials and restores the original palette', () => {
   const { view, axe, handle, head, neighbour, steel, wrap } = fixture();
   const steelColor = steel.color.clone(), wrapColor = wrap.color.clone();

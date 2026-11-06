@@ -47,6 +47,13 @@ export class SpritePool {
     sprite.visible = false;
     this.free.push(sprite);
   }
+
+  warmupRoots() {
+    const held = [];
+    while (this.live.size < this.capacity) held.push(this.acquire());
+    for (const sprite of held) this.release(sprite);
+    return this.free;
+  }
 }
 
 export class Vfx {
@@ -76,6 +83,10 @@ export class Vfx {
 
   scaled(count) {
     return Math.max(1, Math.round(count * this.quality));
+  }
+
+  warmupRoots() {
+    return [...this.models.warmupRoots(), ...Object.values(this.pools).flatMap(pool => pool.warmupRoots())];
   }
 
   // A one-shot billboard that scales and fades along a curve.

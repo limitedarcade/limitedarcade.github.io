@@ -25,6 +25,7 @@ import { exhibitionOpening, ExhibitionProps } from './render/exhibitionOpening.j
 import { resultDuration, stageOutcome } from './engine/stageOutcomes.js';
 import { Stage } from './render/stage.js';
 import { Vfx } from './render/vfx.js';
+import { warmCombatAssets } from './render/combatWarmup.js';
 import { GoreDebris } from './render/goreProps.js';
 import { Hud } from './render/hud.js';
 import { FightCamera } from './render/camera.js';
@@ -458,47 +459,21 @@ async function launchMatch(setup, demo, token, quickIntro = false) {
   // tissue. A missing gore library still resolves to generated props.
   const definitionsNeeded = setup.fighters.map(getFighter);
   const goreReady = gore.load();
-  if (definitionsNeeded.some(f => Object.values(f.combat?.moves || {}).some(move => move?.overwatch))) droneStrike.load();
+  const needsDrone = definitionsNeeded.some(f => Object.values(f.combat?.moves || {}).some(move => move?.overwatch));
+  const droneReady = needsDrone ? droneStrike.load() : null;
+  const weaponKinds = [...new Set(definitionsNeeded.flatMap(weaponsFor))];
   // The title's background exhibition loads silently behind the menu.
   const doneLoading = demo && demoMode !== 'full' ? () => {} : showLoading('Loading arena and fighters');
   try {
-    await Promise.all([stage.ready, goreReady, ensureViews(setup), weapons.load([...new Set(definitionsNeeded.flatMap(weaponsFor))]), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : staticPortraits.then(() => studio?.prewarm()), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
-    // compileAsync traverses hidden meshes too: stick, beavers and detached
-    // surfaces are ready before they appear. Compile for the composer's HDR
-    // target, which uses different tone-mapping defines from the canvas.
-    const probes = gore.warmupMeshes(views); scene.add(probes);
-    const textures = new Set();
-    scene.traverse(object => {
-      for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
-        if (!material) continue;
-        for (const value of Object.values(material)) if (value?.isTexture && !value.isRenderTargetTexture && !value.isVideoTexture) textures.add(value);
-      }
-    });
-    for (const texture of textures) renderer.initTexture(texture);
-    const target = renderer.getRenderTarget();
-    let compiled, shadows;
-    try {
-      renderer.setRenderTarget(postfx.composer.renderTarget1);
-      compiled = renderer.compileAsync(scene, camera);
-      if (beaverTribute.shadowWarmup) {
-        // Shadow rendering passes no scene fog. Match that exact variant;
-        // otherwise the first beaver shadow still compiles during the finale.
-        const fog = scene.fog; scene.fog = null;
-        try { shadows = renderer.compileAsync(beaverTribute.shadowWarmup, camera, scene); }
-        finally { scene.fog = fog; }
-      }
-    } finally { renderer.setRenderTarget(target); }
-    try { await Promise.all([compiled, shadows]); } finally { scene.remove(probes); }
-    // A compile does not upload vertex/bone buffers or exercise the shadow
-    // pass. Render the hidden supporting cast once offscreen during loading.
-    const tributeVisible = beaverTribute.root.visible, warmTarget = renderer.getRenderTarget();
+    await Promise.all([stage.ready, goreReady, vfx.ready, droneReady, ensureViews(setup), weapons.load(weaponKinds), setup.fighters.includes('carney') ? beaverTribute.load() : null, demo || cinematicReview || lakePlayReview ? null : staticPortraits.then(() => studio?.prewarm()), demo ? null : audio.unlock(), document.fonts.load('48px "Fatal Fighter"'), document.fonts.load('32px "Great Fighter"')]);
+    // Use the actual pooled attack instances: detached templates and hidden
+    // meshes otherwise miss the first GPU upload and shadow pass.
+    const probes = gore.warmupMeshes(views);
     const warmCamera = camera.clone(); warmCamera.position.set(0, 3, 10); warmCamera.lookAt(0, 1, 0);
-    try {
-      beaverTribute.root.visible = true;
-      probes.visible = true; scene.add(probes);
-      renderer.setRenderTarget(postfx.composer.renderTarget1);
-      renderer.render(scene, warmCamera);
-    } finally { scene.remove(probes); beaverTribute.root.visible = tributeVisible; renderer.setRenderTarget(warmTarget); }
+    await warmCombatAssets({ renderer, scene, camera: warmCamera, target: postfx.composer.renderTarget1,
+      shadowRoot: beaverTribute.shadowWarmup,
+      roots: [probes, beaverTribute.root, needsDrone ? droneStrike.root : null,
+        ...weapons.warmupRoots(weaponKinds), ...vfx.warmupRoots()] });
   } catch (error) {
     doneLoading();
     dom.loaderCopy.textContent = `Unable to load arena or fighters: ${error.message}. Try Fight again.`;
@@ -860,6 +835,9 @@ function handleEvent(event) {
 
 function frame() {
   const elapsedDt = Math.min(clock.getDelta(), 0.25);
+  // GPU preparation temporarily exposes pooled objects and changes targets.
+  // Keep the normal animation loop out until that state has been restored.
+  if (loadingMatch) return;
   const realDt = Math.min(elapsedDt, 0.05), dt = realDt * debugSpeed;
   let advancedDt = 0;
   // Start is polled even while the simulation is paused.

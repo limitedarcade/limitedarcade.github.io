@@ -167,6 +167,26 @@ export class ModelVfx {
     return { id, root, orientation, model, materials: instanceMaterials, ownedGeometry, mixer, clip, action, token: 0 };
   }
 
+  // Allocate the bounded pool during loading, and expose actual instances to
+  // GPU warmup. The templates alone do not use the converted effect materials.
+  warmupRoots() {
+    const roots = [];
+    for (const [id, pool] of this.free) {
+      const count = Math.min(this.maxPerAsset, this.maxActive);
+      while (pool.length < count) pool.push(this.createInstance(id));
+      for (const item of pool) {
+        item.root.position.set(0, 0, 0); item.root.rotation.set(0, 0, 0); item.root.scale.setScalar(1);
+        item.orientation.rotation.fromArray(this.presets[id].rotation || [0, 0, 0]);
+        if (item.action) {
+          item.action.reset().play();
+          item.mixer.setTime(item.clip.duration * 0.1);
+        }
+        roots.push(item.root);
+      }
+    }
+    return roots;
+  }
+
   spawn(id, options = {}) {
     if (this.disposed || !this.presets[id]) return null;
     if (!this.templates.has(id)) {

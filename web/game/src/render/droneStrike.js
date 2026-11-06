@@ -55,8 +55,10 @@ function additive(color, opacity, { depthWrite = false, side = THREE.DoubleSide 
 }
 
 export class DroneStrike {
-  constructor(scene, { stage = null, vfx = null, quality = 1, reducedMotion = false, autoload = true } = {}) {
+  constructor(scene, { stage = null, vfx = null, quality = 1, reducedMotion = false, autoload = true,
+    loader = createGltfLoader() } = {}) {
     this.scene = scene;
+    this.loader = loader;
     this.stage = stage;
     this.vfx = vfx;
     this.quality = quality;
@@ -141,11 +143,10 @@ export class DroneStrike {
   // Idempotent. The game calls this only when a fighter who can summon the
   // drone is in the match, so the other pairings never download it.
   load() {
-    if (this.loadStarted) return;
-    this.loadStarted = true;
+    if (this.ready) return this.ready;
     const base = import.meta.env?.BASE_URL ?? '/';
-    const loader = createGltfLoader();
-    loader.load(`${base}fx/surveillance_drone.glb`, gltf => {
+    const loader = this.loader;
+    const drone = loader.loadAsync(`${base}fx/surveillance_drone.glb`).then(gltf => {
       const model = gltf.scene;
       // Sketchfab exports arrive at arbitrary scale and origin. Normalise both
       // so the rig can pose the drone in metres without knowing the asset.
@@ -168,9 +169,9 @@ export class DroneStrike {
         node.material.toneMapped = true;
       });
       this.droneModel.add(holder);
-    }, undefined, error => console.warn('Overwatch drone unavailable', error));
+    }).catch(error => console.warn('Overwatch drone unavailable', error));
 
-    loader.load(`${base}fx/laser_beam.glb`, gltf => {
+    const beam = loader.loadAsync(`${base}fx/laser_beam.glb`).then(gltf => {
       const model = gltf.scene;
       model.updateMatrixWorld(true);
       const bounds = new THREE.Box3().setFromObject(model);
@@ -200,7 +201,9 @@ export class DroneStrike {
       });
       this.card = holder;
       this.beam.add(holder);
-    }, undefined, error => console.warn('Overwatch beam unavailable', error));
+    }).catch(error => console.warn('Overwatch beam unavailable', error));
+    this.ready = Promise.all([drone, beam]);
+    return this.ready;
   }
 
   // `strike` is `snapshot.strike`; `dt` is real seconds, so the beam keeps
