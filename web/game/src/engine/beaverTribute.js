@@ -1,6 +1,10 @@
-// One simulation clock owns the slide, collection, handoff and hero hold.
-export const TRIBUTE = Object.freeze({ land: 42, slide: 104, arrive: 150,
-  lift: 185, present: 292, take: 322, place: 384, release: 405, hero: 438, end: 522 });
+// Reserve three seconds for the airborne pursuit, then retain the existing
+// collection, handoff and hero hold on the same simulation clock.
+const EXTRA_FLIGHT = 138;
+export const TRIBUTE = Object.freeze({ land: 42 + EXTRA_FLIGHT, slide: 104 + EXTRA_FLIGHT,
+  approach: 55 + EXTRA_FLIGHT, arrive: 150 + EXTRA_FLIGHT,
+  lift: 185 + EXTRA_FLIGHT, present: 292 + EXTRA_FLIGHT, take: 322 + EXTRA_FLIGHT,
+  place: 384 + EXTRA_FLIGHT, release: 405 + EXTRA_FLIGHT, hero: 438 + EXTRA_FLIGHT, end: 522 + EXTRA_FLIGHT });
 export const smooth = t => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
 export const lerp = (a, b, t) => a + (b - a) * t;
 export function tributeImpact(finisher) {
@@ -12,7 +16,7 @@ export function tributeTime(finisher, frame) {
   return impact === null ? null : Math.max(0, Math.min(TRIBUTE.end, frame - impact));
 }
 export function tributePose(t) {
-  const approach = smooth((t - 55) / (TRIBUTE.arrive - 55));
+  const approach = smooth((t - TRIBUTE.approach) / (TRIBUTE.arrive - TRIBUTE.approach));
   const lift = smooth((t - TRIBUTE.arrive) / (TRIBUTE.lift - TRIBUTE.arrive));
   const carry = smooth((t - TRIBUTE.lift) / (TRIBUTE.present - TRIBUTE.lift));
   const take = smooth((t - TRIBUTE.present) / (TRIBUTE.take - TRIBUTE.present));

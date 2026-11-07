@@ -838,6 +838,7 @@ function frame() {
   // GPU preparation temporarily exposes pooled objects and changes targets.
   // Keep the normal animation loop out until that state has been restored.
   if (loadingMatch) return;
+  let cinematicBloom = 1;
   const realDt = Math.min(elapsedDt, 0.05), dt = realDt * debugSpeed;
   let advancedDt = 0;
   // Start is polled even while the simulation is paused.
@@ -995,8 +996,10 @@ function frame() {
     }
     shot = ending?.shot || opening?.shot || lakeEntranceCamera(snapshot, { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect }) || shot;
     if (tribute && tribute.t >= 12) shot = tributeCamera(tribute.t, stagedOrigin(snapshot.finisher), snapshot.finisher.facing,
-      { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect });
+      { reducedMotion, portrait: fightCamera.portrait, aspect: camera.aspect,
+        head: tribute.head, radius: tribute.radius, trackingHead: tribute.trackingHead });
     if (reviewCamera) shot = reviewCamera;
+    cinematicBloom = shot?.bloomScale ?? 1;
     fightCamera.update(paused || (match?.hitStop > 0) ? 0 : dt * scale, shown, { shot, reducedMotion, frozen: (match?.hitStop > 0), impactDt: paused ? 0 : realDt });
     hud.root.style.opacity = cinematic ? '0' : '1';
     hud.update(snapshot, paused ? 0 : dt, { project: worldToScreen, bindings: preferences.bindings });
@@ -1028,7 +1031,9 @@ function frame() {
   postfx.update(paused ? 0 : realDt, { frozen: (match?.hitStop > 0) || paused, grade: paused ? 0 : impact.grade });
   renderer.info.autoReset = false;
   renderer.info.reset();
-  postfx.render();
+  const bloomStrength = postfx.bloom.strength;
+  try { postfx.bloom.strength *= cinematicBloom; postfx.render(); }
+  finally { postfx.bloom.strength = bloomStrength; }
   // Drawn after the composer and deliberately outside it: the round reel is
   // titling, and titling that blooms and grades reads as a bug.
   if (activeScreen === null) reel.render(renderer);

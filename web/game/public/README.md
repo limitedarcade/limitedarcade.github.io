@@ -48,6 +48,14 @@ The game contains exaggerated cartoon violence and gore.
 
 ![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](storefront/finisher.jpg)
 
+### Officer Flock · Overwatch
+
+![Officer Flock calls in an Overwatch drone strike](storefront/overwatch.gif)
+
+### Officer Flock · Throwing stars
+
+![Officer Flock throws shuriken across the arena](storefront/throwing-stars.gif)
+
 ## Jump into a match
 
 1. Open the [game](https://limitedarcade.github.io/) and choose **Play**.

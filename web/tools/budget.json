@@ -5,7 +5,8 @@
   "perAssetExceptions": {
     "stages/lake-america-3d/lake-america.glb": 8.01
   },
-  "distMB": 80,
+  "distMB": 90,
   "titleMB": 10,
-  "firstFightMB": 35
+  "firstFightMB": 35,
+  "_storefront": "The three approved gameplay GIFs add README media. Allow 90 MiB total; per-asset and first-fight budgets remain unchanged."
 }

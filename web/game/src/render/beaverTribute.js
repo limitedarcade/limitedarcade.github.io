@@ -126,19 +126,19 @@ export class BeaverTribute {
     const pose = tributePose(t), worldX = x => origin + x * facing;
     const body = views[finish.defender];
     if (body?.root) { body.root.position.z = pose.bodyZ; body.root.updateWorldMatrix(true, true); }
-    if (this.sign) { this.sign.position.set(worldX(pose.signX), 0, pose.signZ); this.sign.visible = t >= 55; }
+    if (this.sign) { this.sign.position.set(worldX(pose.signX), 0, pose.signZ); this.sign.visible = t >= TRIBUTE.approach; }
     const carryWeight = pose.lift * (1 - smooth((t - TRIBUTE.take) / 35));
-    const walking = (t > 55 && t < TRIBUTE.arrive) || (t > TRIBUTE.lift && t < TRIBUTE.present);
+    const walking = (t > TRIBUTE.approach && t < TRIBUTE.arrive) || (t > TRIBUTE.lift && t < TRIBUTE.present);
     for (const [i, beaver] of this.beavers.entries()) {
       const offsets = [[-.78, .78], [0, .25], [.78, .78]][i];
-      const gather = smooth((t - 100) / 45), spread = smooth((t - TRIBUTE.take) / 65);
+      const gather = smooth((t - TRIBUTE.arrive + 50) / 45), spread = smooth((t - TRIBUTE.take) / 65);
       const x = pose.groupX + lerp((i - 1) * 1.3, offsets[0], gather) + (i - 1) * .12 * spread;
       const z = lerp(lerp(i === 1 ? .16 : .4, .28, gather), .60 + offsets[1], spread);
       beaver.pivot.position.set(worldX(x), walking && !reducedMotion ? Math.abs(Math.sin(t * .19 + i * 2)) * .013 : 0, z);
       // Point toward travel, then toward Carney while presenting.
       const holdingYaw = Math.atan2(-offsets[0] * facing, .5);
       beaver.pivot.rotation.y = lerp(lerp(-facing * Math.PI / 2, holdingYaw, gather), (i - 1) * -.45 * facing, spread);
-      beaver.pivot.visible = t >= 55;
+      beaver.pivot.visible = t >= TRIBUTE.approach;
       for (const [name, action] of Object.entries(beaver.actions)) {
         const weight = name === 'beaverCarry' ? carryWeight : name === 'beaverWalk' ? (walking ? 1 - carryWeight : 0) : (walking ? 0 : 1 - carryWeight);
         action.setEffectiveWeight(weight); action.time = ((t / 60 + i * .14) % action.getClip().duration);
@@ -170,8 +170,13 @@ export class BeaverTribute {
       if (t < TRIBUTE.land) {
         const a = t / TRIBUTE.land;
         head.copy(this.spawn).lerp(new THREE.Vector3(worldX(1.95), this.radius + .025, .6), a);
-        head.y += Math.sin(a * Math.PI) * .65;
-        rotation.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -facing * a * Math.PI * 2);
+        head.y += Math.sin(a * Math.PI) * (reducedMotion ? .65 : 4.8);
+        // A single turn keeps the face legible during the camera's pursuit.
+        const yaw = facing * (Math.PI / 2 - .3 + smooth(a) * Math.PI * 2) * smooth(t / 12);
+        rotation.setFromAxisAngle(UP, yaw);
+        rotation.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1),
+          reducedMotion ? 0 : Math.sin(a * Math.PI) * .25));
+        rotation.slerp(new THREE.Quaternion(), smooth((t - TRIBUTE.land + 50) / 50));
       } else if (t < TRIBUTE.slide) {
         const a = smooth((t - TRIBUTE.land) / (TRIBUTE.slide - TRIBUTE.land));
         head.set(worldX(lerp(1.95, 3.05, a)), this.radius + .025, .6);
@@ -207,24 +212,45 @@ export class BeaverTribute {
         piece.mesh.position.copy(head).sub(this.center.clone().applyQuaternion(rotation));
       }
     }
-    return { t, head: head.toArray(), pose, contacts };
+    return { t, head: head.toArray(), radius: this.radius, trackingHead: Boolean(this.cut && gore), pose, contacts };
   }
 }
 
-export function tributeCamera(t, origin, facing, { reducedMotion = false, portrait = false, aspect = 16 / 9 } = {}) {
+export function tributeCamera(t, origin, facing, { reducedMotion = false, portrait = false, aspect = 16 / 9,
+  head = null, radius = .16, trackingHead = false } = {}) {
   const pose = tributePose(t);
-  let target, position;
+  let target, position, bloomScale = 1;
   if (reducedMotion) { target = [1.1, 1, .3]; position = [1.1, 1.7, 9]; }
   else if (t < TRIBUTE.present - 25) {
-    const track = smooth((t - 12) / 30);
-    const x = lerp(.65, Math.min(3.05, pose.groupX), track);
-    target = [x, .6, .4]; position = [x + 1.1 * (1 - pose.carry), 1.05, 5.0];
+    // Re-establish Carney and the approaching beavers before the pickup.
+    const close = smooth((t - TRIBUTE.lift) / (TRIBUTE.present - 25 - TRIBUTE.lift));
+    target = [lerp(1.55, .45, close), lerp(1.05, .75, close), .35];
+    position = [lerp(.4, -1.65, close), lerp(1.8, 1.1, close), lerp(9.2, 5.0, close)];
   } else {
     const reveal = smooth((t - TRIBUTE.present + 25) / (TRIBUTE.hero - TRIBUTE.present + 25));
     target = [lerp(.45, .05, reveal), lerp(.75, 1.05, reveal), .35];
     position = [lerp(-1.65, -1.1, reveal), lerp(1.1, .92, reveal), lerp(5.0, 5.7, reveal)];
   }
   if (portrait) position[2] *= Math.max(1, 1.1 / aspect);
+  if (!reducedMotion && trackingHead && head && t < TRIBUTE.land) {
+    const follow = smooth((t - 12) / (TRIBUTE.land - 60 - 12));
+    const rejoin = smooth((t - TRIBUTE.land + 60) / 60);
+    // The overhead ice reflection is far brighter than the combat angle.
+    // Keep its bloom from veiling the subject during the close pursuit.
+    bloomScale = 1 - .96 * smooth((t - 12) / 12) * (1 - rejoin);
+    const endAngle = Math.atan2(position[0] - target[0], position[2] - target[2]);
+    const angle = lerp(-.3, 3.6, follow) + (Math.PI * 2 + endAngle - 3.6) * rejoin;
+    const localHead = [(head[0] - origin) * facing, head[1], head[2]];
+    const orbitDistance = lerp(2.6, Math.max(1.05, radius * 7), follow) * (portrait ? Math.max(1, 1.1 / aspect) : 1);
+    const distance = lerp(orbitDistance, Math.hypot(position[0] - target[0], position[2] - target[2]), rejoin);
+    const aerialTarget = mix(localHead, target, rejoin);
+    target = aerialTarget;
+    position = [target[0] + Math.sin(angle) * distance,
+      lerp(localHead[1] + .35 + Math.sin(follow * Math.PI) * 1.05, position[1], rejoin),
+      target[2] + Math.cos(angle) * distance];
+  }
   const world = a => [origin + a[0] * facing, a[1], a[2]];
-  return { authored: true, position: world(position), target: world(target), fov: 38, cut: 'beaver-tribute' };
+  return { authored: true, position: world(position), target: world(target), fov: 38, cut: 'beaver-tribute', bloomScale };
 }
+
+const mix = (a, b, t) => a.map((value, i) => lerp(value, b[i], t));

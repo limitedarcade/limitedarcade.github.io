@@ -56,6 +56,32 @@ test('tribute camera mirrors and keeps the sign in the final frame at desktop an
   }
 });
 
+test('airborne head rises above the fighters, stays framed through the orbit, and returns smoothly before the beavers enter', () => {
+  for (const facing of [-1, 1]) for (const aspect of [16 / 9, .46]) {
+    const director = new BeaverTribute(new THREE.Scene());
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(.2, .3, .2));
+    director.capture({ pieces: [{ mesh }], x: .58 * facing, y: 1.5, z: 0 });
+    const snapshot = { phase: 'finisher', finisher: { id: 'carney-cold-cut', script: 'cold-cut', facing, originX: 0, attacker: 0 } };
+    const camera = new THREE.PerspectiveCamera(38, aspect, .01, 100);
+    let peak = 0, previous;
+    for (let t = 12; t <= TRIBUTE.land + 1; t++) {
+      const state = director.update(snapshot, [], 218 + t);
+      peak = Math.max(peak, state.head[1]);
+      const shot = tributeCamera(t, 0, facing, { ...state, portrait: aspect < 1, aspect });
+      camera.position.fromArray(shot.position); camera.lookAt(...shot.target); camera.updateMatrixWorld(true);
+      for (const dy of [-.15, 0, .15]) {
+        const head = new THREE.Vector3(...state.head).add(new THREE.Vector3(0, dy, 0)).project(camera);
+        assert.ok(Math.abs(head.x) < .95 && Math.abs(head.y) < .95, `head cropped at ${t}`);
+      }
+      if (previous) assert.ok(camera.position.distanceTo(previous) < .8 * Math.max(1, 1.1 / aspect), `camera jumps at ${t}`);
+      previous = camera.position.clone();
+    }
+    assert.ok(peak > 5, 'head must fly well above the fighters');
+    assert.ok(TRIBUTE.approach > TRIBUTE.land, 'beavers enter after the camera returns');
+    director.reset(); mesh.geometry.dispose(); mesh.material.dispose();
+  }
+});
+
 test('runtime beaver has three skeletal clips, one shared mesh and a bounded asset size', () => {
   const bytes = readFileSync(new URL('../game/public/props/beaver/beaver.glb', import.meta.url));
   const gltf = JSON.parse(bytes.toString('utf8', 20, 20 + bytes.readUInt32LE(12)));
