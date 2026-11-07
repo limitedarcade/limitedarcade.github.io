@@ -47,7 +47,15 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](storefront/finisher.jpg)
+![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](storefront/finisher.gif)
+
+### Officer Flock · Overwatch
+
+![Officer Flock calls in an Overwatch drone strike](storefront/overwatch.gif)
+
+### Officer Flock · Throwing stars
+
+![Officer Flock throws shuriken across the arena](storefront/throwing-stars.gif)
 
 ## Jump into a match
 
