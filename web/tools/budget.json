@@ -3,10 +3,11 @@
   "perAssetMB": 6,
   "_lakeStage": "The completed surface finish optimizes to 8,390,704 bytes, 2,096 bytes above 8 MiB. Allow 8.01 MiB for this stage to preserve the finished textures and geometry; the 80 MiB total and 35 MiB first-fight caps remain unchanged.",
   "perAssetExceptions": {
-    "stages/lake-america-3d/lake-america.glb": 8.01
+    "stages/lake-america-3d/lake-america.glb": 8.01,
+    "storefront/finisher.gif": 16
   },
-  "distMB": 90,
+  "distMB": 110,
   "titleMB": 10,
   "firstFightMB": 35,
-  "_storefront": "The three approved gameplay GIFs add README media. Allow 90 MiB total; per-asset and first-fight budgets remain unchanged."
+  "_storefront": "Restore the approved 640px GIFs and add the fighter-selection GIF. Allow 110 MiB total and 16 MiB for the complete finisher GIF; game title and first-fight budgets remain unchanged."
 }

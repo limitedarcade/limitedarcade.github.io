@@ -8,7 +8,7 @@ Inspired by [this Reddit post](https://www.reddit.com/r/aivideos/s/oTANiZJWjz).
 
 [**Play Battle for Independence in your browser**](https://limitedarcade.github.io/)
 
-![Trump and Carney trading blows on the frozen Lake America arena](storefront/fight.gif)
+<img src="storefront/fight.gif" alt="Trump and Carney trading blows on the frozen Lake America arena" width="640">
 
 No account or download is required. Bring a keyboard or gamepad, pick your fighter, and settle the debate the arcade way.
 
@@ -38,7 +38,7 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Pick your fighter
 
-![The fighter select screen: Trump, Carney, Officer Flock and Jake Lang](storefront/select.jpg)
+<img src="storefront/select.gif" alt="The fighter select screen: Trump, Carney, Officer Flock and Jake Lang" width="640">
 
 ### Battle on Lake America
 
@@ -46,15 +46,15 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's QUIET, PIGGY cinematic finisher](storefront/finisher.gif)
+<img src="storefront/finisher.gif" alt="Carney's QUIET, PIGGY cinematic finisher" width="640">
 
-### Officer Flock · Overwatch
+### Officer Flock Â· Overwatch
 
-![Officer Flock calls in an Overwatch drone strike](storefront/overwatch.gif)
+<img src="storefront/overwatch.gif" alt="Officer Flock calls in an Overwatch drone strike" width="640">
 
-### Officer Flock · Throwing stars
+### Officer Flock Â· Throwing stars
 
-![Officer Flock throws shuriken across the arena](storefront/throwing-stars.gif)
+<img src="storefront/throwing-stars.gif" alt="Officer Flock throws shuriken across the arena" width="640">
 
 ## Jump into a match
 
