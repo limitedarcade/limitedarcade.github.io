@@ -7,6 +7,12 @@ export const TRIBUTE = Object.freeze({ land: 42 + EXTRA_FLIGHT, slide: 104 + EXT
   place: 384 + EXTRA_FLIGHT, release: 405 + EXTRA_FLIGHT, hero: 438 + EXTRA_FLIGHT, end: 522 + EXTRA_FLIGHT });
 export const smooth = t => { t = Math.max(0, Math.min(1, t)); return t * t * (3 - 2 * t); };
 export const lerp = (a, b, t) => a + (b - a) * t;
+export function tributeFlight(t, spawn, landing, out, arc = 4.8) {
+  const a = Math.max(0, Math.min(1, t / TRIBUTE.land));
+  for (let i = 0; i < 3; i++) out[i] = lerp(spawn[i], landing[i], a);
+  out[1] += Math.sin(a * Math.PI) * arc;
+  return out;
+}
 export function tributeImpact(finisher) {
   if (finisher?.id !== 'carney-cold-cut') return null;
   return finisher.script === 'cold-cut-flock' ? 391 : 218;

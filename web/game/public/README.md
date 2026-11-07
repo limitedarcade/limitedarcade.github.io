@@ -46,7 +46,7 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](storefront/finisher.jpg)
+![Carney's QUIET, PIGGY cinematic finisher](storefront/finisher.gif)
 
 ### Officer Flock · Overwatch
 

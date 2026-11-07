@@ -12,7 +12,7 @@ copying the session transcript or duplicating task status here.
 
 This guide supersedes Routes A/B/C and their code-only restrictions. The original is preserved in `FIGHTER_PLAYBOOK.legacy-2026-09-09.md` for specific measurements and debugging history. Do not read the entire archive on every task. Older instructions banning GLB/texture loading, retopology, imported animation, or changes to the 25-bone tree are retired for the new production route. Preserve existing working fighters during migration.
 
-The first integration is implemented: Carney's textured GLB, the fighter comparison lab, simulation-owned hitstop, normal-attack contact markers, and the Vote of No Confidence cinematic proof. See `FIGHTER_MILESTONE.md` for launch instructions, validation and remaining limitations. This does not complete the rig/animation quality target below.
+The first integration is implemented: Carney's textured GLB, the fighter comparison lab, simulation-owned hitstop, normal-attack contact markers, and the QUIET, PIGGY cinematic proof. See `FIGHTER_MILESTONE.md` for launch instructions, validation and remaining limitations. This does not complete the rig/animation quality target below.
 
 ## Default asset flow and why
 

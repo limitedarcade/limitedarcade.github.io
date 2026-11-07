@@ -65,7 +65,9 @@ export class RoundReel {
     const plate = (y, height, color = C.ink) => { ctx.fillStyle = color; ctx.globalAlpha = 0.88; ctx.fillRect(0, y, w, height); ctx.globalAlpha = 1; };
     if (edit.stage === 'execution' && s.finisher) {
       plate(0, h * 0.075);
-      text(s.finisher.name.toUpperCase(), w / 2, h * 0.04, Math.min(w * 0.035, h * 0.044), C.gold, 'Great Fighter');
+      // Grow within the existing top plate, keeping the arena unobstructed.
+      text(s.finisher.name.toUpperCase(), w / 2, h * 0.04, Math.min(w * 0.045, h * 0.058),
+        C.gold, 'Great Fighter', 'center', w * 0.8);
     } else if (edit.stage === 'versus') {
       plate(0, h * 0.065); plate(h * 0.84, h * 0.16);
       ctx.fillStyle = C.red; ctx.fillRect(0, h * 0.84, w * 0.45, 3);

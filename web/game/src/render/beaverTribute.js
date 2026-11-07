@@ -1,7 +1,8 @@
 import * as THREE from '../vendor/three.module.js';
 import { createGltfLoader } from './gltf.js';
 import { CinematicGrip } from './cinematicGrip.js';
-import { TRIBUTE, tributeImpact, tributeTime, tributePose, smooth, lerp } from '../engine/beaverTribute.js';
+import { TRIBUTE, tributeImpact, tributeTime, tributePose, tributeFlight, smooth, lerp } from '../engine/beaverTribute.js';
+import { HeadBloodStream } from './headBloodStream.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 const BASE = import.meta.env?.BASE_URL || '/';
@@ -39,6 +40,9 @@ export class BeaverTribute {
     this.root.visible = false; this.beavers = []; this.grips = [new CinematicGrip(), new CinematicGrip()];
     this.legs = [new CinematicGrip(), new CinematicGrip()]; this.hipSaved = null;
     this.cut = null; this.ready = null;
+    this.blood = new HeadBloodStream(this.root);
+    this.flightStart = [0, 1.5, 0]; this.flightEnd = [1.95, .2, .6]; this.flightPoint = [0, 0, 0];
+    this.sampleFlight = (t, out) => tributeFlight(t, this.flightStart, this.flightEnd, out);
   }
   async load() {
     if (this.ready) return this.ready;
@@ -88,6 +92,7 @@ export class BeaverTribute {
     this.restore();
     if (this.cut) for (const piece of this.cut.pieces) piece.scripted = false;
     this.cut = null; this.root.visible = false;
+    this.blood.hide();
   }
   capture(cut) {
     if (!cut?.pieces?.length) return;
@@ -101,6 +106,7 @@ export class BeaverTribute {
     this.center = bounds.getCenter(new THREE.Vector3());
     this.radius = Math.max(.1, (bounds.max.y - bounds.min.y) * .5);
     this.spawn = new THREE.Vector3(cut.x, cut.y, cut.z).add(this.center);
+    this.spawn.toArray(this.flightStart);
   }
   active(snapshot) { return tributeImpact(snapshot.finisher) !== null && ['finisher', 'matchEnd'].includes(snapshot.phase); }
   actors(snapshot, actors, frame) {
@@ -164,13 +170,13 @@ export class BeaverTribute {
       }
     }
     const head = new THREE.Vector3(worldX(3.05), this.radius || .16, .6);
+    this.flightEnd[0] = worldX(1.95); this.flightEnd[1] = (this.radius || .16) + .025;
     const contacts = [];
     let rotation = new THREE.Quaternion();
     if (this.cut && gore) {
       if (t < TRIBUTE.land) {
         const a = t / TRIBUTE.land;
-        head.copy(this.spawn).lerp(new THREE.Vector3(worldX(1.95), this.radius + .025, .6), a);
-        head.y += Math.sin(a * Math.PI) * (reducedMotion ? .65 : 4.8);
+        head.fromArray(tributeFlight(t, this.flightStart, this.flightEnd, this.flightPoint, reducedMotion ? .65 : 4.8));
         // A single turn keeps the face legible during the camera's pursuit.
         const yaw = facing * (Math.PI / 2 - .3 + smooth(a) * Math.PI * 2) * smooth(t / 12);
         rotation.setFromAxisAngle(UP, yaw);
@@ -212,6 +218,8 @@ export class BeaverTribute {
         piece.mesh.position.copy(head).sub(this.center.clone().applyQuaternion(rotation));
       }
     }
+    this.blood.update(t, { sample: this.sampleFlight, radius: this.radius || .16, land: TRIBUTE.land,
+      enabled: Boolean(this.cut && gore), reducedMotion });
     return { t, head: head.toArray(), radius: this.radius, trackingHead: Boolean(this.cut && gore), pose, contacts };
   }
 }

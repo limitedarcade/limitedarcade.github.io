@@ -46,7 +46,7 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's Vote of No Confidence finisher with an airborne head-tracking camera](web/game/public/storefront/finisher.gif)
+![Carney's QUIET, PIGGY finisher with an airborne head-tracking camera](web/game/public/storefront/finisher.gif)
 
 ### Officer Flock · Overwatch
 

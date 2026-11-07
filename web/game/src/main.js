@@ -649,7 +649,7 @@ function handleEvent(event) {
   }
   if (event.type === 'droneBeat') {
     if (event.beat === 'lock') {
-      hud.say('OVERWATCH · CLEAR THE LINE', 'counter'); announceTimer = 1.2;
+      hud.say('OVERWATCH - THIN BLUE LINE', 'counter'); announceTimer = 1.2;
       audio.effect('block_large', { x: event.x, gain: 0.22, rate: 1.9 });
     }
     if (event.beat === 'fire') {

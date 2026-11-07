@@ -4,14 +4,14 @@ This records the earlier pilot and its validation at that time. Current task
 status, test counts and the movement milestone live in
 [`FIGHTER_PROGRESS.md`](FIGHTER_PROGRESS.md).
 
-Launch with `npm run dev`. On the title screen choose **Watch: Vote of No Confidence**. It runs the real practice command and finishing sequence. Open **Show panel** to replay, select quarter speed, or try the inputs. **Explore the fighter lab** compares the original and textured export, with camera presets, animation scrubbing and wireframe.
+Launch with `npm run dev`. On the title screen choose **Watch: QUIET, PIGGY**. It runs the real practice command and finishing sequence. Open **Show panel** to replay, select quarter speed, or try the inputs. **Explore the fighter lab** compares the original and textured export, with camera presets, animation scrubbing and wireframe.
 
 ## What changed
 
 - Carney now loads `game/public/fighters/carney/carney-hero.glb` through Three.js GLTFLoader. The matching original textured sculpt was baked onto the existing animated model in Blender. Six UV texture maps, all 25 original bones and all 32 exported animations survive. Editable source: `fighters/carney/carney-hero.blend`. Rebuild: Blender in background mode with `--python tools/build_carney_hero.py`.
 - `engine/simulationClock.js` advances the existing simulation at 60 Hz. Match consumes gameplay hitstop; visual effect clocks cannot alter its duration. Render catch-up is bounded after stalls.
 - `render/clipTiming.js` maps normal attacks through startup, contact and recovery markers. Custom clips without markers retain their existing total-duration mapping; they still need authored markers.
-- **Vote of No Confidence** is a 6.5-second, seven-shot presentation proof: windup, body slash, second windup, head cut and victory. `engine/fatalities.js` owns shot and impact frames. `confidenceClips.js` retimes existing skeletal animation; `confidenceProps.js` positions the stick from the posed hand. These are replaceable presentation assets, separate from combat rules.
+- **QUIET, PIGGY** is a 6.5-second, seven-shot presentation proof: windup, body slash, second windup, head cut and victory. `engine/fatalities.js` owns shot and impact frames. `confidenceClips.js` retimes existing skeletal animation; `confidenceProps.js` positions the stick from the posed hand. These are replaceable presentation assets, separate from combat rules.
 - Cinematic cuts no longer use random low-health limb selection. Majority-weighted vertices are fully removed, and shadow passes follow the removal. The previous system could leave a bloodied head visible after severance.
 
 ## Adding the next fighter with AI assistance

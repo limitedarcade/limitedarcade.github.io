@@ -109,7 +109,7 @@ export const FATALITY_REGISTRY = Object.freeze({
     sequence('trump-sky-fall', 'Sky Fall', ['back', 'forward', 'back', 'hk'], SWEEP, 'sky-fall', 'MIND THE LANDING.'),
   ]),
   carney: Object.freeze([
-    sequence('carney-cold-cut', 'Vote of No Confidence', ['down', 'back', 'down', 'hp'], CLOSE, 'cold-cut', 'CONFIDENCE: ZERO. HEADCOUNT: MINUS ONE.'),
+    sequence('carney-cold-cut', 'QUIET, PIGGY', ['down', 'back', 'down', 'hp'], CLOSE, 'cold-cut', 'CONFIDENCE: ZERO. HEADCOUNT: MINUS ONE.'),
     sequence('carney-whiteout', 'Whiteout', ['forward', 'back', 'forward', 'hk'], SWEEP, 'whiteout', 'VISIBILITY: NONE.'),
   ]),
 });
