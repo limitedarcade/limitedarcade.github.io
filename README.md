@@ -1,8 +1,7 @@
 # Battle for Independence
+![](https://komarev.com/ghpvc/?username=limitedarcade&label=PROFILE+VIEWS)
 
-> **Politics got personal. The lake froze. Someone rang the bell.**
-
-**Battle for Independence** is a fast, ridiculous 3D fighting game built around larger-than-life political caricatures, dramatic arenas, named special moves, and spectacular finishes.
+**Battle for Independence** is a fast, ridiculous 3D fighting game built around Larger Than Life political caricatures, dramatic arenas, named Special Moves, and spectacular finishes.
 
 Inspired by [this Reddit post](https://www.reddit.com/r/aivideos/s/oTANiZJWjz).
 
@@ -10,27 +9,9 @@ Inspired by [this Reddit post](https://www.reddit.com/r/aivideos/s/oTANiZJWjz).
 
 <img src="web/game/public/storefront/fight.gif" alt="Trump and Carney trading blows on the frozen Lake America arena" width="640">
 
-No account or download is required. Bring a keyboard or gamepad, pick your fighter, and settle the debate the arcade way.
-
-## Choose your contender
-
-The current roster brings four very different personalities to the fight:
-
-- **Trump** — heavy hits, big movement, and even bigger showmanship.
-- **Carney** — quick combinations, icy tricks, and a mean slapshot.
-- **Officer Flock** — gadgets, projectiles, and absolutely no chill.
-- **Jake Lang** — an unconventional wildcard with his own peculiar style.
+No account or download is required. Bring a keyboard, phone, or gamepad, pick your fighter, and settle the debate the arcade way.
 
 Fight another player on the same machine, take on a CPU opponent, or let two CPU fighters put on a show.
-
-## What is in the game?
-
-- Quick arcade-style rounds with keyboard and gamepad support
-- Four fighters with distinct move sets and personalities
-- Practice lessons that teach movement, combos, special moves, and finishers
-- Cinematic knockouts, secret endings, and arena-specific surprises
-- Optional stage hazards, reactive scenery, announcer calls, and an original soundtrack
-- A hands-off Demo mode when you would rather watch the chaos unfold
 
 The game contains exaggerated cartoon violence and gore.
 
@@ -40,17 +21,13 @@ The game contains exaggerated cartoon violence and gore.
 
 <img src="web/game/public/storefront/select.gif" alt="The fighter select screen: Trump, Carney, Officer Flock and Jake Lang" width="640">
 
-### Battle on Lake America
-
-![Carney lands an uppercut on Trump on Lake America](web/game/public/storefront/fight.jpg)
-
 ### Finish it
 
-<img src="web/game/public/storefront/finisher.gif" alt="Carney's QUIET, PIGGY finisher with an airborne head-tracking camera" width="640">
+<img src="web/game/public/storefront/finisher.gif" alt="Carney's QUIET, PIGGY finisher with an airborne blood stream" width="640">
 
 ### Officer Flock · Overwatch
 
-<img src="web/game/public/storefront/overwatch.gif" alt="Officer Flock calls in an Overwatch drone strike" width="640">
+<img src="web/game/public/storefront/overwatch.gif" alt="Officer Flock calls in OVERWATCH - THIN BLUE LINE" width="640">
 
 ### Officer Flock · Throwing stars
 
@@ -61,9 +38,7 @@ The game contains exaggerated cartoon violence and gore.
 1. Open the [game](https://limitedarcade.github.io/) and choose **Play**.
 2. Choose whether each side is controlled by a human or the CPU.
 3. Pick both fighters and select an arena.
-4. Enter the fight and follow the on-screen prompts.
 
-New players can choose **Practice · Learn every move** from the title or pause menu. Practice mode can demonstrate each move before handing control back to you.
 
 ## Quick controls
 
@@ -77,10 +52,8 @@ New players can choose **Practice · Learn every move** from the title or pause 
 
 For local two-player matches, Player 2 uses the arrow keys and numpad, or a second gamepad. Open **Pause → Move list** during a match for combinations, special moves, and finisher commands.
 
-## A playful work in progress
-
-Battle for Independence is an unofficial work of satire and is not affiliated with, endorsed by, or sponsored by any person, political party, or government shown or referenced in the game.
-
-The roster, arenas, balance, and presentation are still growing. Expect surprises, rough edges, and increasingly unnecessary amounts of spectacle.
+## A work in progress - fork it, star it, add to it.
 
 Curious how it is made? The project source is available on the [source branch](https://github.com/limitedarcade/limitedarcade.github.io/tree/source).
+
+Battle for Independence is an unofficial work of satire and is not affiliated with, endorsed by, or sponsored by any person, political party, or government shown or referenced in the game.
