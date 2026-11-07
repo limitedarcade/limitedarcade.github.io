@@ -47,11 +47,11 @@ The game contains exaggerated cartoon violence and gore.
 
 ### Finish it
 
-![Carney's Vote of No Confidence finisher: a hockey-stick slapshot](storefront/finisher.gif)
+![Carney's QUIET, PIGGY finisher with an airborne blood stream](storefront/finisher.gif)
 
 ### Officer Flock · Overwatch
 
-![Officer Flock calls in an Overwatch drone strike](storefront/overwatch.gif)
+![Officer Flock calls in OVERWATCH - THIN BLUE LINE](storefront/overwatch.gif)
 
 ### Officer Flock · Throwing stars
 
